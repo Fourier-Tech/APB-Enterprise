@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   title: "APB Enterprise | Elevator Components",
   description:
     "APB Enterprise manufactures elevator controllers, door operators, safety gears, and COP panels.",
+  icons: {
+    icon: "/logo.jpg",
+  },
 };
 
 export default function RootLayout({
@@ -13,7 +16,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <head>
         {/* Google Fonts */}
         <link
