@@ -1,0 +1,69 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["partialIndexes"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Product {
+  id           Int       @id @default(autoincrement())
+  name         String    @db.VarChar(120)
+  modelCode    String?   @map("model_code") @db.VarChar(20)
+  shortDesc    String    @map("short_desc")
+  longDesc     String?   @map("long_desc")
+  category     String    @db.VarChar(50)
+  imageUrl     String?   @map("image_url") @db.VarChar(500)
+  isFeatured   Boolean?  @default(false) @map("is_featured")
+  displayOrder Int?      @default(0) @map("display_order")
+  createdAt    DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([isFeatured], map: "idx_products_featured", where: raw("(is_featured = true)"))
+  @@index([category], map: "idx_products_category")
+  @@index([displayOrder], map: "idx_products_order")
+  @@map("products")
+}
+
+model Brochure {
+  id           Int       @id @default(autoincrement())
+  title        String    @db.VarChar(200)
+  fileUrl      String    @map("file_url") @db.VarChar(500)
+  displayOrder Int?      @default(0) @map("display_order")
+  isActive     Boolean?  @default(true) @map("is_active")
+  createdAt    DateTime? @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([isActive, displayOrder], map: "idx_brochures_active", where: raw("(is_active = true)"))
+  @@map("brochures")
+}
+
+model Contact {
+  id                Int       @id @default(autoincrement())
+  facebookUrl       String?   @map("facebook_url")
+  instagramUrl      String?   @map("instagram_url")
+  linkedinUrl       String?   @map("linkedin_url")
+  twitterUrl        String?   @map("twitter_url")
+  youtubeUrl        String?   @map("youtube_url")
+  whatsappUrl       String?   @map("whatsapp_url")
+  phonePrimary      String?   @map("phone_primary")
+  phoneSecondary    String?   @map("phone_secondary")
+  whatsappPrimary   String?   @map("whatsapp_primary")
+  whatsappSecondary String?   @map("whatsapp_secondary")
+  emailPrimary      String?   @map("email_primary")
+  emailSecondary    String?   @map("email_secondary")
+  address           String?
+  addressUrl        String?   @map("address_url")
+  createdAt         DateTime? @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt         DateTime? @default(now()) @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  @@map("contacts")
+}
+
+model QuoteRequest {
+  id       Int     @id @default(autoincrement())
+  formType String  @map("form_type") @db.VarChar(30)
+  msg      String?
+
+  @@index([formType], map: "idx_quotes_form_type")
+  @@map("quote_requests")
+}

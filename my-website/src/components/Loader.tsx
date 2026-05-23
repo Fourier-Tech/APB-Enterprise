@@ -171,12 +171,12 @@ export default function Loader() {
             style={{ ...doorBase, right: 0, borderRadius: "0 0 5px 0" }}
           ></div>
           <div id="ldrContent" style={carContentStyle}>
-            <Image
+            <img
               src="/logo.jpg"
               alt="APB"
-              width={30}
-              height={30}
               style={{
+                width: "30px",
+                height: "30px",
                 borderRadius: "4px",
                 border: "1.5px solid rgba(212,168,0,0.6)",
                 objectFit: "cover",

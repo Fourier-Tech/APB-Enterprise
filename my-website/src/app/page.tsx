@@ -5,8 +5,20 @@ import ElevatorDemo from "@/components/ElevatorDemo";
 import LiftZone from "@/components/LiftZone";
 import HeroClient from "@/components/HeroClient";
 import Link from "next/link";
+import { prisma } from "@/lib/db";
 
-export default function Home() {
+export default async function Home() {
+  // Query business contacts and featured products directly on the server
+  const contact = await prisma.contact.findFirst();
+  const featuredProducts = await prisma.product.findMany({
+    where: { isFeatured: true },
+    orderBy: [
+      { displayOrder: "asc" },
+      { createdAt: "desc" }
+    ],
+    take: 4
+  });
+
   return (
     <>
       <Loader />
@@ -44,9 +56,14 @@ export default function Home() {
                   <Link href="/products" className="btn-primary">
                     <i className="fas fa-th-large"></i> View products
                   </Link>
-                  <Link href="/contact" className="btn-ghost">
+                  <a
+                    href={contact ? contact.whatsappUrl || "/contact" : "/contact"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-ghost"
+                  >
                     Get a quote <i className="fas fa-arrow-right fa-sm"></i>
-                  </Link>
+                  </a>
                 </div>
 
                 <div className="hero-stats">
@@ -75,7 +92,7 @@ export default function Home() {
           </section>
 
           {/* ── LIFT ZONE (scroll-jacked building) ── */}
-          <LiftZone />
+          <LiftZone featuredProducts={featuredProducts} />
 
           {/* ── BROCHURE STRIP ── */}
           <section className="brochure-section reveal">
@@ -96,7 +113,7 @@ export default function Home() {
           </section>
         </main>
 
-        <Footer />
+        <Footer contact={contact} />
       </div>
 
       {/* Client-side: hero→liftzone snap + scroll-reveal + counters */}

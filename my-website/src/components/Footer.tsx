@@ -1,7 +1,24 @@
 import Link from "next/link";
 import Image from "next/image";
 
-export default function Footer() {
+interface ContactData {
+  address: string;
+  addressUrl: string;
+  phonePrimary: string;
+  phoneSecondary: string;
+  whatsappPrimary: string;
+  whatsappSecondary: string;
+  emailPrimary: string;
+  emailSecondary: string;
+  whatsappUrl: string;
+  facebookUrl: string;
+  instagramUrl: string;
+  linkedinUrl: string;
+  twitterUrl: string;
+  youtubeUrl: string;
+}
+
+export default function Footer({ contact }: { contact: ContactData | null }) {
   return (
     <>
       {/* ── WHATSAPP QUOTE STRIP — shown on every page ── */}
@@ -11,9 +28,14 @@ export default function Footer() {
           <p>
             Expert consultation, volume pricing, and tailored product designs.
           </p>
-          <Link href="/contact" className="btn-gold-cta">
+          <a
+            href={contact ? contact.whatsappUrl : "https://wa.me/918460348566"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-gold-cta"
+          >
             <i className="fab fa-whatsapp"></i> Contact us on WhatsApp
-          </Link>
+          </a>
         </div>
       </section>
 
@@ -31,14 +53,13 @@ export default function Footer() {
                   alt="APB Enterprise"
                   width={28}
                   height={28}
-                  style={{ height: "28px", width: "auto" }}
                 />
                 <span className="logo-name" style={{ fontSize: "1rem" }}>
                   APB Enterprise
                 </span>
               </div>
               <p>
-                Engineering trust since 1998 — precision components for modern
+                Engineering trust since 2018 — precision components for modern
                 vertical transportation. LLP registered.
               </p>
             </div>
@@ -92,50 +113,65 @@ export default function Footer() {
               <h4>Contact</h4>
               <div className="footer-contact-item">
                 <i className="fas fa-phone-alt"></i>
-                +91 22 4098 1234
+                <a href={contact ? `tel:${contact.phonePrimary.replace(/\s+/g, "")}` : "tel:+918460348566"}>
+                  {contact ? contact.phonePrimary : "+91 84603 48566"}
+                </a>
               </div>
               <div className="footer-contact-item">
                 <i className="fas fa-envelope"></i>
-                sales@apbenterprise.com
+                <a href={contact ? `mailto:${contact.emailPrimary}` : "mailto:apbenterprise1@gmail.com"}>
+                  {contact ? contact.emailPrimary : "apbenterprise1@gmail.com"}
+                </a>
               </div>
               <div className="footer-contact-item">
                 <i className="fas fa-map-marker-alt"></i>
-                Pune, Maharashtra, India
+                {contact ? (
+                  <a href={contact.addressUrl} target="_blank" rel="noopener noreferrer">
+                    {contact.address}
+                  </a>
+                ) : (
+                  <a href="https://maps.google.com/?q=Fortune+Industrial+Estate+Kathwada+Ahmedabad" target="_blank" rel="noopener noreferrer">
+                    Fortune Industrial Estate, Ahmedabad
+                  </a>
+                )}
               </div>
-              <Link
-                href="/contact"
+              <a
+                href={contact ? contact.whatsappUrl : "https://wa.me/918460348566"}
                 className="btn-outline-teal"
+                target="_blank"
+                rel="noopener noreferrer"
                 style={{
                   marginTop: "0.5rem",
                   fontSize: "0.78rem",
                   padding: "5px 12px",
+                  display: "inline-flex"
                 }}
               >
                 <i className="fab fa-whatsapp"></i> WhatsApp us
-              </Link>
+              </a>
             </div>
           </div>
 
           {/* Footer Bottom */}
           <div className="footer-bottom">
-            <p>© 2025 APB Enterprise LLP. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} APB Enterprise LLP. All rights reserved.</p>
             <div className="footer-socials">
               <a
-                href="https://linkedin.com/company/apb-enterprise"
+                href={contact ? contact.linkedinUrl || "https://linkedin.com" : "https://linkedin.com"}
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <i className="fab fa-linkedin-in"></i>
               </a>
               <a
-                href="https://facebook.com/apbenterprise"
+                href={contact ? contact.facebookUrl || "https://facebook.com" : "https://facebook.com"}
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <i className="fab fa-facebook-f"></i>
               </a>
               <a
-                href="https://instagram.com/apbenterprise"
+                href={contact ? contact.instagramUrl || "https://instagram.com" : "https://instagram.com"}
                 target="_blank"
                 rel="noopener noreferrer"
               >

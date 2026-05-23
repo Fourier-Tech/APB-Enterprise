@@ -3,8 +3,38 @@
 import { useEffect } from "react";
 import Link from "next/link";
 
-export default function LiftZone() {
+interface ProductData {
+  id: number;
+  name: string;
+  modelCode: string | null;
+  shortDesc: string;
+  category: string;
+  imageUrl: string | null;
+}
+
+function getProductIcon(category: string) {
+  switch (category) {
+    case "integrated":
+      return "fa-microchip";
+    case "nice_series":
+      return "fa-th-large";
+    case "geared":
+    case "gearless":
+      return "fa-cogs";
+    case "hydraulic":
+      return "fa-water";
+    case "goods":
+      return "fa-truck-loading";
+    case "harness":
+      return "fa-project-diagram";
+    default:
+      return "fa-cube";
+  }
+}
+
+export default function LiftZone({ featuredProducts }: { featuredProducts: ProductData[] }) {
   useEffect(() => {
+    let isDestroyed = false;
     // Dynamically load GSAP + jsVectorMap scripts
     const loadScript = (src: string) =>
       new Promise<void>((resolve) => {
@@ -515,43 +545,22 @@ export default function LiftZone() {
                 className="products-grid stagger"
                 style={{ gridTemplateColumns: "repeat(4,1fr)", gap: "1rem" }}
               >
-                {[
-                  {
-                    icon: "fa-door-open",
-                    name: "Door Operator",
-                    desc: "VVVF, silent operation, 1,000 cycles/day, IP54 rated",
-                  },
-                  {
-                    icon: "fa-th-large",
-                    name: "Smart COP Panel",
-                    desc: "Customizable, touch & braille support, up to 64 floors",
-                  },
-                  {
-                    icon: "fa-shield-alt",
-                    name: "Safety Gear",
-                    desc: "EN81 progressive, up to 3,000 kg, 5 m/s rated",
-                  },
-                  {
-                    icon: "fa-microchip",
-                    name: "Elevator Controller",
-                    desc: "32-bit ARM, IoT ready, CAN bus, group control",
-                  },
-                ].map((p) => (
-                  <div key={p.name} className="product-card">
+                {featuredProducts.slice(0, 4).map((p) => (
+                  <div key={p.id} className="product-card">
                     <div className="product-img-wrap">
                       <span className="product-watermark-badge">
                         APB Enterprise
                       </span>
                       <div className="product-watermark">
-                        <i className={`fas ${p.icon}`}></i>
+                        <i className={`fas ${getProductIcon(p.category)}`}></i>
                         <span className="product-watermark-label">
-                          Product Image
+                          {p.modelCode || "Product Image"}
                         </span>
                       </div>
                     </div>
                     <div className="product-card-body">
                       <h3>{p.name}</h3>
-                      <p>{p.desc}</p>
+                      <p>{p.shortDesc}</p>
                       <Link href="/products" className="product-link">
                         Details <i className="fas fa-arrow-right fa-xs"></i>
                       </Link>
