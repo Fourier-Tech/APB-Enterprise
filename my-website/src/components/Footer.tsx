@@ -2,20 +2,20 @@ import Link from "next/link";
 import Image from "next/image";
 
 interface ContactData {
-  address: string;
-  addressUrl: string;
-  phonePrimary: string;
-  phoneSecondary: string;
-  whatsappPrimary: string;
-  whatsappSecondary: string;
-  emailPrimary: string;
-  emailSecondary: string;
-  whatsappUrl: string;
-  facebookUrl: string;
-  instagramUrl: string;
-  linkedinUrl: string;
-  twitterUrl: string;
-  youtubeUrl: string;
+  address: string | null;
+  addressUrl: string | null;
+  phonePrimary: string | null;
+  phoneSecondary: string | null;
+  whatsappPrimary: string | null;
+  whatsappSecondary: string | null;
+  emailPrimary: string | null;
+  emailSecondary: string | null;
+  whatsappUrl: string | null;
+  facebookUrl: string | null;
+  instagramUrl: string | null;
+  linkedinUrl: string | null;
+  twitterUrl: string | null;
+  youtubeUrl: string | null;
 }
 
 export default function Footer({ contact }: { contact: ContactData | null }) {
@@ -29,7 +29,7 @@ export default function Footer({ contact }: { contact: ContactData | null }) {
             Expert consultation, volume pricing, and tailored product designs.
           </p>
           <a
-            href={contact ? contact.whatsappUrl : "https://wa.me/918460348566"}
+            href={contact && contact.whatsappUrl ? contact.whatsappUrl : "https://wa.me/918460348566"}
             target="_blank"
             rel="noopener noreferrer"
             className="btn-gold-cta"
@@ -113,19 +113,19 @@ export default function Footer({ contact }: { contact: ContactData | null }) {
               <h4>Contact</h4>
               <div className="footer-contact-item">
                 <i className="fas fa-phone-alt"></i>
-                <a href={contact ? `tel:${contact.phonePrimary.replace(/\s+/g, "")}` : "tel:+918460348566"}>
-                  {contact ? contact.phonePrimary : "+91 84603 48566"}
+                <a href={contact && contact.phonePrimary ? `tel:${contact.phonePrimary.replace(/\s+/g, "")}` : "tel:+918460348566"}>
+                  {contact && contact.phonePrimary ? contact.phonePrimary : "+91 84603 48566"}
                 </a>
               </div>
               <div className="footer-contact-item">
                 <i className="fas fa-envelope"></i>
-                <a href={contact ? `mailto:${contact.emailPrimary}` : "mailto:apbenterprise1@gmail.com"}>
-                  {contact ? contact.emailPrimary : "apbenterprise1@gmail.com"}
+                <a href={contact && contact.emailPrimary ? `mailto:${contact.emailPrimary}` : "mailto:apbenterprise1@gmail.com"}>
+                  {contact && contact.emailPrimary ? contact.emailPrimary : "apbenterprise1@gmail.com"}
                 </a>
               </div>
               <div className="footer-contact-item">
                 <i className="fas fa-map-marker-alt"></i>
-                {contact ? (
+                {contact && contact.addressUrl && contact.address ? (
                   <a href={contact.addressUrl} target="_blank" rel="noopener noreferrer">
                     {contact.address}
                   </a>
@@ -136,7 +136,7 @@ export default function Footer({ contact }: { contact: ContactData | null }) {
                 )}
               </div>
               <a
-                href={contact ? contact.whatsappUrl : "https://wa.me/918460348566"}
+                href={contact && contact.whatsappUrl ? contact.whatsappUrl : "https://wa.me/918460348566"}
                 className="btn-outline-teal"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -157,21 +157,21 @@ export default function Footer({ contact }: { contact: ContactData | null }) {
             <p>© {new Date().getFullYear()} APB Enterprise LLP. All rights reserved.</p>
             <div className="footer-socials">
               <a
-                href={contact ? contact.linkedinUrl || "https://linkedin.com" : "https://linkedin.com"}
+                href={contact && contact.linkedinUrl ? contact.linkedinUrl : "https://linkedin.com"}
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <i className="fab fa-linkedin-in"></i>
               </a>
               <a
-                href={contact ? contact.facebookUrl || "https://facebook.com" : "https://facebook.com"}
+                href={contact && contact.facebookUrl ? contact.facebookUrl : "https://facebook.com"}
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <i className="fab fa-facebook-f"></i>
               </a>
               <a
-                href={contact ? contact.instagramUrl || "https://instagram.com" : "https://instagram.com"}
+                href={contact && contact.instagramUrl ? contact.instagramUrl : "https://instagram.com"}
                 target="_blank"
                 rel="noopener noreferrer"
               >

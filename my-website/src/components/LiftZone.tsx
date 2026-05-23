@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
+import "./LiftZone.css";
 
 interface ProductData {
   id: number;

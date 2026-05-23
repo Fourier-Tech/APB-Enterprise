@@ -6,6 +6,7 @@ import LiftZone from "@/components/LiftZone";
 import HeroClient from "@/components/HeroClient";
 import Link from "next/link";
 import { prisma } from "@/lib/db";
+import styles from "./page.module.css";
 
 export default async function Home() {
   // Query business contacts and featured products directly on the server
@@ -24,20 +25,20 @@ export default async function Home() {
       <Loader />
       <Header />
 
-      <div className="page-shell">
+      <div className={styles["page-shell"]}>
         <main>
           {/* ── HERO ── */}
-          <section className="hero">
-            <div className="hero-bg-circle"></div>
-            <div className="hero-corner-tl"></div>
-            <div className="hero-corner-br"></div>
+          <section className={styles.hero}>
+            <div className={styles["hero-bg-circle"]}></div>
+            <div className={styles["hero-corner-tl"]}></div>
+            <div className={styles["hero-corner-br"]}></div>
 
-            <div className="container hero-grid" style={{ paddingTop: "72px" }}>
+            <div className={`container ${styles["hero-grid"]}`} style={{ paddingTop: "72px" }}>
               {/* Left — copy + stats */}
               <div>
-                <div className="hero-eyebrow">
-                  <span className="eyebrow-line"></span>
-                  <span className="eyebrow-text">
+                <div className={styles["hero-eyebrow"]}>
+                  <span className={styles["eyebrow-line"]}></span>
+                  <span className={styles["eyebrow-text"]}>
                     Precision Elevator Components
                   </span>
                 </div>
@@ -46,13 +47,13 @@ export default async function Home() {
                   Parts that keep <em>elevators</em> moving.
                 </h1>
 
-                <p className="hero-desc">
+                <p className={styles["hero-desc"]}>
                   APB Enterprise manufactures elevator controllers, door
                   operators, safety gears, and COP panels — engineered for
                   reliability, built for the long run.
                 </p>
 
-                <div className="hero-btns">
+                <div className={styles["hero-btns"]}>
                   <Link href="/products" className="btn-primary">
                     <i className="fas fa-th-large"></i> View products
                   </Link>
@@ -66,22 +67,22 @@ export default async function Home() {
                   </a>
                 </div>
 
-                <div className="hero-stats">
-                  <div className="stat-item">
-                    <div className="stat-num" data-count="25+">
+                <div className={styles["hero-stats"]}>
+                  <div className={styles["stat-item"]}>
+                    <div className={styles["stat-num"]} data-count="25+">
                       25+
                     </div>
-                    <div className="stat-label">Years</div>
+                    <div className={styles["stat-label"]}>Years</div>
                   </div>
-                  <div className="stat-item">
-                    <div className="stat-num" data-count="500+">
+                  <div className={styles["stat-item"]}>
+                    <div className={styles["stat-num"]} data-count="500+">
                       500+
                     </div>
-                    <div className="stat-label">Projects</div>
+                    <div className={styles["stat-label"]}>Projects</div>
                   </div>
-                  <div className="stat-item">
-                    <div className="stat-num">ISO</div>
-                    <div className="stat-label">Certified</div>
+                  <div className={styles["stat-item"]}>
+                    <div className={styles["stat-num"]}>ISO</div>
+                    <div className={styles["stat-label"]}>Certified</div>
                   </div>
                 </div>
               </div>

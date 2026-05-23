@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import styles from "./ElevatorDemo.module.css";
 
 export default function ElevatorDemo() {
   useEffect(() => {
@@ -300,7 +301,7 @@ export default function ElevatorDemo() {
   }, []);
 
   return (
-    <div className="elevator-demo">
+    <div className={styles["elevator-demo"]}>
       <div style={{ display: "flex", gap: 0, alignItems: "flex-start" }}>
         {/* Shaft + status bar */}
         <div style={{ flex: 1, minWidth: 0 }}>
