@@ -51,36 +51,44 @@ export default function Loader() {
       moveCar(midTravel, 400);
     }
 
+    function finishAnimation() {
+      safeBar.style.transition = "width 0.3s ease";
+      setProgress(100);
+      moveCar(PAD_BOTTOM + TRAVEL, 300);
+
+      setTimeout(() => {
+        safeDoorL.classList.add("open");
+        safeDoorR.classList.add("open");
+        safeContent.classList.add("show");
+        safeLabel.classList.add("show");
+
+        setTimeout(() => {
+          safeLoader.classList.add("hide");
+
+          setTimeout(() => {
+            (window as any).__loaderDone = true;
+            document.dispatchEvent(new CustomEvent("loaderDone"));
+          }, 700);
+        }, 550);
+      }, 350);
+    }
+
+    function checkAndFinish() {
+      if ((window as any).__pageDataReady) {
+        finishAnimation();
+      } else {
+        document.addEventListener("pageDataReady", finishAnimation, { once: true });
+      }
+    }
+
     function onLoad() {
       setProgress(90);
       const nearTop = PAD_BOTTOM + TRAVEL * 0.85;
       moveCar(nearTop, 500);
 
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          setTimeout(() => {
-            safeBar.style.transition = "width 0.3s ease";
-            setProgress(100);
-            moveCar(PAD_BOTTOM + TRAVEL, 300);
-
-            setTimeout(() => {
-              safeDoorL.classList.add("open");
-              safeDoorR.classList.add("open");
-              safeContent.classList.add("show");
-              safeLabel.classList.add("show");
-
-              setTimeout(() => {
-                safeLoader.classList.add("hide");
-
-                setTimeout(() => {
-                  (window as any).__loaderDone = true;
-                  document.dispatchEvent(new CustomEvent("loaderDone"));
-                }, 700);
-              }, 550);
-            }, 350);
-          }, 100);
-        });
-      });
+      setTimeout(() => {
+        checkAndFinish();
+      }, 500);
     }
 
     let resourceTimer: ReturnType<typeof setInterval> | null = null;

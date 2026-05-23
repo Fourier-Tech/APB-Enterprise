@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import ElevatorDemo from "@/components/ElevatorDemo";
 import LiftZone from "@/components/LiftZone";
 import HeroClient from "@/components/HeroClient";
+import PageReadySignal from "@/components/PageReadySignal";
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import styles from "./page.module.css";
@@ -130,6 +131,9 @@ async function AsyncPageContent() {
 
       {/* Client-side: hero→liftzone snap + scroll-reveal + counters */}
       <HeroClient />
+      
+      {/* Signals the loader that the async page is fully loaded */}
+      <PageReadySignal />
     </>
   );
 }
