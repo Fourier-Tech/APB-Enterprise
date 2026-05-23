@@ -33,7 +33,11 @@ function getProductIcon(category: string) {
   }
 }
 
-export default function LiftZone({ featuredProducts }: { featuredProducts: ProductData[] }) {
+export default function LiftZone({
+  featuredProducts,
+}: {
+  featuredProducts: ProductData[];
+}) {
   useEffect(() => {
     let isDestroyed = false;
     // Dynamically load GSAP + jsVectorMap scripts
@@ -136,7 +140,7 @@ export default function LiftZone({ featuredProducts }: { featuredProducts: Produ
       const hint = scrollHintEl;
 
       const FLOORS = 3;
-      const LIFT_TOPS = ["2%", "40%", "75%"];
+      const LIFT_TOPS = ["0%", "33.33%", "66.66%"];
 
       let currentFloor = 0;
       let isAnimating = false;
@@ -275,7 +279,9 @@ export default function LiftZone({ featuredProducts }: { featuredProducts: Produ
 
       function isLiftZoneActive() {
         const rect = lz.getBoundingClientRect();
-        return rect.top <= 2 && rect.bottom >= window.innerHeight - 2;
+        // Only treat as active once the section has fully scrolled into the viewport
+        // (top edge at or above the viewport top), not while it's still arriving from below
+        return rect.top <= 0 && rect.bottom >= window.innerHeight - 2;
       }
 
       let wheelAccum = 0;
@@ -360,16 +366,9 @@ export default function LiftZone({ featuredProducts }: { featuredProducts: Produ
           if (!isProgrammaticScroll) {
             isProgrammaticScroll = true;
             wheelAccum = 0;
-            if (Math.abs(rect.top) < window.innerHeight / 2) {
-              window.scrollTo({ top: liftZoneTop, behavior: "auto" });
-              changeFloorInstantly(0);
-            } else {
-              window.scrollTo({
-                top: liftZoneTop + window.innerHeight * 2,
-                behavior: "auto",
-              });
-              changeFloorInstantly(2);
-            }
+            // Always snap to floor 0 when entering from normal scroll-down
+            window.scrollTo({ top: liftZoneTop, behavior: "auto" });
+            changeFloorInstantly(0);
             if (progScrollTimer) clearTimeout(progScrollTimer);
             progScrollTimer = setTimeout(() => {
               isProgrammaticScroll = false;
@@ -464,9 +463,9 @@ export default function LiftZone({ featuredProducts }: { featuredProducts: Produ
           <div className="lz-center-col">
             <div className="lz-guide-rail left"></div>
             <div className="lz-guide-rail right"></div>
-            <div className="lz-floor-sill" style={{ top: "2%" }}></div>
-            <div className="lz-floor-sill" style={{ top: "40%" }}></div>
-            <div className="lz-floor-sill" style={{ top: "75%" }}></div>
+            <div className="lz-floor-sill" style={{ top: "0%" }}></div>
+            <div className="lz-floor-sill" style={{ top: "33.33%" }}></div>
+            <div className="lz-floor-sill" style={{ top: "66.66%" }}></div>
             <div className="lz-elevator-car" id="lz-elevator">
               <div className="lz-car-door left-door"></div>
               <div className="lz-car-door right-door"></div>
