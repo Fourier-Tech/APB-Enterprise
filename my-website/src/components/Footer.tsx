@@ -53,6 +53,7 @@ export default function Footer({ contact }: { contact: ContactData | null }) {
                   alt="APB Enterprise"
                   width={28}
                   height={28}
+                  style={{ width: "auto", height: "auto" }}
                 />
                 <span className="logo-name" style={{ fontSize: "1rem" }}>
                   APB Enterprise

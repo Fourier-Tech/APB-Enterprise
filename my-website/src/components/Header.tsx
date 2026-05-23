@@ -24,6 +24,7 @@ export default function Header() {
             alt="APB Enterprise Logo"
             width={38}
             height={38}
+            style={{ width: "auto", height: "auto" }}
           />
           <div className="logo-text">
             <span className="logo-name">APB Enterprise</span>
