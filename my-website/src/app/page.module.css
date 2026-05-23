@@ -144,12 +144,12 @@
   border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
-.hero .btn-ghost {
+.hero :global(.btn-ghost) {
   color: rgba(255, 255, 255, 0.85) !important;
   border-bottom-color: rgba(255, 255, 255, 0.2) !important;
 }
 
-.hero .btn-ghost:hover {
+.hero :global(.btn-ghost:hover) {
   border-color: var(--gold) !important;
   color: #ffffff !important;
 }
