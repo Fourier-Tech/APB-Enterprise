@@ -8,7 +8,21 @@ import Link from "next/link";
 import { prisma } from "@/lib/db";
 import styles from "./page.module.css";
 
-export default async function Home() {
+import { Suspense } from "react";
+
+export default function Home() {
+  return (
+    <>
+      <Loader />
+      <Header />
+      <Suspense fallback={null}>
+        <AsyncPageContent />
+      </Suspense>
+    </>
+  );
+}
+
+async function AsyncPageContent() {
   // Query business contacts and featured products directly on the server
   const contact = await prisma.contact.findFirst();
   const featuredProducts = await prisma.product.findMany({
@@ -22,9 +36,6 @@ export default async function Home() {
 
   return (
     <>
-      <Loader />
-      <Header />
-
       <div className={styles["page-shell"]}>
         <main>
           {/* ── HERO ── */}

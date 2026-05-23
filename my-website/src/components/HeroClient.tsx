@@ -11,7 +11,11 @@ export default function HeroClient() {
       initHeroSnap();
     }
 
-    document.addEventListener("loaderDone", bootstrap, { once: true });
+    if ((window as any).__loaderDone) {
+      bootstrap();
+    } else {
+      document.addEventListener("loaderDone", bootstrap, { once: true });
+    }
 
     return () => {
       document.removeEventListener("loaderDone", bootstrap);

@@ -73,6 +73,7 @@ export default function Loader() {
                 safeLoader.classList.add("hide");
 
                 setTimeout(() => {
+                  (window as any).__loaderDone = true;
                   document.dispatchEvent(new CustomEvent("loaderDone"));
                 }, 700);
               }, 550);
