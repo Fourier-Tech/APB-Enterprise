@@ -1,0 +1,617 @@
+"use client";
+
+import { useEffect } from "react";
+import Link from "next/link";
+
+export default function LiftZone() {
+  useEffect(() => {
+    // Dynamically load GSAP + jsVectorMap scripts
+    const loadScript = (src: string) =>
+      new Promise<void>((resolve) => {
+        if (document.querySelector(`script[src="${src}"]`)) {
+          resolve();
+          return;
+        }
+        const s = document.createElement("script");
+        s.src = src;
+        s.onload = () => resolve();
+        document.body.appendChild(s);
+      });
+
+    async function init() {
+      await loadScript(
+        "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js",
+      );
+      await loadScript(
+        "https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/js/jsvectormap.min.js",
+      );
+      await loadScript(
+        "https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/maps/world.js",
+      );
+
+      const gsap = (window as any).gsap;
+
+      // ── MAP ──
+      const countries = [
+        "IN",
+        "BD",
+        "LK",
+        "NP",
+        "SG",
+        "MY",
+        "TH",
+        "ID",
+        "PH",
+        "VN",
+        "AE",
+        "SA",
+        "QA",
+        "KW",
+        "OM",
+        "BH",
+        "GB",
+        "DE",
+        "FR",
+        "IT",
+        "NL",
+        "NG",
+        "KE",
+        "ZA",
+        "GH",
+        "US",
+        "CA",
+        "BR",
+        "AU",
+      ];
+      try {
+        new (window as any).jsVectorMap({
+          selector: "#world-map",
+          map: "world",
+          backgroundColor: "transparent",
+          regionStyle: {
+            initial: { fill: "#EBEBEB", stroke: "#FFFFFF", strokeWidth: 0.5 },
+            hover: { fill: "#0F6978", cursor: "pointer" },
+            selected: { fill: "#0F6978" },
+            selectedHover: { fill: "#1A8A9E" },
+          },
+          selectedRegions: countries,
+          zoomButtons: false,
+          zoomOnScroll: false,
+        });
+      } catch (e) {
+        console.warn("Map failed", e);
+      }
+
+      // ── LIFT ZONE SCROLL-JACK ──
+      // Query all elements once and guard in one place
+      const liftZoneEl = document.getElementById("lift-zone");
+      const elevatorEl = document.getElementById("lz-elevator");
+      const progressEl = document.getElementById("lz-progress");
+      const scrollHintEl = document.getElementById("lz-scroll-hint");
+
+      // Single null-guard — after this block TypeScript knows all are HTMLElement
+      if (
+        !(liftZoneEl instanceof HTMLElement) ||
+        !(elevatorEl instanceof HTMLElement) ||
+        !(progressEl instanceof HTMLElement) ||
+        !(scrollHintEl instanceof HTMLElement)
+      )
+        return;
+
+      // Now alias as non-nullable so all inner functions use them safely
+      const lz = liftZoneEl;
+      const elev = elevatorEl;
+      const prog = progressEl;
+      const hint = scrollHintEl;
+
+      const FLOORS = 3;
+      const LIFT_TOPS = ["2%", "40%", "75%"];
+
+      let currentFloor = 0;
+      let isAnimating = false;
+      let liftActive = false;
+      let doorTimeline: any = null;
+
+      gsap.set(".lz-panel", {
+        opacity: 0,
+        y: 30,
+        visibility: "hidden",
+        pointerEvents: "none",
+      });
+      gsap.set("#lz-panel-0", {
+        opacity: 1,
+        y: 0,
+        visibility: "visible",
+        pointerEvents: "auto",
+      });
+
+      let isProgrammaticScroll = false;
+      let progScrollTimer: ReturnType<typeof setTimeout> | null = null;
+
+      function changeFloorInstantly(target: number) {
+        if (target === currentFloor) return;
+        const old = currentFloor;
+        currentFloor = target;
+
+        gsap.killTweensOf(".lz-panel");
+        if (doorTimeline) doorTimeline.kill();
+
+        gsap.set(`#lz-panel-${old}`, {
+          opacity: 0,
+          y: -25,
+          visibility: "hidden",
+          pointerEvents: "none",
+        });
+        gsap.set(`#lz-panel-${target}`, {
+          visibility: "visible",
+          pointerEvents: "auto",
+          y: 0,
+          opacity: 1,
+        });
+
+        document
+          .querySelectorAll<HTMLElement>(".lz-floor-label")
+          .forEach((el) =>
+            el.classList.toggle("active", Number(el.dataset.floor) === target),
+          );
+        document
+          .querySelectorAll<HTMLElement>(".lz-dot")
+          .forEach((el) =>
+            el.classList.toggle("active", Number(el.dataset.target) === target),
+          );
+
+        elev.classList.remove("open");
+        gsap.set(elev, { top: LIFT_TOPS[target] });
+      }
+
+      function changeFloor(target: number, syncScroll = false) {
+        if (target === currentFloor || isAnimating) return;
+        isAnimating = true;
+
+        const old = currentFloor;
+        currentFloor = target;
+
+        if (syncScroll) {
+          const liftZoneTop = window.scrollY + lz.getBoundingClientRect().top;
+          const targetY = liftZoneTop + window.innerHeight * target;
+          isProgrammaticScroll = true;
+          window.scrollTo({ top: targetY, behavior: "auto" });
+          if (progScrollTimer) clearTimeout(progScrollTimer);
+          progScrollTimer = setTimeout(() => {
+            isProgrammaticScroll = false;
+          }, 150);
+        }
+
+        gsap.to(`#lz-panel-${old}`, {
+          opacity: 0,
+          y: -25,
+          duration: 0.35,
+          ease: "power2.in",
+          onComplete: () =>
+            gsap.set(`#lz-panel-${old}`, {
+              visibility: "hidden",
+              pointerEvents: "none",
+            }),
+        });
+        gsap.set(`#lz-panel-${target}`, {
+          visibility: "visible",
+          pointerEvents: "auto",
+          y: 30,
+        });
+        gsap.to(`#lz-panel-${target}`, {
+          opacity: 1,
+          y: 0,
+          duration: 0.5,
+          delay: 0.25,
+          ease: "power2.out",
+        });
+
+        document
+          .querySelectorAll<HTMLElement>(".lz-floor-label")
+          .forEach((el) =>
+            el.classList.toggle("active", Number(el.dataset.floor) === target),
+          );
+        document
+          .querySelectorAll<HTMLElement>(".lz-dot")
+          .forEach((el) =>
+            el.classList.toggle("active", Number(el.dataset.target) === target),
+          );
+
+        if (doorTimeline) doorTimeline.kill();
+        elev.classList.remove("open");
+        doorTimeline = gsap.timeline();
+        doorTimeline.to(
+          elev,
+          { top: LIFT_TOPS[target], duration: 0.8, ease: "power2.inOut" },
+          0,
+        );
+        doorTimeline.add(() => elev.classList.add("open"), 0.8);
+        doorTimeline.add(() => elev.classList.remove("open"), 2.3);
+
+        hint.style.opacity = "0";
+
+        let floorCooldown = false;
+        let floorCooldownTimer: ReturnType<typeof setTimeout> | null = null;
+        setTimeout(() => {
+          isAnimating = false;
+          floorCooldown = true;
+          if (floorCooldownTimer) clearTimeout(floorCooldownTimer);
+          floorCooldownTimer = setTimeout(() => {
+            floorCooldown = false;
+          }, 400);
+        }, 1200);
+      }
+
+      function isLiftZoneActive() {
+        const rect = lz.getBoundingClientRect();
+        return rect.top <= 2 && rect.bottom >= window.innerHeight - 2;
+      }
+
+      let wheelAccum = 0;
+      let wheelTimer: ReturnType<typeof setTimeout> | null = null;
+      let floorCooldown = false;
+      let lastWheelTime = 0;
+
+      const handleWheel = (e: WheelEvent) => {
+        if (!isLiftZoneActive()) return;
+        const now = Date.now();
+        if (now - lastWheelTime > 150) {
+          isProgrammaticScroll = false;
+          floorCooldown = false;
+        }
+        lastWheelTime = now;
+
+        if (e.deltaY > 0 && currentFloor >= FLOORS - 1) return;
+        if (e.deltaY < 0 && currentFloor <= 0) return;
+
+        e.preventDefault();
+
+        if (isProgrammaticScroll || floorCooldown || isAnimating) {
+          wheelAccum = 0;
+          return;
+        }
+
+        wheelAccum += e.deltaY;
+        if (wheelTimer) clearTimeout(wheelTimer);
+        wheelTimer = setTimeout(() => {
+          wheelAccum = 0;
+        }, 200);
+
+        if (wheelAccum > 30) {
+          wheelAccum = 0;
+          changeFloor(Math.min(currentFloor + 1, FLOORS - 1), true);
+        } else if (wheelAccum < -30) {
+          wheelAccum = 0;
+          changeFloor(Math.max(currentFloor - 1, 0), true);
+        }
+      };
+
+      let touchStartY = 0;
+      const handleTouchStart = (e: TouchEvent) => {
+        touchStartY = e.touches[0].clientY;
+      };
+      const handleTouchEnd = (e: TouchEvent) => {
+        if (!isLiftZoneActive() || isAnimating || isProgrammaticScroll) return;
+        const delta = touchStartY - e.changedTouches[0].clientY;
+        if (delta > 40 && currentFloor < FLOORS - 1)
+          changeFloor(currentFloor + 1, true);
+        else if (delta < -40 && currentFloor > 0)
+          changeFloor(currentFloor - 1, true);
+      };
+
+      document.querySelectorAll<HTMLElement>(".lz-dot").forEach((dot) => {
+        dot.addEventListener("click", () => {
+          const target = Number(dot.dataset.target);
+          if (isNaN(target)) return;
+          if (!isLiftZoneActive()) {
+            isProgrammaticScroll = true;
+            if (progScrollTimer) clearTimeout(progScrollTimer);
+            progScrollTimer = setTimeout(() => {
+              isProgrammaticScroll = false;
+            }, 1200);
+            lz.scrollIntoView({ behavior: "smooth" });
+            setTimeout(() => changeFloor(target, true), 600);
+          } else {
+            changeFloor(target, true);
+          }
+        });
+      });
+
+      function onPageScroll() {
+        const active = isLiftZoneActive();
+        prog.classList.toggle("visible", active);
+
+        const rect = lz.getBoundingClientRect();
+        const liftZoneTop = window.scrollY + rect.top;
+
+        if (active && !liftActive) {
+          liftActive = true;
+          if (!isProgrammaticScroll) {
+            isProgrammaticScroll = true;
+            wheelAccum = 0;
+            if (Math.abs(rect.top) < window.innerHeight / 2) {
+              window.scrollTo({ top: liftZoneTop, behavior: "auto" });
+              changeFloorInstantly(0);
+            } else {
+              window.scrollTo({
+                top: liftZoneTop + window.innerHeight * 2,
+                behavior: "auto",
+              });
+              changeFloorInstantly(2);
+            }
+            if (progScrollTimer) clearTimeout(progScrollTimer);
+            progScrollTimer = setTimeout(() => {
+              isProgrammaticScroll = false;
+            }, 800);
+            return;
+          }
+        } else if (!active && liftActive) {
+          liftActive = false;
+        }
+
+        if (active && !isProgrammaticScroll) {
+          const scrolledInto = window.scrollY - liftZoneTop;
+          let targetFloor = 0;
+          if (
+            scrolledInto > window.innerHeight * 0.5 &&
+            scrolledInto < window.innerHeight * 1.5
+          )
+            targetFloor = 1;
+          else if (scrolledInto >= window.innerHeight * 1.5) targetFloor = 2;
+          if (currentFloor !== targetFloor) changeFloorInstantly(targetFloor);
+        }
+
+        if (active && currentFloor === 0) hint.classList.add("visible");
+        else hint.classList.remove("visible");
+      }
+
+      window.addEventListener("wheel", handleWheel, { passive: false });
+      window.addEventListener("touchstart", handleTouchStart, {
+        passive: true,
+      });
+      window.addEventListener("touchend", handleTouchEnd, { passive: true });
+      window.addEventListener("scroll", onPageScroll, { passive: true });
+      onPageScroll();
+
+      return () => {
+        window.removeEventListener("wheel", handleWheel);
+        window.removeEventListener("touchstart", handleTouchStart);
+        window.removeEventListener("touchend", handleTouchEnd);
+        window.removeEventListener("scroll", onPageScroll);
+      };
+    }
+
+    init();
+  }, []);
+
+  return (
+    <div id="lift-zone">
+      <div id="lift-sticky">
+        {/* Progress dots */}
+        <div id="lz-progress">
+          {[
+            { label: "About", idx: 0 },
+            { label: "Flagship", idx: 1 },
+            { label: "Global", idx: 2 },
+          ].map((d) => (
+            <div
+              key={d.idx}
+              className={`lz-dot${d.idx === 0 ? " active" : ""}`}
+              data-target={d.idx}
+            >
+              <span className="lz-dot-text">{d.label}</span>
+              <span className="lz-dot-btn"></span>
+            </div>
+          ))}
+        </div>
+
+        {/* Scroll hint */}
+        <div id="lz-scroll-hint">
+          <i className="fas fa-chevron-down"></i>
+          <span>Scroll to explore</span>
+        </div>
+
+        <div className="building-container">
+          {/* Left — floor labels */}
+          <div className="lz-left-col">
+            {[
+              { label: "About", idx: 0 },
+              { label: "Flagship", idx: 1 },
+              { label: "Reach", idx: 2 },
+            ].map((f) => (
+              <div
+                key={f.idx}
+                className={`lz-floor-label${f.idx === 0 ? " active" : ""}`}
+                data-floor={f.idx}
+              >
+                <span className="lz-floor-label-text">{f.label}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Center — elevator shaft */}
+          <div className="lz-center-col">
+            <div className="lz-guide-rail left"></div>
+            <div className="lz-guide-rail right"></div>
+            <div className="lz-floor-sill" style={{ top: "2%" }}></div>
+            <div className="lz-floor-sill" style={{ top: "40%" }}></div>
+            <div className="lz-floor-sill" style={{ top: "75%" }}></div>
+            <div className="lz-elevator-car" id="lz-elevator">
+              <div className="lz-car-door left-door"></div>
+              <div className="lz-car-door right-door"></div>
+            </div>
+          </div>
+
+          {/* Right — content panels */}
+          <div className="lz-right-col">
+            {/* Floor 0: About */}
+            <div className="lz-panel" id="lz-panel-0">
+              <div className="lz-panel-tag">First Floor · About APB</div>
+              <h2>
+                Engineering trust
+                <br />
+                <em style={{ fontStyle: "normal", color: "var(--teal)" }}>
+                  since 1998.
+                </em>
+              </h2>
+              <div
+                className="about-inner"
+                style={{
+                  gridTemplateColumns: "160px 1fr",
+                  gap: "2.5rem",
+                  maxWidth: "820px",
+                  marginBottom: "2rem",
+                }}
+              >
+                <span className="about-label">About APB</span>
+                <div className="about-body">
+                  <p>
+                    Founded in 1998, APB Enterprise has grown from a small
+                    engineering team into a registered LLP trusted by elevator
+                    manufacturers across India and Southeast Asia. We build
+                    controllers, door operators, safety gears, and COP panels —
+                    components that move millions of people every day, safely
+                    and silently.
+                  </p>
+                  <Link href="/about" className="about-link">
+                    Learn more about us{" "}
+                    <i className="fas fa-arrow-right fa-xs"></i>
+                  </Link>
+                </div>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "1.25rem",
+                  alignItems: "center",
+                  flexWrap: "wrap",
+                }}
+              >
+                <Link href="/about" className="btn-primary">
+                  <i className="fas fa-arrow-right"></i>&nbsp; Our full story
+                </Link>
+                <Link href="/contact" className="btn-ghost">
+                  Get a quote &nbsp;<i className="fas fa-arrow-right fa-xs"></i>
+                </Link>
+              </div>
+            </div>
+
+            {/* Floor 1: Flagship Products */}
+            <div className="lz-panel" id="lz-panel-1">
+              <div className="lz-panel-tag">Second Floor · Flagship Range</div>
+              <div className="section-head" style={{ marginBottom: "1.75rem" }}>
+                <h2 className="section-title">
+                  Engineered for extreme reliability
+                </h2>
+                <Link
+                  href="/products"
+                  className="btn-ghost"
+                  style={{ marginBottom: "4px" }}
+                >
+                  View all <i className="fas fa-arrow-right fa-xs"></i>
+                </Link>
+              </div>
+              <div
+                className="products-grid stagger"
+                style={{ gridTemplateColumns: "repeat(4,1fr)", gap: "1rem" }}
+              >
+                {[
+                  {
+                    icon: "fa-door-open",
+                    name: "Door Operator",
+                    desc: "VVVF, silent operation, 1,000 cycles/day, IP54 rated",
+                  },
+                  {
+                    icon: "fa-th-large",
+                    name: "Smart COP Panel",
+                    desc: "Customizable, touch & braille support, up to 64 floors",
+                  },
+                  {
+                    icon: "fa-shield-alt",
+                    name: "Safety Gear",
+                    desc: "EN81 progressive, up to 3,000 kg, 5 m/s rated",
+                  },
+                  {
+                    icon: "fa-microchip",
+                    name: "Elevator Controller",
+                    desc: "32-bit ARM, IoT ready, CAN bus, group control",
+                  },
+                ].map((p) => (
+                  <div key={p.name} className="product-card">
+                    <div className="product-img-wrap">
+                      <span className="product-watermark-badge">
+                        APB Enterprise
+                      </span>
+                      <div className="product-watermark">
+                        <i className={`fas ${p.icon}`}></i>
+                        <span className="product-watermark-label">
+                          Product Image
+                        </span>
+                      </div>
+                    </div>
+                    <div className="product-card-body">
+                      <h3>{p.name}</h3>
+                      <p>{p.desc}</p>
+                      <Link href="/products" className="product-link">
+                        Details <i className="fas fa-arrow-right fa-xs"></i>
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Floor 2: Global Reach */}
+            <div className="lz-panel" id="lz-panel-2">
+              <div className="lz-panel-tag">Third Floor · Global Reach</div>
+              <div className="section-head" style={{ marginBottom: "1.5rem" }}>
+                <h2 className="section-title">Trusted across six continents</h2>
+              </div>
+              <div
+                className="reach-grid"
+                style={{ gridTemplateColumns: "180px 1fr", gap: "2.5rem" }}
+              >
+                <div className="reach-stats stagger">
+                  {[
+                    { num: "25+", label: "Countries" },
+                    { num: "500+", label: "Projects" },
+                    { num: "15+", label: "Export years" },
+                    { num: "6", label: "Continents" },
+                  ].map((s) => (
+                    <div key={s.label} className="reach-stat">
+                      <div className="reach-stat-num">{s.num}</div>
+                      <div className="reach-stat-label">{s.label}</div>
+                    </div>
+                  ))}
+                </div>
+                <div>
+                  <div className="map-container">
+                    <div id="world-map"></div>
+                  </div>
+                  <div
+                    className="region-pills"
+                    style={{ marginTop: "0.75rem" }}
+                  >
+                    {[
+                      "South Asia",
+                      "SE Asia",
+                      "Middle East",
+                      "Europe",
+                      "Africa",
+                      "Americas",
+                      "Australia",
+                    ].map((r) => (
+                      <span key={r} className="region-pill">
+                        {r}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
