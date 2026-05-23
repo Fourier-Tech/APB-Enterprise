@@ -89,7 +89,7 @@ function initCounters() {
    When the user scrolls down with enough intent while the hero is fully
    visible, smoothly snap them straight to the lift-zone section. */
 function initHeroSnap() {
-  const heroEl = document.querySelector<HTMLElement>(".hero");
+  const heroEl = document.getElementById("home-hero");
   const liftZoneEl = document.getElementById("lift-zone");
   if (!heroEl || !liftZoneEl) return;
 

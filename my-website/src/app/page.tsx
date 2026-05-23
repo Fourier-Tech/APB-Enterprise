@@ -28,7 +28,7 @@ export default async function Home() {
       <div className={styles["page-shell"]}>
         <main>
           {/* ── HERO ── */}
-          <section className={styles.hero}>
+          <section id="home-hero" className={styles.hero}>
             <div className={styles["hero-bg-circle"]}></div>
             <div className={styles["hero-corner-tl"]}></div>
             <div className={styles["hero-corner-br"]}></div>
