@@ -54,7 +54,7 @@ This is a production Next.js website for APB Enterprise (elevator components man
 4. Create a `.env` file in the root directory and add `DATABASE_URL` and `DIRECT_URL`
 5. Generate the Prisma client: `npx prisma generate`
 6. Sync the database schema: `npx prisma db push` (or `npx prisma migrate dev` if using migrations)
-7. Start the development server: `npm run dev` (starts on port 3000)
+7. Start the development server: `npm run dev` (starts on port 3000, pre-configured with `--hostname 0.0.0.0` to allow local network IP/mobile browser testing. Refer to `README.md` for secure localtunnel directions).
 
 ## Build & Deploy
 - **Production Build**: `npm run build`

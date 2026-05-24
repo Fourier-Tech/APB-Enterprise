@@ -290,6 +290,7 @@ export default function LiftZone({
       let lastWheelTime = 0;
 
       const handleWheel = (e: WheelEvent) => {
+        if (window.innerWidth <= 768) return; // Disable scroll-jacking on mobile
         if (!isLiftZoneActive()) return;
         const now = Date.now();
         if (now - lastWheelTime > 150) {
@@ -325,9 +326,11 @@ export default function LiftZone({
 
       let touchStartY = 0;
       const handleTouchStart = (e: TouchEvent) => {
+        if (window.innerWidth <= 768) return; // Disable scroll-jacking on mobile
         touchStartY = e.touches[0].clientY;
       };
       const handleTouchEnd = (e: TouchEvent) => {
+        if (window.innerWidth <= 768) return; // Disable scroll-jacking on mobile
         if (!isLiftZoneActive() || isAnimating || isProgrammaticScroll) return;
         const delta = touchStartY - e.changedTouches[0].clientY;
         if (delta > 40 && currentFloor < FLOORS - 1)
@@ -338,6 +341,7 @@ export default function LiftZone({
 
       document.querySelectorAll<HTMLElement>(".lz-dot").forEach((dot) => {
         dot.addEventListener("click", () => {
+          if (window.innerWidth <= 768) return; // Disable dot clicks on mobile
           const target = Number(dot.dataset.target);
           if (isNaN(target)) return;
           if (!isLiftZoneActive()) {
@@ -355,6 +359,11 @@ export default function LiftZone({
       });
 
       function onPageScroll() {
+        if (window.innerWidth <= 768) {
+          prog.classList.remove("visible");
+          hint.classList.remove("visible");
+          return;
+        }
         const active = isLiftZoneActive();
         prog.classList.toggle("visible", active);
 
