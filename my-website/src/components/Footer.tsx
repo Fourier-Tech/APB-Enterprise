@@ -63,41 +63,33 @@ export default function Footer({ contact }: { contact: ContactData | null }) {
                 Engineering trust since 2018 — precision components for modern
                 vertical transportation. LLP registered.
               </p>
-              <div className="footer-socials" style={{ marginTop: "0.75rem" }}>
-                <a
-                  href={
-                    contact && contact.linkedinUrl
-                      ? contact.linkedinUrl
-                      : "https://linkedin.com"
-                  }
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <i className="fab fa-linkedin-in"></i>
-                </a>
-                <a
-                  href={
-                    contact && contact.facebookUrl
-                      ? contact.facebookUrl
-                      : "https://facebook.com"
-                  }
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <i className="fab fa-facebook-f"></i>
-                </a>
-                <a
-                  href={
-                    contact && contact.instagramUrl
-                      ? contact.instagramUrl
-                      : "https://instagram.com"
-                  }
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <i className="fab fa-instagram"></i>
-                </a>
-              </div>
+              {(() => {
+                const socials = [
+                  { url: contact?.linkedinUrl, icon: "fab fa-linkedin-in" },
+                  { url: contact?.facebookUrl, icon: "fab fa-facebook-f" },
+                  { url: contact?.instagramUrl, icon: "fab fa-instagram" },
+                  { url: contact?.twitterUrl, icon: "fab fa-x-twitter" },
+                  { url: contact?.youtubeUrl, icon: "fab fa-youtube" },
+                ].filter((s) => s.url);
+
+                return socials.length > 0 ? (
+                  <div
+                    className="footer-socials"
+                    style={{ marginTop: "0.75rem" }}
+                  >
+                    {socials.map((s, i) => (
+                      <a
+                        key={i}
+                        href={s.url!}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <i className={s.icon}></i>
+                      </a>
+                    ))}
+                  </div>
+                ) : null;
+              })()}
             </div>
 
             {/* Navigation */}
