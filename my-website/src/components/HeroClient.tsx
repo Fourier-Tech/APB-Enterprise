@@ -93,6 +93,7 @@ function initCounters() {
    When the user scrolls down with enough intent while the hero is fully
    visible, smoothly snap them straight to the lift-zone section. */
 function initHeroSnap() {
+  if (window.innerWidth <= 768) return; // Skip snap on mobile/phone screens
   const heroEl = document.getElementById("home-hero");
   const liftZoneEl = document.getElementById("lift-zone");
   if (!heroEl || !liftZoneEl) return;
@@ -122,6 +123,7 @@ function initHeroSnap() {
   }
 
   const handleWheel = (e: WheelEvent) => {
+    if (window.innerWidth <= 768) return; // Skip snap on mobile
     if (!heroFullyVisible()) return;
     if (e.deltaY <= 0) return;
 
@@ -139,10 +141,12 @@ function initHeroSnap() {
   };
 
   const handleTouchStart = (e: TouchEvent) => {
+    if (window.innerWidth <= 768) return; // Skip snap on mobile
     touchStartY = e.touches[0].clientY;
   };
 
   const handleTouchEnd = (e: TouchEvent) => {
+    if (window.innerWidth <= 768) return; // Skip snap on mobile
     if (!heroFullyVisible()) return;
     const delta = touchStartY - e.changedTouches[0].clientY;
     if (delta > 60) snapToLift();

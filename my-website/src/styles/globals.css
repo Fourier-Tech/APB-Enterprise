@@ -134,20 +134,22 @@ header {
 }
 
 .logo-name {
-  font-size: 1.1rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
   color: var(--black);
+  line-height: 1.1;
 }
 
 .logo-sub {
-  font-family: "Epilogue", sans-serif;
-  font-size: 0.58rem;
-  font-weight: 500;
-  letter-spacing: 0.16em;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.46rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--gray-mid);
-  margin-top: 3px;
+  color: var(--teal);
+  margin-top: 2px;
+  opacity: 0.85;
 }
 
 /* Nav links */
@@ -816,6 +818,9 @@ footer {
   background: var(--off-white);
   padding: 1.25rem;
   border-radius: 3px;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 #world-map {
@@ -883,4 +888,187 @@ footer {
   font-size: 0.82rem;
   color: var(--gray-mid);
   margin-top: 4px;
+}
+
+/* ============================================================
+   13. MOBILE NAV MENU & LOGO BRANDING & BROCHURE SECTION RESPONSIVE OVERRIDES
+   ============================================================ */
+
+/* Menu toggle button (desktop hidden) */
+.menu-toggle {
+  display: none;
+}
+
+/* Mobile Nav Drawer (desktop hidden) */
+.mobile-nav {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  /* Hide desktop navbar */
+  .desktop-nav {
+    display: none !important;
+  }
+
+  /* Hamburger Menu Button */
+  .menu-toggle {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 6px;
+    border: 1px solid var(--gray-light);
+    background: var(--off-white);
+    color: var(--black);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 210;
+  }
+
+  .menu-toggle:hover {
+    background: var(--gray-xlight);
+    border-color: var(--gray-mid);
+  }
+
+  .menu-toggle.open {
+    background: var(--teal-bg);
+    border-color: rgba(15, 105, 120, 0.3);
+    color: var(--teal);
+  }
+
+  /* Mobile Fullscreen Slide-Down Nav Drawer */
+  .mobile-nav {
+    display: flex !important;
+    position: fixed;
+    top: 72px; /* Placed exactly below sticky header */
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 72px);
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.75rem;
+    z-index: 199;
+    border-top: 1px solid var(--gray-xlight);
+    transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateY(-10px);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .mobile-nav.open {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Mobile links */
+  .mobile-nav a {
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--gray-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    transition: color 0.2s ease;
+    padding: 6px 20px;
+    border-bottom: 2px solid transparent;
+  }
+
+  .mobile-nav a:hover,
+  .mobile-nav a.active {
+    color: var(--teal) !important;
+  }
+
+  .mobile-nav .nav-cta {
+    margin-top: 1.5rem;
+    width: 75%;
+    max-width: 250px;
+    text-align: center;
+    justify-content: center;
+    background: var(--teal) !important;
+    color: var(--white) !important;
+    padding: 12px 24px !important;
+    border-radius: 6px !important;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-transform: none;
+    letter-spacing: 0;
+    box-shadow: 0 8px 24px rgba(15, 105, 120, 0.2) !important;
+    border: none !important;
+  }
+
+  /* Tagline & Logo Sizing adjustments to look incredibly cool */
+  .logo-name {
+    font-size: 1.05rem !important;
+    letter-spacing: -0.02em !important;
+  }
+
+  .logo-sub {
+    font-size: 0.44rem !important;
+    letter-spacing: 0.05em !important;
+    margin-top: 1px !important;
+    opacity: 0.85;
+  }
+
+  /* Brochure Section mobile-optimized horizontal overrides */
+  .brochure-section {
+    padding: 1.75rem 0 !important;
+  }
+
+  .brochure-inner {
+    flex-direction: row !important;
+    text-align: left !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 1.25rem !important;
+  }
+
+  .brochure-title {
+    font-size: 0.95rem !important;
+    line-height: 1.3 !important;
+    margin-bottom: 0px !important;
+  }
+
+  .brochure-sub {
+    font-size: 0.72rem !important;
+    line-height: 1.4 !important;
+    margin-top: 2px !important;
+    max-width: 100% !important;
+  }
+
+  .brochure-inner .btn-outline-teal {
+    width: auto !important;
+    padding: 8px 14px !important;
+    font-size: 0.76rem !important;
+    white-space: nowrap !important;
+    align-self: center !important;
+    display: inline-flex !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* On extremely narrow screens, hide the long tagline to keep navigation pristine */
+  .logo-sub {
+    display: none !important;
+  }
+
+  /* Hide brochure subtext on extremely small screens to maintain clean single-line horizontal alignment */
+  .brochure-sub {
+    display: none !important;
+  }
+
+  .brochure-inner {
+    gap: 0.75rem !important;
+  }
+
+  .brochure-inner .btn-outline-teal {
+    padding: 6px 10px !important;
+    font-size: 0.72rem !important;
+  }
 }

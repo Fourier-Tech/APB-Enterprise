@@ -81,19 +81,19 @@ async function AsyncPageContent() {
 
                 <div className={styles["hero-stats"]}>
                   <div className={styles["stat-item"]}>
-                    <div className={styles["stat-num"]} data-count="25+">
+                    <div className={`${styles["stat-num"]} stat-num`} data-count="25+">
                       25+
                     </div>
                     <div className={styles["stat-label"]}>Years</div>
                   </div>
                   <div className={styles["stat-item"]}>
-                    <div className={styles["stat-num"]} data-count="500+">
+                    <div className={`${styles["stat-num"]} stat-num`} data-count="500+">
                       500+
                     </div>
                     <div className={styles["stat-label"]}>Projects</div>
                   </div>
                   <div className={styles["stat-item"]}>
-                    <div className={styles["stat-num"]}>ISO</div>
+                    <div className={`${styles["stat-num"]} stat-num`}>ISO</div>
                     <div className={styles["stat-label"]}>Certified</div>
                   </div>
                 </div>

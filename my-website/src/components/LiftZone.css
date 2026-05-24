@@ -686,3 +686,226 @@
   margin-bottom: 0.5rem;
   animation: bounceDown 2s infinite;
 }
+
+/* ============================================================
+   RESPONSIVE STYLING (PHONES & PORTRAIT TABLETS)
+   ============================================================ */
+@media (max-width: 768px) {
+  #lift-zone {
+    height: auto !important;
+    position: relative !important;
+  }
+
+  #lift-sticky {
+    position: relative !important;
+    top: auto !important;
+    height: auto !important;
+    padding: 3.5rem 0 2rem !important;
+    overflow: visible !important;
+    background: var(--off-white) !important;
+  }
+
+  .building-container {
+    width: 100% !important;
+    height: auto !important;
+    flex-direction: column !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    background: none !important;
+    padding: 0 !important;
+  }
+
+  /* Hide elevator mechanics, shaft, labels, and scroll helpers */
+  .lz-left-col,
+  .lz-center-col,
+  #lz-progress,
+  #lz-scroll-hint {
+    display: none !important;
+  }
+
+  /* Expand right-side panel wrapper to full width */
+  .lz-right-col {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2.5rem !important;
+    background: none !important;
+    padding: 0 !important;
+  }
+
+  /* Convert panels to beautiful vertical flow cards */
+  .lz-panel {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    width: calc(100% - 2.5rem) !important;
+    max-width: 540px !important;
+    margin: 0 auto 2.5rem !important;
+    height: auto !important;
+    padding: 2.5rem 1.5rem !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    pointer-events: auto !important;
+    background: var(--white) !important;
+    border: 1px solid var(--gray-light) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.035) !important;
+    overflow: visible !important;
+  }
+
+  .lz-panel:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  .lz-panel h2 {
+    font-size: 1.5rem !important;
+    font-weight: 700;
+    line-height: 1.25 !important;
+    margin-bottom: 1.25rem !important;
+    letter-spacing: -0.01em !important;
+  }
+
+  /* Transform vertical text label to an elegant horizontal teal pill badge */
+  .lz-panel .about-label {
+    display: inline-block !important;
+    background: var(--teal-bg) !important;
+    border: 1px solid rgba(15, 105, 120, 0.15) !important;
+    color: var(--teal) !important;
+    padding: 4px 12px !important;
+    border-radius: 20px !important;
+    font-family: "Space Grotesk", sans-serif !important;
+    font-size: 0.6rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.12em !important;
+    text-transform: uppercase !important;
+    width: fit-content !important;
+    margin-bottom: 1rem !important;
+    writing-mode: horizontal-tb !important;
+    transform: none !important;
+    height: auto !important;
+    padding-top: 4px !important;
+  }
+
+  .lz-panel .about-inner {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+    margin-bottom: 1.75rem !important;
+  }
+
+  .lz-panel .about-body p {
+    font-size: 0.95rem !important;
+    line-height: 1.65 !important;
+    color: var(--gray-dark) !important;
+    border-left: 3px solid var(--gold) !important;
+    padding-left: 1.25rem !important;
+  }
+
+  .lz-panel .about-link {
+    margin-top: 1rem !important;
+    margin-left: 1.25rem !important;
+    font-size: 0.8rem !important;
+    display: inline-flex !important;
+  }
+
+  /* Products Grid inside LiftZone */
+  .lz-panel .products-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1.25rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  .lz-panel .product-card {
+    border-radius: 8px !important;
+    border: 1px solid var(--gray-light) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02) !important;
+  }
+
+  .lz-panel .product-img-wrap {
+    height: 140px !important;
+  }
+
+  .lz-panel .product-card h3 {
+    font-size: 0.95rem !important;
+  }
+
+  .lz-panel .product-card p {
+    font-size: 0.78rem !important;
+    line-height: 1.5 !important;
+    margin-bottom: 0.75rem !important;
+  }
+
+  .lz-panel .product-link {
+    font-size: 0.65rem !important;
+  }
+
+  /* Reach Grid inside LiftZone */
+  .lz-panel .reach-grid {
+    grid-template-columns: 1fr !important;
+    gap: 2rem !important;
+  }
+
+  .lz-panel .reach-stats {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1.25rem !important;
+    margin-bottom: 0 !important;
+  }
+
+  .lz-panel .reach-stat {
+    border-left: 2px solid var(--gold) !important;
+    padding-left: 0.75rem !important;
+  }
+
+  .lz-panel .reach-stat-num {
+    font-size: 1.55rem !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+  }
+
+  .lz-panel .reach-stat-label {
+    font-size: 0.65rem !important;
+    letter-spacing: 0.05em !important;
+    margin-top: 3px !important;
+  }
+
+  .lz-panel .map-container {
+    padding: 0.5rem !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+  }
+
+  .lz-panel #world-map {
+    height: 200px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .lz-panel .map-container svg {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  .lz-panel .region-pills {
+    margin-top: 0.75rem !important;
+    gap: 0.35rem !important;
+  }
+
+  .lz-panel .region-pill {
+    font-size: 0.58rem !important;
+    padding: 3px 8px !important;
+    border-radius: 3px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Collapse products grid to a single column on small phone screens */
+  .lz-panel .products-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
