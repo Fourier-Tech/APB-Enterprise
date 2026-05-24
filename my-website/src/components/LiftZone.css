@@ -290,6 +290,7 @@
 /* Beat both .lz-panel p (flex-grow etc) and globals .product-card p (flex:1) */
 .lz-panel .product-card p {
   display: -webkit-box !important;
+  line-clamp: 2 !important;
   -webkit-line-clamp: 2 !important;
   -webkit-box-orient: vertical !important;
   overflow: hidden !important;
