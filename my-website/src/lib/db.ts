@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { Pool } from "pg";
+import { parse } from "pg-connection-string";
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
@@ -11,7 +12,8 @@ let prismaInstance: PrismaClient;
 if (typeof window === "undefined") {
   // We are on server side (Next.js Node environment)
   const connectionString = process.env.DATABASE_URL;
-  const pool = new Pool({ connectionString });
+  const config = parse(connectionString || "");
+  const pool = new Pool(config as any);
   const adapter = new PrismaPg(pool);
 
   prismaInstance =
