@@ -517,12 +517,6 @@ export default function LiftZone({
                   flexWrap: "wrap",
                 }}
               >
-                <Link href="/about" className="btn-primary">
-                  <i className="fas fa-arrow-right"></i>&nbsp; Our full story
-                </Link>
-                <Link href="/contact" className="btn-ghost">
-                  Get a quote &nbsp;<i className="fas fa-arrow-right fa-xs"></i>
-                </Link>
               </div>
             </div>
 
