@@ -37,6 +37,11 @@ export default function QuotePopup({ open, onClose }: QuotePopupProps) {
     document.body.style.paddingRight = `${scrollbarWidth}px`;
     document.body.classList.add("modal-open");
 
+    const headerEl = document.querySelector("header");
+    if (headerEl) {
+      headerEl.style.paddingRight = `${scrollbarWidth}px`;
+    }
+
     window.addEventListener("keydown", handleEscape);
     
     // Auto-focus the first field beautifully
@@ -48,6 +53,9 @@ export default function QuotePopup({ open, onClose }: QuotePopupProps) {
       document.body.style.overflow = "";
       document.body.style.paddingRight = "";
       document.body.classList.remove("modal-open");
+      if (headerEl) {
+        headerEl.style.paddingRight = "";
+      }
     };
   }, [open, onClose]);
 
@@ -129,7 +137,6 @@ export default function QuotePopup({ open, onClose }: QuotePopupProps) {
               <i className="fab fa-whatsapp" style={{ marginRight: 8 }}></i>
               Get a Quick Quote
             </h3>
-            <p>Fill in details — we will open WhatsApp with your message.</p>
           </div>
           <button className="qp-x" onClick={onClose} aria-label="Close modal">
             <i className="fas fa-times"></i>

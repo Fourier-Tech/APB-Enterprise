@@ -52,9 +52,9 @@ export default function Loader() {
     }
 
     function finishAnimation() {
-      safeBar.style.transition = "width 0.3s ease";
+      safeBar.style.transition = "width 0.2s ease";
       setProgress(100);
-      moveCar(PAD_BOTTOM + TRAVEL, 300);
+      moveCar(PAD_BOTTOM + TRAVEL, 150);
 
       setTimeout(() => {
         safeDoorL.classList.add("open");
@@ -68,9 +68,9 @@ export default function Loader() {
           setTimeout(() => {
             (window as any).__loaderDone = true;
             document.dispatchEvent(new CustomEvent("loaderDone"));
-          }, 700);
-        }, 550);
-      }, 350);
+          }, 400);
+        }, 350);
+      }, 150);
     }
 
     function checkAndFinish() {
@@ -84,11 +84,11 @@ export default function Loader() {
     function onLoad() {
       setProgress(90);
       const nearTop = PAD_BOTTOM + TRAVEL * 0.85;
-      moveCar(nearTop, 500);
+      moveCar(nearTop, 250);
 
       setTimeout(() => {
         checkAndFinish();
-      }, 500);
+      }, 100);
     }
 
     let resourceTimer: ReturnType<typeof setInterval> | null = null;

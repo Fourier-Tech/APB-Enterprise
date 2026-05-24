@@ -1347,13 +1347,22 @@ footer {
 }
 
 /* ============================================================
-   15. CINEMATIC CROSS-BROWSER BACKDROP BLUR (Single Unified Layer)
+   15. CINEMATIC CROSS-BROWSER BACKDROP BLUR (Fixed Header Safe)
    ============================================================ */
-#page-wrapper {
+#page-wrapper > *:not(header),
+header {
   transition: filter 0.22s cubic-bezier(0.4, 0, 0.2, 1);
-  width: 100%;
 }
 
-body.modal-open #page-wrapper {
+body.modal-open #page-wrapper > *:not(header) {
+  filter: blur(4px);
+  /* Negative margin expands render box by 12px to push bleed-edges off-screen,
+     while padding offsets it to keep internal content layout 100% static & stretch-free */
+  margin: -12px !important;
+  padding: 12px !important;
+}
+
+body.modal-open header {
   filter: blur(4px);
 }
+
