@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import QuoteButton from "@/components/QuoteButton";
 
 interface ContactData {
   address: string | null;
@@ -139,55 +140,40 @@ export default function Footer({ contact }: { contact: ContactData | null }) {
             {/* Contact */}
             <div className="footer-col footer-col--contact">
               <style>{`
-                .footer-col--contact .footer-contact-item {
-                  cursor: default;
-                }
-                .footer-col--contact .footer-contact-item i {
-                  transition: color 0.2s ease, transform 0.2s ease;
-                }
-                .footer-col--contact .footer-contact-item:hover i {
-                  color: var(--teal);
-                  transform: scale(1.15);
-                }
-                .footer-col--contact .footer-contact-item a {
-                  transition: color 0.2s ease;
-                }
-                .footer-col--contact .footer-contact-item:hover a {
-                  color: var(--teal);
-                }
+                .footer-col--contact .footer-contact-item { cursor: default; }
+                .footer-col--contact .footer-contact-item i { transition: color 0.2s ease, transform 0.2s ease; }
+                .footer-col--contact .footer-contact-item:hover i { color: var(--teal); transform: scale(1.15); }
+                .footer-col--contact .footer-contact-item a { transition: color 0.2s ease; }
+                .footer-col--contact .footer-contact-item:hover a { color: var(--teal); }
               `}</style>
               <h4>Contact</h4>
               <div className="footer-contact-item">
                 <i className="fas fa-phone-alt"></i>
                 <a
                   href={
-                    contact && contact.phonePrimary
+                    contact?.phonePrimary
                       ? `tel:${contact.phonePrimary.replace(/\s+/g, "")}`
                       : "tel:+918460348566"
                   }
                 >
-                  {contact && contact.phonePrimary
-                    ? contact.phonePrimary
-                    : "+91 84603 48566"}
+                  {contact?.phonePrimary ?? "+91 84603 48566"}
                 </a>
               </div>
               <div className="footer-contact-item">
                 <i className="fas fa-envelope"></i>
                 <a
                   href={
-                    contact && contact.emailPrimary
+                    contact?.emailPrimary
                       ? `mailto:${contact.emailPrimary}`
                       : "mailto:apbenterprise1@gmail.com"
                   }
                 >
-                  {contact && contact.emailPrimary
-                    ? contact.emailPrimary
-                    : "apbenterprise1@gmail.com"}
+                  {contact?.emailPrimary ?? "apbenterprise1@gmail.com"}
                 </a>
               </div>
               <div className="footer-contact-item">
                 <i className="fas fa-map-marker-alt"></i>
-                {contact && contact.addressUrl && contact.address ? (
+                {contact?.addressUrl && contact?.address ? (
                   <a
                     href={contact.addressUrl}
                     target="_blank"
@@ -205,24 +191,17 @@ export default function Footer({ contact }: { contact: ContactData | null }) {
                   </a>
                 )}
               </div>
-              <a
-                href={
-                  contact && contact.whatsappUrl
-                    ? contact.whatsappUrl
-                    : "https://wa.me/918460348566"
-                }
+
+              {/* Opens QuotePopup instead of direct WhatsApp link */}
+              <QuoteButton
+                label="WhatsApp us"
                 className="btn-outline-teal"
-                target="_blank"
-                rel="noopener noreferrer"
                 style={{
                   marginTop: "0.5rem",
                   fontSize: "0.78rem",
                   padding: "5px 12px",
-                  display: "inline-flex",
                 }}
-              >
-                <i className="fab fa-whatsapp"></i> WhatsApp us
-              </a>
+              />
             </div>
           </div>
 

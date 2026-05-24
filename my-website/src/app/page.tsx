@@ -5,6 +5,7 @@ import ElevatorDemo from "@/components/ElevatorDemo";
 import LiftZone from "@/components/LiftZone";
 import HeroClient from "@/components/HeroClient";
 import PageReadySignal from "@/components/PageReadySignal";
+import QuoteButton from "@/components/QuoteButton";
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import styles from "./page.module.css";
@@ -24,15 +25,11 @@ export default function Home() {
 }
 
 async function AsyncPageContent() {
-  // Query business contacts and featured products directly on the server
   const contact = await prisma.contact.findFirst();
   const featuredProducts = await prisma.product.findMany({
     where: { isFeatured: true },
-    orderBy: [
-      { displayOrder: "asc" },
-      { createdAt: "desc" }
-    ],
-    take: 4
+    orderBy: [{ displayOrder: "asc" }, { createdAt: "desc" }],
+    take: 4,
   });
 
   return (
@@ -45,7 +42,10 @@ async function AsyncPageContent() {
             <div className={styles["hero-corner-tl"]}></div>
             <div className={styles["hero-corner-br"]}></div>
 
-            <div className={`container ${styles["hero-grid"]}`} style={{ paddingTop: "72px" }}>
+            <div
+              className={`container ${styles["hero-grid"]}`}
+              style={{ paddingTop: "72px" }}
+            >
               {/* Left — copy + stats */}
               <div>
                 <div className={styles["hero-eyebrow"]}>
@@ -69,25 +69,25 @@ async function AsyncPageContent() {
                   <Link href="/products" className="btn-primary">
                     <i className="fas fa-th-large"></i> View products
                   </Link>
-                  <a
-                    href={contact ? contact.whatsappUrl || "/contact" : "/contact"}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-ghost"
-                  >
-                    Get a quote <i className="fas fa-arrow-right fa-sm"></i>
-                  </a>
+                  {/* Opens QuotePopup */}
+                  <QuoteButton label="Get a quote" className="btn-ghost" />
                 </div>
 
                 <div className={styles["hero-stats"]}>
                   <div className={styles["stat-item"]}>
-                    <div className={`${styles["stat-num"]} stat-num`} data-count="25+">
+                    <div
+                      className={`${styles["stat-num"]} stat-num`}
+                      data-count="25+"
+                    >
                       25+
                     </div>
                     <div className={styles["stat-label"]}>Years</div>
                   </div>
                   <div className={styles["stat-item"]}>
-                    <div className={`${styles["stat-num"]} stat-num`} data-count="500+">
+                    <div
+                      className={`${styles["stat-num"]} stat-num`}
+                      data-count="500+"
+                    >
                       500+
                     </div>
                     <div className={styles["stat-label"]}>Projects</div>
@@ -131,7 +131,7 @@ async function AsyncPageContent() {
 
       {/* Client-side: hero→liftzone snap + scroll-reveal + counters */}
       <HeroClient />
-      
+
       {/* Signals the loader that the async page is fully loaded */}
       <PageReadySignal />
     </>
