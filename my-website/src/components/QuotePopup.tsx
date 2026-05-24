@@ -103,8 +103,8 @@ export default function QuotePopup({ open, onClose }: QuotePopupProps) {
 
       setStatus("success");
       if (data.whatsappUrl) {
-        // Direct location change bypasses browser popup blockers and triggers native WhatsApp seamlessly!
-        window.location.href = data.whatsappUrl;
+        // Open WhatsApp in a new tab so the user keeps their active session on our website
+        window.open(data.whatsappUrl, "_blank", "noopener,noreferrer");
       }
 
       // Close the modal cleanly after showing the success state
