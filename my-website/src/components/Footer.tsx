@@ -29,12 +29,12 @@ export default function Footer({ contact }: { contact: ContactData | null }) {
             Expert consultation, volume pricing, and tailored product designs.
           </p>
           <a
-            href={contact && contact.whatsappUrl ? contact.whatsappUrl : "https://wa.me/918460348566"}
+            href="/contact"
             target="_blank"
             rel="noopener noreferrer"
             className="btn-gold-cta"
           >
-            <i className="fab fa-whatsapp"></i> Contact us on WhatsApp
+            Contact Us
           </a>
         </div>
       </section>
