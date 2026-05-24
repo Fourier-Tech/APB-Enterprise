@@ -63,6 +63,41 @@ export default function Footer({ contact }: { contact: ContactData | null }) {
                 Engineering trust since 2018 — precision components for modern
                 vertical transportation. LLP registered.
               </p>
+              <div className="footer-socials" style={{ marginTop: "0.75rem" }}>
+                <a
+                  href={
+                    contact && contact.linkedinUrl
+                      ? contact.linkedinUrl
+                      : "https://linkedin.com"
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <i className="fab fa-linkedin-in"></i>
+                </a>
+                <a
+                  href={
+                    contact && contact.facebookUrl
+                      ? contact.facebookUrl
+                      : "https://facebook.com"
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <i className="fab fa-facebook-f"></i>
+                </a>
+                <a
+                  href={
+                    contact && contact.instagramUrl
+                      ? contact.instagramUrl
+                      : "https://instagram.com"
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <i className="fab fa-instagram"></i>
+                </a>
+              </div>
             </div>
 
             {/* Navigation */}
@@ -110,34 +145,80 @@ export default function Footer({ contact }: { contact: ContactData | null }) {
             </div>
 
             {/* Contact */}
-            <div className="footer-col">
+            <div className="footer-col footer-col--contact">
+              <style>{`
+                .footer-col--contact .footer-contact-item {
+                  cursor: default;
+                }
+                .footer-col--contact .footer-contact-item i {
+                  transition: color 0.2s ease, transform 0.2s ease;
+                }
+                .footer-col--contact .footer-contact-item:hover i {
+                  color: var(--teal);
+                  transform: scale(1.15);
+                }
+                .footer-col--contact .footer-contact-item a {
+                  transition: color 0.2s ease;
+                }
+                .footer-col--contact .footer-contact-item:hover a {
+                  color: var(--teal);
+                }
+              `}</style>
               <h4>Contact</h4>
               <div className="footer-contact-item">
                 <i className="fas fa-phone-alt"></i>
-                <a href={contact && contact.phonePrimary ? `tel:${contact.phonePrimary.replace(/\s+/g, "")}` : "tel:+918460348566"}>
-                  {contact && contact.phonePrimary ? contact.phonePrimary : "+91 84603 48566"}
+                <a
+                  href={
+                    contact && contact.phonePrimary
+                      ? `tel:${contact.phonePrimary.replace(/\s+/g, "")}`
+                      : "tel:+918460348566"
+                  }
+                >
+                  {contact && contact.phonePrimary
+                    ? contact.phonePrimary
+                    : "+91 84603 48566"}
                 </a>
               </div>
               <div className="footer-contact-item">
                 <i className="fas fa-envelope"></i>
-                <a href={contact && contact.emailPrimary ? `mailto:${contact.emailPrimary}` : "mailto:apbenterprise1@gmail.com"}>
-                  {contact && contact.emailPrimary ? contact.emailPrimary : "apbenterprise1@gmail.com"}
+                <a
+                  href={
+                    contact && contact.emailPrimary
+                      ? `mailto:${contact.emailPrimary}`
+                      : "mailto:apbenterprise1@gmail.com"
+                  }
+                >
+                  {contact && contact.emailPrimary
+                    ? contact.emailPrimary
+                    : "apbenterprise1@gmail.com"}
                 </a>
               </div>
               <div className="footer-contact-item">
                 <i className="fas fa-map-marker-alt"></i>
                 {contact && contact.addressUrl && contact.address ? (
-                  <a href={contact.addressUrl} target="_blank" rel="noopener noreferrer">
+                  <a
+                    href={contact.addressUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     {contact.address}
                   </a>
                 ) : (
-                  <a href="https://maps.google.com/?q=Fortune+Industrial+Estate+Kathwada+Ahmedabad" target="_blank" rel="noopener noreferrer">
+                  <a
+                    href="https://maps.google.com/?q=Fortune+Industrial+Estate+Kathwada+Ahmedabad"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     Fortune Industrial Estate, Ahmedabad
                   </a>
                 )}
               </div>
               <a
-                href={contact && contact.whatsappUrl ? contact.whatsappUrl : "https://wa.me/918460348566"}
+                href={
+                  contact && contact.whatsappUrl
+                    ? contact.whatsappUrl
+                    : "https://wa.me/918460348566"
+                }
                 className="btn-outline-teal"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -145,7 +226,7 @@ export default function Footer({ contact }: { contact: ContactData | null }) {
                   marginTop: "0.5rem",
                   fontSize: "0.78rem",
                   padding: "5px 12px",
-                  display: "inline-flex"
+                  display: "inline-flex",
                 }}
               >
                 <i className="fab fa-whatsapp"></i> WhatsApp us
@@ -154,31 +235,11 @@ export default function Footer({ contact }: { contact: ContactData | null }) {
           </div>
 
           {/* Footer Bottom */}
-          <div className="footer-bottom">
-            <p>© {new Date().getFullYear()} APB Enterprise LLP. All rights reserved.</p>
-            <div className="footer-socials">
-              <a
-                href={contact && contact.linkedinUrl ? contact.linkedinUrl : "https://linkedin.com"}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <i className="fab fa-linkedin-in"></i>
-              </a>
-              <a
-                href={contact && contact.facebookUrl ? contact.facebookUrl : "https://facebook.com"}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <i className="fab fa-facebook-f"></i>
-              </a>
-              <a
-                href={contact && contact.instagramUrl ? contact.instagramUrl : "https://instagram.com"}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <i className="fab fa-instagram"></i>
-              </a>
-            </div>
+          <div className="footer-bottom" style={{ justifyContent: "center" }}>
+            <p style={{ textAlign: "center" }}>
+              © {new Date().getFullYear()} APB Enterprise LLP. All rights
+              reserved.
+            </p>
           </div>
         </div>
       </footer>
