@@ -6,9 +6,9 @@ import styles from "./ElevatorDemo.module.css";
 export default function ElevatorDemo() {
   useEffect(() => {
     const FLOORS = [
-      { id: 3, label: "4", name: "Level 4", sub: "Offices" },
-      { id: 2, label: "3", name: "Level 3", sub: "Offices" },
-      { id: 1, label: "2", name: "Level 2", sub: "Commercial" },
+      { id: 3, label: "3", name: "Floor 3 ", sub: "Offices" },
+      { id: 2, label: "2", name: "Floor 2", sub: "Offices" },
+      { id: 1, label: "1", name: "Floor 1", sub: "Commercial" },
       { id: 0, label: "G", name: "Ground", sub: "Lobby / Reception" },
     ];
     const FLOOR_HEIGHT = 82;
