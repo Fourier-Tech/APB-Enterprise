@@ -162,6 +162,7 @@ export default function LiftZone({
 
       let isProgrammaticScroll = false;
       let progScrollTimer: ReturnType<typeof setTimeout> | null = null;
+      let lastScrollY = window.scrollY;
 
       function changeFloorInstantly(target: number) {
         if (target === currentFloor) return;
@@ -330,7 +331,7 @@ export default function LiftZone({
         touchStartY = e.touches[0].clientY;
       };
       const handleTouchEnd = (e: TouchEvent) => {
-        if (window.innerWidth <= 768) return; // Disable scroll-jacking on mobile
+        if (window.innerWidth <= 768) return;
         if (!isLiftZoneActive() || isAnimating || isProgrammaticScroll) return;
         const delta = touchStartY - e.changedTouches[0].clientY;
         if (delta > 40 && currentFloor < FLOORS - 1)
@@ -362,31 +363,87 @@ export default function LiftZone({
         if (window.innerWidth <= 768) {
           prog.classList.remove("visible");
           hint.classList.remove("visible");
+          lastScrollY = window.scrollY;
           return;
         }
+
         const active = isLiftZoneActive();
         prog.classList.toggle("visible", active);
 
         const rect = lz.getBoundingClientRect();
         const liftZoneTop = window.scrollY + rect.top;
+        const liftZoneBottom = liftZoneTop + window.innerHeight * FLOORS;
+        const scrollingUp = window.scrollY < lastScrollY;
+
+        // ── Proximity snap: pull user into lift zone before they drift past ──
+        // Threshold: within 40% of a viewport-height of either boundary.
+        // Snap fires only when the lift zone boundary is right at the viewport edge
+        // (within a small pixel buffer), so it feels like a natural handoff.
+        const SNAP_THRESHOLD = window.innerHeight * 0.25;
+
+        if (!isProgrammaticScroll && !active) {
+          // Approaching from above (scrolling down): lift zone top is about to cross viewport top
+          const distFromTop = liftZoneTop - window.scrollY;
+          if (!scrollingUp && distFromTop > 0 && distFromTop < SNAP_THRESHOLD) {
+            isProgrammaticScroll = true;
+            wheelAccum = 0;
+            window.scrollTo({ top: liftZoneTop, behavior: "smooth" });
+            changeFloorInstantly(0);
+            liftActive = true;
+            if (progScrollTimer) clearTimeout(progScrollTimer);
+            progScrollTimer = setTimeout(() => {
+              isProgrammaticScroll = false;
+            }, 800);
+            lastScrollY = window.scrollY;
+            return;
+          }
+
+          // Approaching from below (scrolling up, near the bottom boundary)
+          // Fire when the lift zone bottom is ~65% of a viewport above the fold
+          // (matches the point in the screenshot where the Reach section is peeking)
+          const BOTTOM_SNAP_THRESHOLD = window.innerHeight * 0.65;
+          const distFromBottom =
+            window.scrollY + window.innerHeight - liftZoneBottom;
+          if (
+            scrollingUp &&
+            distFromBottom > 0 &&
+            distFromBottom < BOTTOM_SNAP_THRESHOLD
+          ) {
+            isProgrammaticScroll = true;
+            wheelAccum = 0;
+            const snapTop = liftZoneTop + window.innerHeight * (FLOORS - 1);
+            window.scrollTo({ top: snapTop, behavior: "smooth" });
+            changeFloorInstantly(FLOORS - 1);
+            liftActive = true;
+            if (progScrollTimer) clearTimeout(progScrollTimer);
+            progScrollTimer = setTimeout(() => {
+              isProgrammaticScroll = false;
+            }, 800);
+            lastScrollY = window.scrollY;
+            return;
+          }
+        }
 
         if (active && !liftActive) {
           liftActive = true;
           if (!isProgrammaticScroll) {
             isProgrammaticScroll = true;
             wheelAccum = 0;
-            // Always snap to floor 0 when entering from normal scroll-down
-            window.scrollTo({ top: liftZoneTop, behavior: "auto" });
-            changeFloorInstantly(0);
+            const entryFloor = scrollingUp ? FLOORS - 1 : 0;
+            const snapTop = liftZoneTop + window.innerHeight * entryFloor;
+            window.scrollTo({ top: snapTop, behavior: "auto" });
+            changeFloorInstantly(entryFloor);
             if (progScrollTimer) clearTimeout(progScrollTimer);
             progScrollTimer = setTimeout(() => {
               isProgrammaticScroll = false;
             }, 800);
+            lastScrollY = window.scrollY;
             return;
           }
         } else if (!active && liftActive) {
           liftActive = false;
         }
+        lastScrollY = window.scrollY;
 
         if (active && !isProgrammaticScroll) {
           const scrolledInto = window.scrollY - liftZoneTop;
