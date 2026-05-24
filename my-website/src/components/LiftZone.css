@@ -750,6 +750,7 @@
   /* Hide elevator mechanics, shaft, labels, and scroll helpers */
   .lz-left-col,
   .lz-center-col,
+  .lz-panel-tag,
   #lz-progress,
   #lz-scroll-hint {
     display: none !important;
