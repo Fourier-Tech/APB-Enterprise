@@ -60,11 +60,11 @@ model Contact {
 }
 
 model QuoteRequest {
-  id       Int     @id @default(autoincrement())
-  formType String  @map("form_type") @db.VarChar(30)
-  msg      String?
-  name     String? @db.VarChar
-  mobile   String?
+  id            Int     @id @default(autoincrement())
+  formType      String  @map("form_type") @db.VarChar(30)
+  msg           String?
+  name          String? @db.VarChar(100)
+  mobile_number String? @db.VarChar(15)
 
   @@index([formType], map: "idx_quotes_form_type")
   @@map("quote_requests")
