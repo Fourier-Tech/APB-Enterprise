@@ -35,6 +35,7 @@ export default function QuotePopup({ open, onClose }: QuotePopupProps) {
     const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
     document.body.style.overflow = "hidden";
     document.body.style.paddingRight = `${scrollbarWidth}px`;
+    document.body.classList.add("modal-open");
 
     window.addEventListener("keydown", handleEscape);
     
@@ -46,6 +47,7 @@ export default function QuotePopup({ open, onClose }: QuotePopupProps) {
       window.removeEventListener("keydown", handleEscape);
       document.body.style.overflow = "";
       document.body.style.paddingRight = "";
+      document.body.classList.remove("modal-open");
     };
   }, [open, onClose]);
 
