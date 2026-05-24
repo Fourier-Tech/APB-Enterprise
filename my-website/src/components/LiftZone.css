@@ -255,29 +255,58 @@
 }
 
 /* Products grid inside lift panel */
-.lz-panel .products-grid {
+/* Flexible grid — fills evenly for 1–4 cards */
+.lz-products-grid {
+  display: grid !important;
+  gap: 1rem !important;
   grid-template-columns: repeat(4, 1fr) !important;
-  gap: 1.25rem !important;
+}
+.lz-products-grid[data-count="1"] {
+  grid-template-columns: repeat(1, minmax(0, 340px)) !important;
+}
+.lz-products-grid[data-count="2"] {
+  grid-template-columns: repeat(2, 1fr) !important;
+}
+.lz-products-grid[data-count="3"] {
+  grid-template-columns: repeat(3, 1fr) !important;
 }
 
-.lz-panel .product-img-wrap {
-  height: 180px;
+.lz-product-img-wrap {
+  height: 200px !important;
 }
 
 .lz-panel .product-card-body {
-  padding: 1.25rem 1.4rem 1.5rem;
+  padding: 1.1rem 1.2rem 1.3rem;
+  display: flex !important;
+  flex-direction: column !important;
 }
 
 .lz-panel .product-card h3 {
-  font-size: 1.15rem;
-  margin-bottom: 0.4rem;
+  font-size: 1rem;
+  margin-bottom: 0.35rem;
+  flex: none !important;
 }
 
+/* Beat both .lz-panel p (flex-grow etc) and globals .product-card p (flex:1) */
 .lz-panel .product-card p {
-  font-size: 0.85rem;
-  margin-bottom: 1rem;
-  max-width: none;
-  line-height: 1.5;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  font-size: 0.76rem !important;
+  line-height: 1.55 !important;
+  max-width: 100% !important;
+  margin-bottom: 0.75rem !important;
+  flex: none !important;
+  flex-grow: 0 !important;
+  flex-shrink: 0 !important;
+  align-self: stretch !important;
+  width: 100% !important;
+  color: var(--gray-mid) !important;
+}
+
+.lz-panel .product-link {
+  margin-top: auto !important;
 }
 
 /* Reach grid inside lift panel */

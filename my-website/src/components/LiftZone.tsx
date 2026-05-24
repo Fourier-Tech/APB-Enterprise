@@ -516,8 +516,7 @@ export default function LiftZone({
                   alignItems: "center",
                   flexWrap: "wrap",
                 }}
-              >
-              </div>
+              ></div>
             </div>
 
             {/* Floor 1: Flagship Products */}
@@ -536,12 +535,12 @@ export default function LiftZone({
                 </Link>
               </div>
               <div
-                className="products-grid stagger"
-                style={{ gridTemplateColumns: "repeat(4,1fr)", gap: "1rem" }}
+                className="products-grid stagger lz-products-grid"
+                data-count={featuredProducts.slice(0, 4).length}
               >
                 {featuredProducts.slice(0, 4).map((p) => (
                   <div key={p.id} className="product-card">
-                    <div className="product-img-wrap">
+                    <div className="product-img-wrap lz-product-img-wrap">
                       <span className="product-watermark-badge">
                         APB Enterprise
                       </span>
@@ -554,7 +553,7 @@ export default function LiftZone({
                     </div>
                     <div className="product-card-body">
                       <h3>{p.name}</h3>
-                      <p>{p.shortDesc}</p>
+                      <p title={p.shortDesc}>{p.shortDesc}</p>
                       <Link href="/products" className="product-link">
                         Details <i className="fas fa-arrow-right fa-xs"></i>
                       </Link>
