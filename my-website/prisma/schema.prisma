@@ -69,3 +69,19 @@ model QuoteRequest {
   @@index([formType], map: "idx_quotes_form_type")
   @@map("quote_requests")
 }
+
+model Review {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(100)
+  companyName String   @map("company_name") @db.VarChar(100)
+  position    String   @db.VarChar(100)
+  location    String   @db.VarChar(100)
+  rating      Int      @default(5)
+  message     String   @db.Text
+  isFeatured  Boolean  @default(false) @map("is_featured")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([isFeatured], map: "idx_reviews_featured")
+  @@map("reviews")
+}
+
