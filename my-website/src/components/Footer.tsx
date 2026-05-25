@@ -57,7 +57,7 @@ export default function Footer({ contact }: { contact: ContactData | null }) {
                   style={{ width: "auto", height: "auto" }}
                 />
                 <span className="logo-name" style={{ fontSize: "1rem" }}>
-                  APB Enterprise
+                  APB ENTERPRISE
                 </span>
               </div>
               <p>
@@ -208,7 +208,7 @@ export default function Footer({ contact }: { contact: ContactData | null }) {
           {/* Footer Bottom */}
           <div className="footer-bottom" style={{ justifyContent: "center" }}>
             <p style={{ textAlign: "center" }}>
-              © {new Date().getFullYear()} APB Enterprise LLP. All rights
+              © {new Date().getFullYear()} APB ENTERPRISE. All rights
               reserved.
             </p>
           </div>
