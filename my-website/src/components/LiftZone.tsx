@@ -69,34 +69,15 @@ export default function LiftZone({
       // ── MAP ──
       const countries = [
         "IN",
-        "BD",
-        "LK",
-        "NP",
-        "SG",
-        "MY",
-        "TH",
-        "ID",
-        "PH",
-        "VN",
-        "AE",
-        "SA",
-        "QA",
-        "KW",
         "OM",
-        "BH",
-        "GB",
-        "DE",
-        "FR",
-        "IT",
-        "NL",
-        "NG",
-        "KE",
+        "AE",
+        "LK",
+        "BD",
         "ZA",
-        "GH",
-        "US",
-        "CA",
+        "NP",
+        // "BH",
+        "NG",
         "BR",
-        "AU",
       ];
       try {
         new (window as any).jsVectorMap({
@@ -547,7 +528,7 @@ export default function LiftZone({
                 Engineering trust
                 <br />
                 <em style={{ fontStyle: "normal", color: "var(--teal)" }}>
-                  since 1998.
+                  since 2019.
                 </em>
               </h2>
               <div
@@ -661,13 +642,15 @@ export default function LiftZone({
                     style={{ marginTop: "0.75rem" }}
                   >
                     {[
-                      "South Asia",
-                      "SE Asia",
-                      "Middle East",
-                      "Europe",
-                      "Africa",
-                      "Americas",
-                      "Australia",
+                      "India",
+                      "Nepal",
+                      "Bangladesh",
+                      "Sri Lanka",
+                      "Omen",
+                      "UAE",
+                      "South Africa",
+                      "Nigeria",
+                      "Brazil",
                     ].map((r) => (
                       <span key={r} className="region-pill">
                         {r}
