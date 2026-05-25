@@ -543,7 +543,7 @@ export default function LiftZone({
                 <span className="about-label">About APB</span>
                 <div className="about-body">
                   <p>
-                    Founded in 1998, APB Enterprise has grown from a small
+                    Founded in 2019, APB Enterprise has grown from a small
                     engineering team into a registered LLP trusted by elevator
                     manufacturers across India and Southeast Asia. We build
                     controllers, door operators, safety gears, and COP panels —
