@@ -24,12 +24,12 @@ export default function Header() {
           <Image
             src="/logo.jpg"
             alt="APB Enterprise Logo"
-            width={38}
-            height={38}
-            style={{ width: "auto", height: "auto" }}
+            width={30}
+            height={30}
+            // style={{ width: "auto", height: "auto" }}
           />
           <div className="logo-text">
-            <span className="logo-name">APB Enterprise</span>
+            <span className="logo-name">APB ENTERPRISE</span>
             <span className="logo-sub">
               Controls &amp; Harness Manufacturer
             </span>
