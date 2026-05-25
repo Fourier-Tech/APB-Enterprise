@@ -27,17 +27,53 @@ function StarRating({ rating }: { rating: number }) {
         <i
           key={i}
           className={i < rating ? "fas fa-star" : "far fa-star"}
-          style={{ color: i < rating ? "var(--gold)" : "var(--gray-light)" }}
+          style={{ color: i < rating ? "var(--gold)" : "var(--gray-light)", marginRight: "2px" }}
         />
       ))}
     </div>
   );
 }
 
+// Sleek Compact Marquee Card Component (Single-line quote snippets)
+function MarqueeCard({ review }: { review: Review }) {
+  const roleText = [
+    review.position.trim(),
+    review.companyName.trim(),
+  ].filter(Boolean).join(", ") + (review.location.trim() ? ` — ${review.location.trim()}` : "");
+
+  return (
+    <div className="fc-marquee-card">
+      <div className="fc-marquee-card-header">
+        <StarRating rating={review.rating} />
+        <span className="feedback-verified">
+          <i className="fas fa-check" /> Verified
+        </span>
+      </div>
+      <p className="fc-marquee-text">"{review.message}"</p>
+      <div className="feedback-divider" style={{ margin: "0.5rem 0" }} />
+      <div className="feedback-author">
+        <div className="feedback-avatar" style={{ width: "30px", height: "30px", fontSize: "0.72rem" }}>
+          {getInitials(review.name)}
+        </div>
+        <div className="feedback-author-info">
+          <div className="feedback-author-name" style={{ fontSize: "0.8rem" }}>
+            {review.name}
+          </div>
+          <div className="feedback-author-role" style={{ fontSize: "0.68rem" }}>
+            {roleText}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Full detailed Curated Showcase Card Component (Pristine, solid white background)
 function FeedbackCard({ review }: { review: Review }) {
-  const role =
-    [review.position, review.companyName].filter(Boolean).join(", ") +
-    (review.location ? ` — ${review.location}` : "");
+  const roleText = [
+    review.position.trim(),
+    review.companyName.trim(),
+  ].filter(Boolean).join(", ") + (review.location.trim() ? ` — ${review.location.trim()}` : "");
 
   return (
     <div className="feedback-card fc-slide-card">
@@ -49,7 +85,7 @@ function FeedbackCard({ review }: { review: Review }) {
         <div className="feedback-avatar">{getInitials(review.name)}</div>
         <div className="feedback-author-info">
           <div className="feedback-author-name">{review.name}</div>
-          <div className="feedback-author-role">{role}</div>
+          <div className="feedback-author-role">{roleText}</div>
         </div>
         <span className="feedback-verified">
           <i className="fas fa-check" /> Verified
@@ -60,17 +96,15 @@ function FeedbackCard({ review }: { review: Review }) {
 }
 
 export default function FeedbackCarousel({ reviews }: { reviews: Review[] }) {
-  // Determine cards per view based on width
-  const [perView, setPerView] = useState(3);
+  const [perView, setPerView] = useState(2);
   const [current, setCurrent] = useState(0);
   const trackRef = useRef<HTMLDivElement>(null);
   const autoRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     const update = () => {
-      if (window.innerWidth < 640) setPerView(1);
-      else if (window.innerWidth < 1024) setPerView(2);
-      else setPerView(3);
+      if (window.innerWidth < 1024) setPerView(1); // 1 card on tablet/mobile
+      else setPerView(2); // 2 wide cards on desktop for elegant ratio
     };
     update();
     window.addEventListener("resize", update);
@@ -80,7 +114,6 @@ export default function FeedbackCarousel({ reviews }: { reviews: Review[] }) {
   const total = reviews.length;
   const maxIndex = Math.max(0, total - perView);
 
-  // Reset current if perView changes
   useEffect(() => {
     setCurrent((c) => Math.min(c, Math.max(0, total - perView)));
   }, [perView, total]);
@@ -93,10 +126,9 @@ export default function FeedbackCarousel({ reviews }: { reviews: Review[] }) {
     setCurrent((c) => (c >= maxIndex ? 0 : c + 1));
   }, [maxIndex]);
 
-  // Auto-advance
   useEffect(() => {
     if (total <= perView) return;
-    autoRef.current = setInterval(next, 5000);
+    autoRef.current = setInterval(next, 6000);
     return () => {
       if (autoRef.current) clearInterval(autoRef.current);
     };
@@ -104,7 +136,7 @@ export default function FeedbackCarousel({ reviews }: { reviews: Review[] }) {
 
   const resetAuto = () => {
     if (autoRef.current) clearInterval(autoRef.current);
-    autoRef.current = setInterval(next, 5000);
+    autoRef.current = setInterval(next, 6000);
   };
 
   const handlePrev = () => {
@@ -118,92 +150,133 @@ export default function FeedbackCarousel({ reviews }: { reviews: Review[] }) {
 
   if (!reviews.length) return null;
 
+  // Build infinite marquee tracks by replicating items dynamically
+  const multiplyCount = Math.max(3, Math.ceil(12 / total));
+  const marqueeRow1 = Array(multiplyCount).fill(reviews).flat();
+  const marqueeRow2 = Array(multiplyCount).fill([...reviews].reverse()).flat();
+
   const cardWidthPct = 100 / perView;
   const gapPx = 24;
-  const translateX =
-    current * (cardWidthPct + gapPx / (perView > 1 ? perView : 1));
+
+  const averageRating = (reviews.reduce((s, r) => s + r.rating, 0) / total).toFixed(1);
 
   return (
     <div className="fc-carousel-root">
-      {/* Header */}
-      <div className="fc-header">
-        <div>
-          <div className="section-eyebrow">Client Feedback</div>
-          <h2 className="section-title">Trusted by elevator professionals</h2>
-        </div>
-        {total > perView && (
-          <div className="fc-nav-btns">
-            <button
-              className="fc-nav-btn"
-              onClick={handlePrev}
-              aria-label="Previous reviews"
-            >
-              <i className="fas fa-arrow-left" />
-            </button>
-            <button
-              className="fc-nav-btn"
-              onClick={handleNext}
-              aria-label="Next reviews"
-            >
-              <i className="fas fa-arrow-right" />
-            </button>
+      
+      {/* ── TOP SECTION: DYNAMIC TRUST SUMMARY BANNER (With Background Marquee) ── */}
+      <div className="fc-summary-banner">
+        
+        {/* Background Scrolling Reviews (Confined strictly inside the summary banner) */}
+        <div className="fc-marquees-container">
+          <div className="fc-marquee-row row-ltr">
+            {marqueeRow1.map((review, idx) => (
+              <MarqueeCard key={`m1-${review.id}-${idx}`} review={review} />
+            ))}
           </div>
-        )}
-      </div>
-
-      {/* Carousel Track */}
-      <div className="fc-viewport">
-        <div
-          ref={trackRef}
-          className="fc-track"
-          style={{
-            transform: `translateX(calc(-${current * cardWidthPct}% - ${current * gapPx}px))`,
-            gridTemplateColumns: `repeat(${total}, calc(${cardWidthPct}% - ${(gapPx * (perView - 1)) / perView}px))`,
-          }}
-        >
-          {reviews.map((review) => (
-            <FeedbackCard key={review.id} review={review} />
-          ))}
+          <div className="fc-marquee-row row-rtl">
+            {marqueeRow2.map((review, idx) => (
+              <MarqueeCard key={`m2-${review.id}-${idx}`} review={review} />
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* Rating Summary */}
-      {total >= 3 && (
-        <div className="fc-rating-bar-section">
-          <div className="fc-avg-block">
-            <div className="fc-avg-num">
-              {(reviews.reduce((s, r) => s + r.rating, 0) / total).toFixed(1)}
+        {/* Foreground Content Card: Glassmorphic Trust Summary */}
+        <div className="fc-summary-card">
+          
+          {/* Left Column: Big Average Score */}
+          <div className="fc-avg-block-new">
+            <div className="fc-avg-eyebrow">Overall Rating</div>
+            <div className="fc-avg-display">
+              <span className="fc-avg-big-num">{averageRating}</span>
+              <span className="fc-avg-max-val">/ 5</span>
             </div>
-            <div className="fc-avg-label">/ 5</div>
-            <div>
-              <StarRating
-                rating={Math.round(
-                  reviews.reduce((s, r) => s + r.rating, 0) / total,
-                )}
-              />
-              <div className="fc-avg-count">
-                Based on {total} verified reviews
-              </div>
+            <StarRating rating={Math.round(parseFloat(averageRating))} />
+            <div className="fc-avg-count-text">
+              Based on <strong>{total}</strong> verified reviews
+            </div>
+            <div className="fc-trust-badge">
+              <i className="fas fa-shield-alt"></i> Verified Database
             </div>
           </div>
 
-          <div className="fc-bars">
+          {/* Right Column: Dynamic Star Level Bars */}
+          <div className="fc-bars-new">
             {[5, 4, 3, 2, 1].map((star) => {
               const count = reviews.filter((r) => r.rating === star).length;
               const pct = total ? (count / total) * 100 : 0;
               return (
-                <div key={star} className="fc-bar-row">
-                  <span className="fc-bar-label">{star}</span>
-                  <div className="fc-bar-track">
-                    <div className="fc-bar-fill" style={{ width: `${pct}%` }} />
+                <div key={star} className="fc-bar-row-new">
+                  <span className="fc-bar-label-new">
+                    {star} <i className="fas fa-star" style={{ color: "var(--gold)", fontSize: "0.72rem" }}></i>
+                  </span>
+                  <div className="fc-bar-track-new">
+                    <div className="fc-bar-fill-new" style={{ width: `${pct}%` }} />
                   </div>
-                  <span className="fc-bar-count">{count}</span>
+                  <span className="fc-bar-count-new">
+                    {pct.toFixed(0)}% ({count})
+                  </span>
                 </div>
               );
             })}
           </div>
+
         </div>
-      )}
+      </div>
+
+      {/* ── BOTTOM SECTION: CURATED TESTIMONIALS (Solid background with no noise) ── */}
+      <div className="fc-showcase-section">
+        
+        {/* Header (No navigation controls here anymore) */}
+        <div className="fc-header">
+          <div>
+            <div className="section-eyebrow">Client Case Studies</div>
+            <h2 className="section-title">Trusted by elevator professionals</h2>
+          </div>
+        </div>
+
+        {/* Carousel Flanked by Side Navigation Buttons */}
+        <div className="fc-slider-wrapper">
+          
+          {total > perView && (
+            <button
+              className="fc-side-btn btn-left"
+              onClick={handlePrev}
+              aria-label="Previous reviews"
+            >
+              <i className="fas fa-chevron-left" />
+            </button>
+          )}
+
+          {/* Carousel Viewport */}
+          <div className="fc-viewport">
+            <div
+              ref={trackRef}
+              className="fc-track"
+              style={{
+                transform: `translateX(calc(-${current * cardWidthPct}% - ${current * gapPx}px))`,
+                gridTemplateColumns: `repeat(${total}, calc(${cardWidthPct}% - ${(gapPx * (perView - 1)) / perView}px))`,
+              }}
+            >
+              {reviews.map((review) => (
+                <FeedbackCard key={review.id} review={review} />
+              ))}
+            </div>
+          </div>
+
+          {total > perView && (
+            <button
+              className="fc-side-btn btn-right"
+              onClick={handleNext}
+              aria-label="Next reviews"
+            >
+              <i className="fas fa-chevron-right" />
+            </button>
+          )}
+
+        </div>
+
+      </div>
+
     </div>
   );
 }

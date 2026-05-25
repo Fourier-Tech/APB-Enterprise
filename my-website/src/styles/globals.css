@@ -1391,13 +1391,15 @@ body.modal-open header {
    16. CUSTOM CLIENT TESTIMONIALS & FEEDBACK CARDS (Theme Matched)
    ============================================================ */
 .feedback-card {
-  background: var(--white);
-  border: 1px solid var(--gray-light);
+  background: rgba(255, 255, 255, 0.96); /* Translucent white for premium readability */
+  backdrop-filter: blur(8px); /* Frosted glass effect */
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(222, 222, 222, 0.85); /* Soft premium border trim */
   border-radius: 12px;
-  padding: 2.2rem;
+  padding: 1.4rem 1.8rem;
   position: relative;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.04);
   display: flex;
   flex-direction: column;
 }
@@ -1410,18 +1412,18 @@ body.modal-open header {
 
 .feedback-quote-mark {
   position: absolute;
-  top: 1.5rem;
-  right: 2rem;
+  top: 1.2rem;
+  right: 1.8rem;
   font-family: "Space Grotesk", sans-serif;
-  font-size: 4rem;
+  font-size: 3.5rem;
   line-height: 1;
-  color: rgba(15, 105, 120, 0.06);
+  color: rgba(15, 105, 120, 0.05);
   font-weight: 700;
   user-select: none;
 }
 
 .feedback-stars {
-  margin-bottom: 1.2rem;
+  margin-bottom: 0.8rem;
   display: flex;
   gap: 2px;
 }
@@ -1434,8 +1436,8 @@ body.modal-open header {
 .feedback-text {
   font-size: 0.94rem;
   color: var(--gray-dark);
-  line-height: 1.6;
-  margin-bottom: 1.8rem;
+  line-height: 1.55;
+  margin-bottom: 0.8rem;
   flex-grow: 1;
   word-break: break-word;
 }
@@ -1444,7 +1446,7 @@ body.modal-open header {
   height: 1px;
   background: var(--gray-light);
   width: 100%;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.8rem;
 }
 
 .feedback-author {
@@ -1474,7 +1476,8 @@ body.modal-open header {
   display: flex;
   flex-direction: column;
   line-height: 1.35;
-  overflow: hidden;
+  overflow: visible;
+  flex: 1;
 }
 
 .feedback-author-name {
@@ -1482,18 +1485,16 @@ body.modal-open header {
   font-weight: 700;
   font-size: 0.95rem;
   color: var(--black);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
 }
 
 .feedback-author-role {
   font-size: 0.76rem;
   color: var(--gray-dark);
   margin-top: 2px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
 }
 
 .feedback-verified {
@@ -1918,12 +1919,16 @@ body.modal-open header {
    ============================================================ */
 .fc-section {
   background: var(--off-white);
-  padding: 5rem 0 4.5rem;
+  padding: 5.5rem 0;
   border-top: 1px solid var(--gray-light);
+  position: relative; /* Contain absolute marquee */
+  overflow: hidden; /* Crop off-screen bleed items */
 }
 
 .fc-carousel-root {
   width: 100%;
+  position: relative;
+  z-index: 2; /* Float in front of marquee */
 }
 
 /* Section header row */
@@ -1934,17 +1939,25 @@ body.modal-open header {
   margin-bottom: 2.5rem;
   flex-wrap: wrap;
   gap: 1rem;
+  position: relative;
+  z-index: 2;
 }
 
-/* Arrow nav buttons */
-.fc-nav-btns {
+/* Slider wrap to anchor side buttons absolutely */
+.fc-slider-wrapper {
+  position: relative;
+  width: 100%;
   display: flex;
-  gap: 10px;
+  align-items: center;
 }
 
-.fc-nav-btn {
-  width: 40px;
-  height: 40px;
+/* absolute positioned chevron side buttons */
+.fc-side-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   border: 1.5px solid var(--gray-light);
   background: var(--white);
@@ -1952,22 +1965,50 @@ body.modal-open header {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.85rem;
+  font-size: 1.05rem;
   cursor: pointer;
-  transition: all 0.18s ease;
-  flex-shrink: 0;
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  z-index: 10;
 }
 
-.fc-nav-btn:hover {
+.fc-side-btn:hover {
   border-color: var(--teal);
   color: var(--teal);
   background: var(--teal-bg);
+  box-shadow: 0 6px 16px rgba(15, 118, 110, 0.12);
+}
+
+.fc-side-btn.btn-left {
+  left: -24px; /* Hang half outside the viewport */
+}
+
+.fc-side-btn.btn-right {
+  right: -24px; /* Hang half outside the viewport */
+}
+
+@media (max-width: 768px) {
+  .fc-side-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 0.9rem;
+  }
+  .fc-side-btn.btn-left {
+    left: -12px;
+  }
+  .fc-side-btn.btn-right {
+    right: -12px;
+  }
 }
 
 /* Viewport clips the overflow */
 .fc-viewport {
   overflow: hidden;
   width: 100%;
+  position: relative;
+  z-index: 2;
+  padding: 12px 0; /* Creates vertical gutter so card hover translation is not clipped */
+  margin: -12px 0; /* Offsets padding to keep layout spacing exact */
 }
 
 /* Track — slides via transform */
@@ -1984,119 +2025,304 @@ body.modal-open header {
 }
 
 /* Rating summary bar section */
-.fc-rating-bar-section {
+.fc-summary-banner {
+  position: relative;
+  width: 100vw; /* Bleed out edge-to-edge */
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  overflow: hidden;
+  padding: 2rem 0; /* Extremely tight and space-efficient */
+  margin-bottom: 2.5rem;
+  background: transparent; /* Completely seamless background */
+  border: none; /* Removed borders to blend with page flow */
   display: flex;
   align-items: center;
-  gap: 3rem;
-  margin-top: 3rem;
-  padding-top: 2.5rem;
-  border-top: 1px solid var(--gray-light);
-  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.fc-avg-block {
+/* Background Scrolling Ticker - Confined strictly behind the summary card */
+.fc-marquees-container {
   display: flex;
-  align-items: center;
-  gap: 14px;
+  flex-direction: column;
+  gap: 1.2rem;
+  overflow: hidden;
+  width: 125%; /* Expand wider than parent to bleed edges */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Perfectly horizontal scroll behind the summary card */
+  opacity: 0.22; /* Bumped visibility of background scrolling reviews */
+  pointer-events: none; /* Let all clicks pass straight through */
+  z-index: 0;
+}
+
+/* Fades the left and right edges for a premium 3D depth effect */
+.fc-marquees-container::before,
+.fc-marquees-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 15%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.fc-marquees-container::before {
+  left: 0;
+  background: linear-gradient(90deg, var(--off-white) 0%, rgba(249, 249, 249, 0) 100%);
+}
+
+.fc-marquees-container::after {
+  right: 0;
+  background: linear-gradient(-90deg, var(--off-white) 0%, rgba(249, 249, 249, 0) 100%);
+}
+
+.fc-marquee-row {
+  display: flex;
+  width: max-content;
+  gap: 1.5rem;
+  user-select: none;
+}
+
+/* Row 1: Left to Right */
+.fc-marquee-row.row-ltr {
+  animation: marquee-ltr 55s linear infinite;
+}
+
+/* Row 2: Right to Left */
+.fc-marquee-row.row-rtl {
+  animation: marquee-rtl 55s linear infinite;
+}
+
+/* Marquee card: extremely low-profile, concise and sleek */
+.fc-marquee-card {
+  width: 440px;
   flex-shrink: 0;
+  background: var(--white);
+  border: 1px solid var(--gray-light);
+  border-radius: 12px;
+  padding: 1.1rem 1.4rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.015);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  cursor: default;
+  pointer-events: none;
 }
 
-.fc-avg-num {
+.fc-marquee-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fc-marquee-text {
+  font-family: "Epilogue", sans-serif;
+  font-size: 0.83rem;
+  color: var(--gray-dark);
+  line-height: 1.45;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 1; /* 1-line clamp for high density */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  height: 1.3em;
+}
+
+/* Foreground glass summary card: beautiful circular metrics + star bars */
+.fc-summary-card {
+  position: relative;
+  z-index: 2; /* Float cleanly in front of marquee */
+  background: rgba(255, 255, 255, 0.48); /* Highly translucent white for ultra-clear glassmorphism */
+  backdrop-filter: blur(16px); /* Stronger frosted glass blur */
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.55); /* Translucent white outline border */
+  border-radius: 16px;
+  padding: 1rem 1.5rem; /* Super-compact inner padding */
+  width: 90%;
+  max-width: 740px; /* Highly concise card size */
+  box-shadow: 0 16px 40px rgba(10, 15, 26, 0.04); /* Premium soft drop shadow */
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 1.5rem; /* Tighter layout gap */
+  align-items: center;
+}
+
+/* Left side: Avg Display */
+.fc-avg-block-new {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px; /* More compact */
+  border-right: 1px solid rgba(222, 222, 222, 0.75);
+  padding-right: 1.5rem; /* Tighter right padding */
+}
+
+.fc-avg-eyebrow {
   font-family: "Space Grotesk", sans-serif;
-  font-size: 3.5rem;
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  color: var(--black);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--teal);
+  text-transform: uppercase;
+}
+
+.fc-avg-display {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
   line-height: 1;
 }
 
-.fc-avg-label {
+.fc-avg-big-num {
   font-family: "Space Grotesk", sans-serif;
-  font-size: 1.1rem;
-  font-weight: 500;
+  font-size: 3.2rem; /* Compact visual display size */
+  font-weight: 800;
+  color: var(--black);
+  letter-spacing: -0.04em;
+}
+
+.fc-avg-max-val {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
   color: var(--gray-mid);
-  align-self: flex-end;
   padding-bottom: 8px;
 }
 
-.fc-avg-count {
-  font-size: 0.78rem;
-  color: var(--gray-mid);
+.fc-avg-count-text {
+  font-size: 0.88rem;
+  color: var(--gray-dark);
   margin-top: 4px;
 }
 
-.fc-bars {
-  flex: 1;
-  min-width: 220px;
+.fc-trust-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #0f766e;
+  background: #f0fdfa;
+  padding: 4px 10px;
+  border-radius: 100px;
+  margin-top: 6px; /* Highly compact */
+  border: 1px solid #ccfbf1;
+}
+
+/* Right side: Star Breakdown Bars */
+.fc-bars-new {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px; /* Tight star bar layouts */
+  width: 100%;
 }
 
-.fc-bar-row {
+.fc-bar-row-new {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px; /* Tighter label-bar-value rows */
 }
 
-.fc-bar-label {
+.fc-bar-label-new {
   font-family: "Space Grotesk", sans-serif;
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   font-weight: 600;
-  color: var(--gray-dark);
-  width: 10px;
-  text-align: right;
+  color: var(--black);
+  width: 24px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
   flex-shrink: 0;
 }
 
-.fc-bar-track {
+.fc-bar-track-new {
   flex: 1;
-  height: 6px;
-  background: var(--gray-light);
+  height: 8px;
+  background: var(--gray-xlight);
   border-radius: 100px;
   overflow: hidden;
+  border: 1px solid var(--gray-light);
 }
 
-.fc-bar-fill {
+.fc-bar-fill-new {
   height: 100%;
   border-radius: 100px;
   background: linear-gradient(90deg, var(--teal) 0%, var(--gold) 100%);
   transition: width 0.6s ease;
 }
 
-.fc-bar-count {
+.fc-bar-count-new {
   font-family: "Space Grotesk", sans-serif;
-  font-size: 0.75rem;
-  color: var(--gray-mid);
-  width: 18px;
+  font-size: 0.78rem;
+  color: var(--gray-dark);
+  width: 65px;
   text-align: right;
   flex-shrink: 0;
+  font-weight: 500;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .fc-section {
-    padding: 3.5rem 0 3rem;
-  }
+/* Bottom showcase wrapper containing the curated slider */
+.fc-showcase-section {
+  width: 100%;
+}
 
-  .fc-rating-bar-section {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1.5rem;
-  }
+/* Animations */
+@keyframes marquee-ltr {
+  0% { transform: translate3d(-50%, 0, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
 
-  .fc-bars {
+@keyframes marquee-rtl {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
+
+/* Responsive Overrides */
+@media (max-width: 992px) {
+  .fc-summary-card {
+    grid-template-columns: 1fr;
+    gap: 2.2rem;
+    padding: 2.2rem 2rem;
+  }
+  
+  .fc-avg-block-new {
+    border-right: none;
+    border-bottom: 1px solid var(--gray-light);
+    padding-right: 0;
+    padding-bottom: 2rem;
     width: 100%;
-  }
-
-  .fc-avg-num {
-    font-size: 2.8rem;
+    align-items: center;
+    text-align: center;
   }
 }
 
-@media (max-width: 480px) {
-  .fc-nav-btn {
-    width: 36px;
-    height: 36px;
+@media (max-width: 768px) {
+  .fc-summary-banner {
+    padding: 1.5rem 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .fc-marquees-container {
+    width: 145%;
+    padding: 0.4rem 0;
+  }
+  
+  .fc-marquee-card {
+    width: 330px;
+    padding: 0.95rem 1.1rem;
+    gap: 0.5rem;
+  }
+  
+  .fc-marquee-text {
+    font-size: 0.78rem;
+    height: 1.3em;
+  }
+  
+  .fc-avg-big-num {
+    font-size: 3.2rem;
   }
 }
