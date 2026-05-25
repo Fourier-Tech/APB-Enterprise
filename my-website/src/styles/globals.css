@@ -1533,7 +1533,11 @@ body.modal-open header {
   transform: translateX(-50%);
   width: 800px;
   height: 800px;
-  background: radial-gradient(circle, rgba(15, 105, 120, 0.06) 0%, rgba(255, 255, 255, 0) 70%);
+  background: radial-gradient(
+    circle,
+    rgba(15, 105, 120, 0.06) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
   z-index: 0;
   pointer-events: none;
 }
@@ -1851,9 +1855,18 @@ body.modal-open header {
 }
 
 @keyframes pulseSuccess {
-  0% { transform: scale(0.95); opacity: 1; }
-  50% { transform: scale(1.2); opacity: 0.5; }
-  100% { transform: scale(0.95); opacity: 1; }
+  0% {
+    transform: scale(0.95);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 1;
+  }
 }
 
 .feedback-success-card h2 {
@@ -1890,7 +1903,200 @@ body.modal-open header {
 }
 
 @keyframes revealFadeIn {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
+/* ============================================================
+   18. CLIENT FEEDBACK CAROUSEL — Homepage Section
+   ============================================================ */
+.fc-section {
+  background: var(--off-white);
+  padding: 5rem 0 4.5rem;
+  border-top: 1px solid var(--gray-light);
+}
+
+.fc-carousel-root {
+  width: 100%;
+}
+
+/* Section header row */
+.fc-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* Arrow nav buttons */
+.fc-nav-btns {
+  display: flex;
+  gap: 10px;
+}
+
+.fc-nav-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid var(--gray-light);
+  background: var(--white);
+  color: var(--black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  flex-shrink: 0;
+}
+
+.fc-nav-btn:hover {
+  border-color: var(--teal);
+  color: var(--teal);
+  background: var(--teal-bg);
+}
+
+/* Viewport clips the overflow */
+.fc-viewport {
+  overflow: hidden;
+  width: 100%;
+}
+
+/* Track — slides via transform */
+.fc-track {
+  display: grid;
+  gap: 24px;
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+/* Each slide card — height fully fills its grid cell */
+.fc-slide-card {
+  min-width: 0; /* prevents overflow in grid */
+}
+
+/* Rating summary bar section */
+.fc-rating-bar-section {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  margin-top: 3rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--gray-light);
+  flex-wrap: wrap;
+}
+
+.fc-avg-block {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+.fc-avg-num {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 3.5rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--black);
+  line-height: 1;
+}
+
+.fc-avg-label {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--gray-mid);
+  align-self: flex-end;
+  padding-bottom: 8px;
+}
+
+.fc-avg-count {
+  font-size: 0.78rem;
+  color: var(--gray-mid);
+  margin-top: 4px;
+}
+
+.fc-bars {
+  flex: 1;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fc-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.fc-bar-label {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--gray-dark);
+  width: 10px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.fc-bar-track {
+  flex: 1;
+  height: 6px;
+  background: var(--gray-light);
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.fc-bar-fill {
+  height: 100%;
+  border-radius: 100px;
+  background: linear-gradient(90deg, var(--teal) 0%, var(--gold) 100%);
+  transition: width 0.6s ease;
+}
+
+.fc-bar-count {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.75rem;
+  color: var(--gray-mid);
+  width: 18px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .fc-section {
+    padding: 3.5rem 0 3rem;
+  }
+
+  .fc-rating-bar-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+
+  .fc-bars {
+    width: 100%;
+  }
+
+  .fc-avg-num {
+    font-size: 2.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .fc-nav-btn {
+    width: 36px;
+    height: 36px;
+  }
+}

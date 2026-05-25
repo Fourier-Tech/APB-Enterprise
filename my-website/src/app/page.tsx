@@ -6,6 +6,7 @@ import LiftZone from "@/components/LiftZone";
 import HeroClient from "@/components/HeroClient";
 import PageReadySignal from "@/components/PageReadySignal";
 import QuoteButton from "@/components/QuoteButton";
+import FeedbackCarousel from "@/components/FeedbackCarousel";
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import styles from "./page.module.css";
@@ -30,6 +31,10 @@ async function AsyncPageContent() {
     where: { isFeatured: true },
     orderBy: [{ displayOrder: "asc" }, { createdAt: "desc" }],
     take: 4,
+  });
+  const featuredReviews = await prisma.review.findMany({
+    where: { isFeatured: true },
+    orderBy: { createdAt: "desc" },
   });
 
   return (
@@ -106,6 +111,15 @@ async function AsyncPageContent() {
 
           {/* ── LIFT ZONE (scroll-jacked building) ── */}
           <LiftZone featuredProducts={featuredProducts} />
+
+          {/* ── CLIENT FEEDBACK ── */}
+          {featuredReviews.length > 0 && (
+            <section className="fc-section reveal">
+              <div className="container">
+                <FeedbackCarousel reviews={featuredReviews} />
+              </div>
+            </section>
+          )}
 
           {/* ── BROCHURE STRIP ── */}
           <section className="brochure-section reveal">
