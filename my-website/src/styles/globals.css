@@ -955,7 +955,9 @@ footer {
     gap: 1.75rem;
     z-index: 199;
     border-top: 1px solid var(--gray-xlight);
-    transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     transform: translateY(-10px);
     opacity: 0;
     pointer-events: none;
@@ -1073,9 +1075,9 @@ footer {
   }
 }
 
-/* ============================================================
-   14. WHATSAPP QUOTE POPUP MODAL (FourierTech Premium UI)
-   ============================================================ */
+/* ==============================
+   14. WHATSAPP QUOTE POPUP MODAL
+   ============================== */
 .qp-overlay {
   position: fixed;
   inset: 0;
@@ -1172,7 +1174,9 @@ footer {
   color: var(--white);
   font-size: 0.95rem;
   flex-shrink: 0;
-  transition: background 0.15s, transform 0.15s;
+  transition:
+    background 0.15s,
+    transform 0.15s;
 }
 
 .qp-x:hover {
@@ -1211,7 +1215,10 @@ footer {
   font-family: inherit;
   color: var(--black);
   background: var(--off-white);
-  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s,
+    background 0.2s;
   outline: none;
   box-sizing: border-box;
   text-align: left;
@@ -1255,7 +1262,10 @@ footer {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  transition:
+    background 0.2s,
+    transform 0.15s,
+    box-shadow 0.2s;
 }
 
 .qp-submit:hover:not(:disabled) {
@@ -1279,7 +1289,9 @@ footer {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .qp-ok {
@@ -1303,9 +1315,18 @@ footer {
 }
 
 @keyframes pulseOk {
-  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(15, 105, 120, 0.2); }
-  70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(15, 105, 120, 0); }
-  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(15, 105, 120, 0); }
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(15, 105, 120, 0.2);
+  }
+  70% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(15, 105, 120, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(15, 105, 120, 0);
+  }
 }
 
 .qp-ok h4 {
@@ -1365,4 +1386,3 @@ body.modal-open #page-wrapper > *:not(header) {
 body.modal-open header {
   filter: blur(4px);
 }
-
