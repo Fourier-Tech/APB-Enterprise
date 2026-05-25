@@ -134,7 +134,7 @@ header {
 }
 
 .logo-name {
-  font-size: 1.25rem;
+  font-size: 1.20rem;
   font-weight: 800;
   letter-spacing: -0.03em;
   color: var(--black);
@@ -1391,7 +1391,12 @@ body.modal-open header {
    16. CUSTOM CLIENT TESTIMONIALS & FEEDBACK CARDS (Theme Matched)
    ============================================================ */
 .feedback-card {
-  background: rgba(255, 255, 255, 0.96); /* Translucent white for premium readability */
+  background: rgba(
+    255,
+    255,
+    255,
+    0.96
+  ); /* Translucent white for premium readability */
   backdrop-filter: blur(8px); /* Frosted glass effect */
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(222, 222, 222, 0.85); /* Soft premium border trim */
@@ -2032,8 +2037,8 @@ body.modal-open header {
   right: 50%;
   margin-left: -50vw;
   margin-right: -50vw;
-  padding: 2rem 0; /* Extremely tight and space-efficient */
   margin-bottom: 2.5rem;
+  padding: 2rem 0; /* Extremely tight and space-efficient */
   background: transparent; /* Completely seamless background */
   border: none; /* Removed borders to blend with page flow */
   display: flex;
@@ -2051,7 +2056,10 @@ body.modal-open header {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); /* Perfectly horizontal scroll behind the summary card */
+  transform: translate(
+    -50%,
+    -50%
+  ); /* Perfectly horizontal scroll behind the summary card */
   opacity: 0.45; /* Raised contrast so blurred elements are visible behind the glass card */
   pointer-events: none; /* Let all clicks pass straight through */
   z-index: 0;
@@ -2071,12 +2079,20 @@ body.modal-open header {
 
 .fc-marquees-container::before {
   left: 0;
-  background: linear-gradient(90deg, var(--off-white) 0%, rgba(249, 249, 249, 0) 100%);
+  background: linear-gradient(
+    90deg,
+    var(--off-white) 0%,
+    rgba(249, 249, 249, 0) 100%
+  );
 }
 
 .fc-marquees-container::after {
   right: 0;
-  background: linear-gradient(-90deg, var(--off-white) 0%, rgba(249, 249, 249, 0) 100%);
+  background: linear-gradient(
+    -90deg,
+    var(--off-white) 0%,
+    rgba(249, 249, 249, 0) 100%
+  );
 }
 
 .fc-marquee-row {
@@ -2136,10 +2152,17 @@ body.modal-open header {
 .fc-summary-card {
   position: relative;
   z-index: 2; /* Float cleanly in front of marquee */
-  background: rgba(255, 255, 255, 0.75); /* Milky frosted white for a premium matte glass finish */
+  background: rgba(
+    255,
+    255,
+    255,
+    0.75
+  ); /* Milky frosted white for a premium matte glass finish */
   backdrop-filter: blur(12px); /* Frosted glass sweet spot */
   -webkit-backdrop-filter: blur(12px);
-  transform: translateZ(0); /* Force GPU compositing layer to resolve browser backdrop-filter bug */
+  transform: translateZ(
+    0
+  ); /* Force GPU compositing layer to resolve browser backdrop-filter bug */
   -webkit-transform: translateZ(0);
   border: 1px solid rgba(255, 255, 255, 0.9); /* Premium crisp matte border trim */
   border-radius: 16px;
@@ -2270,17 +2293,26 @@ body.modal-open header {
 /* Bottom showcase wrapper containing the curated slider */
 .fc-showcase-section {
   width: 100%;
+  padding-top: 3rem;
 }
 
 /* Animations */
 @keyframes marquee-ltr {
-  0% { transform: translate3d(-50%, 0, 0); }
-  100% { transform: translate3d(0, 0, 0); }
+  0% {
+    transform: translate3d(-50%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
 }
 
 @keyframes marquee-rtl {
-  0% { transform: translate3d(0, 0, 0); }
-  100% { transform: translate3d(-50%, 0, 0); }
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
 }
 
 /* Responsive Overrides */
@@ -2290,7 +2322,7 @@ body.modal-open header {
     gap: 2.2rem;
     padding: 2.2rem 2rem;
   }
-  
+
   .fc-avg-block-new {
     border-right: none;
     border-bottom: 1px solid var(--gray-light);
@@ -2307,23 +2339,23 @@ body.modal-open header {
     padding: 1.5rem 1rem;
     margin-bottom: 2rem;
   }
-  
+
   .fc-marquees-container {
     width: 145%;
     padding: 0.4rem 0;
   }
-  
+
   .fc-marquee-card {
     width: 330px;
     padding: 0.95rem 1.1rem;
     gap: 0.5rem;
   }
-  
+
   .fc-marquee-text {
     font-size: 0.78rem;
     height: 1.3em;
   }
-  
+
   .fc-avg-big-num {
     font-size: 3.2rem;
   }

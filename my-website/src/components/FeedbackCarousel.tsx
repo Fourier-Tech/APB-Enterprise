@@ -27,7 +27,10 @@ function StarRating({ rating }: { rating: number }) {
         <i
           key={i}
           className={i < rating ? "fas fa-star" : "far fa-star"}
-          style={{ color: i < rating ? "var(--gold)" : "var(--gray-light)", marginRight: "2px" }}
+          style={{
+            color: i < rating ? "var(--gold)" : "var(--gray-light)",
+            marginRight: "2px",
+          }}
         />
       ))}
     </div>
@@ -36,10 +39,11 @@ function StarRating({ rating }: { rating: number }) {
 
 // Sleek Compact Marquee Card Component (Single-line quote snippets)
 function MarqueeCard({ review }: { review: Review }) {
-  const roleText = [
-    review.position.trim(),
-    review.companyName.trim(),
-  ].filter(Boolean).join(", ") + (review.location.trim() ? ` — ${review.location.trim()}` : "");
+  const roleText =
+    [review.position.trim(), review.companyName.trim()]
+      .filter(Boolean)
+      .join(", ") +
+    (review.location.trim() ? ` — ${review.location.trim()}` : "");
 
   return (
     <div className="fc-marquee-card">
@@ -52,7 +56,10 @@ function MarqueeCard({ review }: { review: Review }) {
       <p className="fc-marquee-text">"{review.message}"</p>
       <div className="feedback-divider" style={{ margin: "0.5rem 0" }} />
       <div className="feedback-author">
-        <div className="feedback-avatar" style={{ width: "30px", height: "30px", fontSize: "0.72rem" }}>
+        <div
+          className="feedback-avatar"
+          style={{ width: "30px", height: "30px", fontSize: "0.72rem" }}
+        >
           {getInitials(review.name)}
         </div>
         <div className="feedback-author-info">
@@ -70,10 +77,11 @@ function MarqueeCard({ review }: { review: Review }) {
 
 // Full detailed Curated Showcase Card Component (Pristine, solid white background)
 function FeedbackCard({ review }: { review: Review }) {
-  const roleText = [
-    review.position.trim(),
-    review.companyName.trim(),
-  ].filter(Boolean).join(", ") + (review.location.trim() ? ` — ${review.location.trim()}` : "");
+  const roleText =
+    [review.position.trim(), review.companyName.trim()]
+      .filter(Boolean)
+      .join(", ") +
+    (review.location.trim() ? ` — ${review.location.trim()}` : "");
 
   return (
     <div className="feedback-card fc-slide-card">
@@ -102,7 +110,8 @@ export default function FeedbackCarousel({ reviews }: { reviews: Review[] }) {
 
   useEffect(() => {
     const update = () => {
-      if (window.innerWidth < 1024) setPerView(1); // 1 card on tablet/mobile
+      if (window.innerWidth < 1024)
+        setPerView(1); // 1 card on tablet/mobile
       else setPerView(2); // 2 wide cards on desktop for elegant ratio
     };
     update();
@@ -152,7 +161,7 @@ export default function FeedbackCarousel({ reviews }: { reviews: Review[] }) {
   // Autoscroll loop, halts when mouse is hovered inside the testimonials viewport
   useEffect(() => {
     if (isHovered || total <= perView) return;
-    autoRef.current = setInterval(next, 5000); // Shift review every 5 seconds
+    autoRef.current = setInterval(next, 3000); // Shift review every 3 seconds
     return () => {
       if (autoRef.current) clearInterval(autoRef.current);
     };
@@ -191,7 +200,9 @@ export default function FeedbackCarousel({ reviews }: { reviews: Review[] }) {
   // Build infinite marquee tracks by replicating items dynamically
   const multiplyCount = Math.max(3, Math.ceil(12 / total));
   const marqueeRow1 = Array(multiplyCount).fill(reviews).flat();
-  const marqueeRow2 = Array(multiplyCount).fill([...reviews].reverse()).flat();
+  const marqueeRow2 = Array(multiplyCount)
+    .fill([...reviews].reverse())
+    .flat();
 
   // Clone items on left and right for seamless circular slide teleportations
   const clonedReviews = [
@@ -203,14 +214,14 @@ export default function FeedbackCarousel({ reviews }: { reviews: Review[] }) {
   const cardWidthPct = 100 / perView;
   const gapPx = 24;
 
-  const averageRating = (reviews.reduce((s, r) => s + r.rating, 0) / total).toFixed(1);
+  const averageRating = (
+    reviews.reduce((s, r) => s + r.rating, 0) / total
+  ).toFixed(1);
 
   return (
     <div className="fc-carousel-root">
-      
       {/* ── TOP SECTION: DYNAMIC TRUST SUMMARY BANNER (With Background Marquee) ── */}
       <div className="fc-summary-banner">
-        
         {/* Background Scrolling Reviews (Confined strictly inside the summary banner) */}
         <div className="fc-marquees-container">
           <div className="fc-marquee-row row-ltr">
@@ -227,7 +238,6 @@ export default function FeedbackCarousel({ reviews }: { reviews: Review[] }) {
 
         {/* Foreground Content Card: Glassmorphic Trust Summary */}
         <div className="fc-summary-card">
-          
           {/* Left Column: Big Average Score */}
           <div className="fc-avg-block-new">
             <div className="fc-avg-eyebrow">Overall Rating</div>
@@ -252,10 +262,17 @@ export default function FeedbackCarousel({ reviews }: { reviews: Review[] }) {
               return (
                 <div key={star} className="fc-bar-row-new">
                   <span className="fc-bar-label-new">
-                    {star} <i className="fas fa-star" style={{ color: "var(--gold)", fontSize: "0.72rem" }}></i>
+                    {star}{" "}
+                    <i
+                      className="fas fa-star"
+                      style={{ color: "var(--gold)", fontSize: "0.72rem" }}
+                    ></i>
                   </span>
                   <div className="fc-bar-track-new">
-                    <div className="fc-bar-fill-new" style={{ width: `${pct}%` }} />
+                    <div
+                      className="fc-bar-fill-new"
+                      style={{ width: `${pct}%` }}
+                    />
                   </div>
                   <span className="fc-bar-count-new">
                     {pct.toFixed(0)}% ({count})
@@ -264,17 +281,15 @@ export default function FeedbackCarousel({ reviews }: { reviews: Review[] }) {
               );
             })}
           </div>
-
         </div>
       </div>
 
       {/* ── BOTTOM SECTION: CURATED TESTIMONIALS (Solid background with no noise) ── */}
       <div className="fc-showcase-section">
-        
         {/* Header */}
         <div className="fc-header">
           <div>
-            <div className="section-eyebrow">Client Case Studies</div>
+            <div className="section-eyebrow">Client Feedback</div>
             <h2 className="section-title">Trusted by elevator professionals</h2>
           </div>
         </div>
@@ -303,9 +318,7 @@ export default function FeedbackCarousel({ reviews }: { reviews: Review[] }) {
             ))}
           </div>
         </div>
-
       </div>
-
     </div>
   );
 }
