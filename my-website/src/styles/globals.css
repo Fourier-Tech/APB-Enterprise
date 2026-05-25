@@ -1386,7 +1386,6 @@ body.modal-open #page-wrapper > *:not(header) {
 body.modal-open header {
   filter: blur(4px);
 }
-<<<<<<< HEAD
 
 /* ============================================================
    16. CUSTOM CLIENT TESTIMONIALS & FEEDBACK CARDS (Theme Matched)
@@ -1895,6 +1894,3 @@ body.modal-open header {
   to { opacity: 1; transform: translateY(0); }
 }
 
-
-=======
->>>>>>> fe1acc507882604369ed474cf3dfee06ad0c1bf8
