@@ -97,7 +97,6 @@ function FeedbackCard({ review }: { review: Review }) {
 
 export default function FeedbackCarousel({ reviews }: { reviews: Review[] }) {
   const [perView, setPerView] = useState(2);
-  const [current, setCurrent] = useState(0);
   const trackRef = useRef<HTMLDivElement>(null);
   const autoRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -112,40 +111,79 @@ export default function FeedbackCarousel({ reviews }: { reviews: Review[] }) {
   }, []);
 
   const total = reviews.length;
-  const maxIndex = Math.max(0, total - perView);
 
-  useEffect(() => {
-    setCurrent((c) => Math.min(c, Math.max(0, total - perView)));
-  }, [perView, total]);
+  // Buffer size for circular infinite transitions
+  const BUFFER_SIZE = 2;
+  const [current, setCurrent] = useState(BUFFER_SIZE);
+  const [disableTransition, setDisableTransition] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const prev = useCallback(() => {
-    setCurrent((c) => (c <= 0 ? maxIndex : c - 1));
-  }, [maxIndex]);
+    if (disableTransition) return;
+    setCurrent((c) => c - 1);
+  }, [disableTransition]);
 
   const next = useCallback(() => {
-    setCurrent((c) => (c >= maxIndex ? 0 : c + 1));
-  }, [maxIndex]);
+    if (disableTransition) return;
+    setCurrent((c) => c + 1);
+  }, [disableTransition]);
 
+  // Teleports index silently at the track boundaries on transition completion
+  const handleTransitionEnd = () => {
+    if (current >= total + BUFFER_SIZE) {
+      setDisableTransition(true);
+      setCurrent(current - total);
+    } else if (current < BUFFER_SIZE) {
+      setDisableTransition(true);
+      setCurrent(current + total);
+    }
+  };
+
+  // Triggers DOM reflow to safely clear disableTransition instantly
   useEffect(() => {
-    if (total <= perView) return;
-    autoRef.current = setInterval(next, 6000);
+    if (disableTransition) {
+      if (trackRef.current) {
+        trackRef.current.offsetHeight; // triggers reflow
+      }
+      setDisableTransition(false);
+    }
+  }, [disableTransition]);
+
+  // Autoscroll loop, halts when mouse is hovered inside the testimonials viewport
+  useEffect(() => {
+    if (isHovered || total <= perView) return;
+    autoRef.current = setInterval(next, 5000); // Shift review every 5 seconds
     return () => {
       if (autoRef.current) clearInterval(autoRef.current);
     };
-  }, [next, total, perView]);
+  }, [next, total, perView, isHovered]);
 
-  const resetAuto = () => {
-    if (autoRef.current) clearInterval(autoRef.current);
-    autoRef.current = setInterval(next, 6000);
+  // Mobile/Tablet Touch Swipe gesture listeners
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
   };
 
-  const handlePrev = () => {
-    prev();
-    resetAuto();
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
   };
-  const handleNext = () => {
-    next();
-    resetAuto();
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe) {
+      next();
+    } else if (isRightSwipe) {
+      prev();
+    }
+
+    setTouchStart(null);
+    setTouchEnd(null);
   };
 
   if (!reviews.length) return null;
@@ -154,6 +192,13 @@ export default function FeedbackCarousel({ reviews }: { reviews: Review[] }) {
   const multiplyCount = Math.max(3, Math.ceil(12 / total));
   const marqueeRow1 = Array(multiplyCount).fill(reviews).flat();
   const marqueeRow2 = Array(multiplyCount).fill([...reviews].reverse()).flat();
+
+  // Clone items on left and right for seamless circular slide teleportations
+  const clonedReviews = [
+    ...reviews.slice(-BUFFER_SIZE),
+    ...reviews,
+    ...reviews.slice(0, BUFFER_SIZE),
+  ];
 
   const cardWidthPct = 100 / perView;
   const gapPx = 24;
@@ -226,7 +271,7 @@ export default function FeedbackCarousel({ reviews }: { reviews: Review[] }) {
       {/* ── BOTTOM SECTION: CURATED TESTIMONIALS (Solid background with no noise) ── */}
       <div className="fc-showcase-section">
         
-        {/* Header (No navigation controls here anymore) */}
+        {/* Header */}
         <div className="fc-header">
           <div>
             <div className="section-eyebrow">Client Case Studies</div>
@@ -234,45 +279,29 @@ export default function FeedbackCarousel({ reviews }: { reviews: Review[] }) {
           </div>
         </div>
 
-        {/* Carousel Flanked by Side Navigation Buttons */}
-        <div className="fc-slider-wrapper">
-          
-          {total > perView && (
-            <button
-              className="fc-side-btn btn-left"
-              onClick={handlePrev}
-              aria-label="Previous reviews"
-            >
-              <i className="fas fa-chevron-left" />
-            </button>
-          )}
-
-          {/* Carousel Viewport */}
-          <div className="fc-viewport">
-            <div
-              ref={trackRef}
-              className="fc-track"
-              style={{
-                transform: `translateX(calc(-${current * cardWidthPct}% - ${current * gapPx}px))`,
-                gridTemplateColumns: `repeat(${total}, calc(${cardWidthPct}% - ${(gapPx * (perView - 1)) / perView}px))`,
-              }}
-            >
-              {reviews.map((review) => (
-                <FeedbackCard key={review.id} review={review} />
-              ))}
-            </div>
+        {/* Carousel Viewport flushes bounds, pauses on hover, swipes on touch */}
+        <div
+          className="fc-viewport"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
+          <div
+            ref={trackRef}
+            className="fc-track"
+            onTransitionEnd={handleTransitionEnd}
+            style={{
+              transform: `translateX(calc(-${current} * (${cardWidthPct}% + ${gapPx / perView}px)))`,
+              gridTemplateColumns: `repeat(${clonedReviews.length}, calc(${cardWidthPct}% - ${(gapPx * (perView - 1)) / perView}px))`,
+              transition: disableTransition ? "none" : undefined,
+            }}
+          >
+            {clonedReviews.map((review, idx) => (
+              <FeedbackCard key={`c-${review.id}-${idx}`} review={review} />
+            ))}
           </div>
-
-          {total > perView && (
-            <button
-              className="fc-side-btn btn-right"
-              onClick={handleNext}
-              aria-label="Next reviews"
-            >
-              <i className="fas fa-chevron-right" />
-            </button>
-          )}
-
         </div>
 
       </div>

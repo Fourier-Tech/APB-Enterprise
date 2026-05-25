@@ -2032,7 +2032,6 @@ body.modal-open header {
   right: 50%;
   margin-left: -50vw;
   margin-right: -50vw;
-  overflow: hidden;
   padding: 2rem 0; /* Extremely tight and space-efficient */
   margin-bottom: 2.5rem;
   background: transparent; /* Completely seamless background */
@@ -2053,7 +2052,7 @@ body.modal-open header {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%); /* Perfectly horizontal scroll behind the summary card */
-  opacity: 0.22; /* Bumped visibility of background scrolling reviews */
+  opacity: 0.45; /* Raised contrast so blurred elements are visible behind the glass card */
   pointer-events: none; /* Let all clicks pass straight through */
   z-index: 0;
 }
@@ -2136,10 +2135,12 @@ body.modal-open header {
 .fc-summary-card {
   position: relative;
   z-index: 2; /* Float cleanly in front of marquee */
-  background: rgba(255, 255, 255, 0.48); /* Highly translucent white for ultra-clear glassmorphism */
-  backdrop-filter: blur(16px); /* Stronger frosted glass blur */
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.55); /* Translucent white outline border */
+  background: rgba(255, 255, 255, 0.75); /* Milky frosted white for a premium matte glass finish */
+  backdrop-filter: blur(12px); /* Frosted glass sweet spot */
+  -webkit-backdrop-filter: blur(12px);
+  transform: translateZ(0); /* Force GPU compositing layer to resolve browser backdrop-filter bug */
+  -webkit-transform: translateZ(0);
+  border: 1px solid rgba(255, 255, 255, 0.9); /* Premium crisp matte border trim */
   border-radius: 16px;
   padding: 1rem 1.5rem; /* Super-compact inner padding */
   width: 90%;
