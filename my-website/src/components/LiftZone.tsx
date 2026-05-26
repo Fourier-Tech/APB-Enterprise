@@ -469,7 +469,7 @@ export default function LiftZone({
           {[
             { label: "About", idx: 0 },
             { label: "Flagship", idx: 1 },
-            { label: "Global", idx: 2 },
+            { label: "Reach", idx: 2 },
           ].map((d) => (
             <div
               key={d.idx}
@@ -614,7 +614,13 @@ export default function LiftZone({
             <div className="lz-panel" id="lz-panel-2">
               <div className="lz-panel-tag">Third Floor · Global Reach</div>
               <div className="section-head" style={{ marginBottom: "1.5rem" }}>
-                <h2 className="section-title">Trusted across six continents</h2>
+                <h2 className="section-title">
+                  Trusted across{" "}
+                  <em style={{ fontStyle: "normal", color: "var(--teal)" }}>
+                    Three
+                  </em>{" "}
+                  continents
+                </h2>
               </div>
               <div
                 className="reach-grid"
@@ -622,10 +628,10 @@ export default function LiftZone({
               >
                 <div className="reach-stats stagger">
                   {[
-                    { num: "25+", label: "Countries" },
-                    { num: "500+", label: "Projects" },
+                    { num: "7+", label: "Countries" },
+                    { num: "200+", label: "Projects" },
                     { num: "15+", label: "Export years" },
-                    { num: "6", label: "Continents" },
+                    { num: "3", label: "Continents" },
                   ].map((s) => (
                     <div key={s.label} className="reach-stat">
                       <div className="reach-stat-num">{s.num}</div>
