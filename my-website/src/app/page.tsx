@@ -93,7 +93,7 @@ async function AsyncPageContent() {
                       className={`${styles["stat-num"]} stat-num`}
                       data-count="500+"
                     >
-                      500+
+                      200+
                     </div>
                     <div className={styles["stat-label"]}>Projects</div>
                   </div>
