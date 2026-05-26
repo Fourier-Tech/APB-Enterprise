@@ -82,16 +82,16 @@ async function AsyncPageContent() {
                   <div className={styles["stat-item"]}>
                     <div
                       className={`${styles["stat-num"]} stat-num`}
-                      data-count="25+"
+                      data-count="8+"
                     >
-                      7+
+                      8+
                     </div>
                     <div className={styles["stat-label"]}>Years</div>
                   </div>
                   <div className={styles["stat-item"]}>
                     <div
                       className={`${styles["stat-num"]} stat-num`}
-                      data-count="500+"
+                      data-count="200+"
                     >
                       200+
                     </div>

@@ -33,6 +33,52 @@ function getProductIcon(category: string) {
   }
 }
 
+const scriptLoadingPromises: { [src: string]: Promise<void> | undefined } = {};
+
+const loadScript = (src: string): Promise<void> => {
+  if (typeof window === "undefined") return Promise.resolve();
+
+  if (scriptLoadingPromises[src]) {
+    return scriptLoadingPromises[src];
+  }
+
+  const promise = new Promise<void>((resolve, reject) => {
+    // If the library/map is already defined globally, resolve immediately
+    if (src.includes("gsap") && (window as any).gsap) {
+      resolve();
+      return;
+    }
+    if (src.includes("jsvectormap.min.js") && (window as any).jsVectorMap) {
+      resolve();
+      return;
+    }
+    if (src.includes("world.js") && (window as any).jsVectorMap?.maps?.world) {
+      resolve();
+      return;
+    }
+
+    const existing = document.querySelector(`script[src="${src}"]`) as HTMLScriptElement;
+    if (existing) {
+      const oldOnload = existing.onload;
+      existing.onload = (e) => {
+        if (oldOnload) (oldOnload as any).call(existing, e);
+        resolve();
+      };
+      existing.onerror = (e) => reject(e);
+      return;
+    }
+
+    const s = document.createElement("script");
+    s.src = src;
+    s.onload = () => resolve();
+    s.onerror = (e) => reject(e);
+    document.body.appendChild(s);
+  });
+
+  scriptLoadingPromises[src] = promise;
+  return promise;
+};
+
 export default function LiftZone({
   featuredProducts,
 }: {
@@ -40,18 +86,8 @@ export default function LiftZone({
 }) {
   useEffect(() => {
     let isDestroyed = false;
-    // Dynamically load GSAP + jsVectorMap scripts
-    const loadScript = (src: string) =>
-      new Promise<void>((resolve) => {
-        if (document.querySelector(`script[src="${src}"]`)) {
-          resolve();
-          return;
-        }
-        const s = document.createElement("script");
-        s.src = src;
-        s.onload = () => resolve();
-        document.body.appendChild(s);
-      });
+    let mapInstance: any = null;
+
 
     async function init() {
       await loadScript(
@@ -80,7 +116,7 @@ export default function LiftZone({
         "BR",
       ];
       try {
-        new (window as any).jsVectorMap({
+        mapInstance = new (window as any).jsVectorMap({
           selector: "#world-map",
           map: "world",
           backgroundColor: "transparent",
@@ -451,10 +487,24 @@ export default function LiftZone({
       onPageScroll();
 
       return () => {
+        isDestroyed = true;
         window.removeEventListener("wheel", handleWheel);
         window.removeEventListener("touchstart", handleTouchStart);
         window.removeEventListener("touchend", handleTouchEnd);
         window.removeEventListener("scroll", onPageScroll);
+
+        // Destroy map instance to prevent memory leaks and clean up DOM elements
+        if (mapInstance && typeof mapInstance.destroy === "function") {
+          try {
+            mapInstance.destroy();
+          } catch (e) {
+            console.warn("Failed to destroy map", e);
+          }
+        }
+
+        // Clean up any dynamic tooltips appended to body
+        const tooltips = document.querySelectorAll(".jvm-tooltip");
+        tooltips.forEach((el) => el.remove());
       };
     }
 
@@ -528,7 +578,7 @@ export default function LiftZone({
                 Engineering trust
                 <br />
                 <em style={{ fontStyle: "normal", color: "var(--teal)" }}>
-                  since 2019.
+                  since 2018.
                 </em>
               </h2>
               <div
@@ -543,7 +593,7 @@ export default function LiftZone({
                 <span className="about-label">About APB</span>
                 <div className="about-body">
                   <p>
-                    Founded in 2019, APB Enterprise has grown from a small
+                    Founded in 2018, APB Enterprise has grown from a small
                     engineering team into a registered LLP trusted by elevator
                     manufacturers across India and Southeast Asia. We build
                     controllers, door operators, safety gears, and COP panels —

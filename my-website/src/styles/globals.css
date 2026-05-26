@@ -2360,3 +2360,15 @@ body.modal-open header {
     font-size: 3.2rem;
   }
 }
+
+/* ============================================================
+   18. jsVectorMap Tooltip Safeguard Overrides
+   ============================================================ */
+.jvm-tooltip {
+  display: none !important;
+  position: absolute;
+  z-index: 99999;
+}
+.jvm-tooltip.active {
+  display: block !important;
+}
