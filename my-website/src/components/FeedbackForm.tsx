@@ -28,6 +28,28 @@ export default function FeedbackForm() {
     return (first + last).toUpperCase();
   };
 
+  const AVATAR_GRADIENTS = [
+    "linear-gradient(135deg, var(--teal) 0%, var(--near-black) 100%)", // Brand Teal-to-Black
+    "linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)", // Ocean Blue
+    "linear-gradient(135deg, #4c1d95 0%, #8b5cf6 100%)", // Royal Amethyst
+    "linear-gradient(135deg, #78350f 0%, #f59e0b 100%)", // Amber Copper
+    "linear-gradient(135deg, #064e3b 0%, #10b981 100%)", // Forest Emerald
+    "linear-gradient(135deg, #374151 0%, #9ca3af 100%)", // Slate Steel
+  ];
+
+  const getAvatarBackground = (nameStr: string) => {
+    const cleanName = nameStr.trim();
+    if (!cleanName) {
+      return AVATAR_GRADIENTS[0]; // Default brand gradient
+    }
+    let hash = 0;
+    for (let i = 0; i < cleanName.length; i++) {
+      hash = cleanName.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const index = Math.abs(hash) % AVATAR_GRADIENTS.length;
+    return AVATAR_GRADIENTS[index];
+  };
+
   // Get description for star ratings
   const getRatingLabel = (val: number) => {
     switch (val) {
@@ -303,7 +325,7 @@ export default function FeedbackForm() {
               </p>
               <div className="feedback-divider"></div>
               <div className="feedback-author">
-                <div className="feedback-avatar">{initials}</div>
+                <div className="feedback-avatar" style={{ background: getAvatarBackground(name) }}>{initials}</div>
                 <div className="feedback-author-info">
                   <div className="feedback-author-name">{name.trim() || "Client Name"}</div>
                   <div className="feedback-author-role">{formattedRole}</div>

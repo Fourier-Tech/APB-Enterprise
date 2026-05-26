@@ -20,6 +20,28 @@ function getInitials(nameStr: string) {
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 }
 
+const AVATAR_GRADIENTS = [
+  "linear-gradient(135deg, var(--teal) 0%, var(--near-black) 100%)", // Brand Teal-to-Black
+  "linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)", // Ocean Blue
+  "linear-gradient(135deg, #4c1d95 0%, #8b5cf6 100%)", // Royal Amethyst
+  "linear-gradient(135deg, #78350f 0%, #f59e0b 100%)", // Amber Copper
+  "linear-gradient(135deg, #064e3b 0%, #10b981 100%)", // Forest Emerald
+  "linear-gradient(135deg, #374151 0%, #9ca3af 100%)", // Slate Steel
+];
+
+function getAvatarBackground(name: string) {
+  const cleanName = name.trim();
+  if (!cleanName) {
+    return AVATAR_GRADIENTS[0]; // Default brand gradient
+  }
+  let hash = 0;
+  for (let i = 0; i < cleanName.length; i++) {
+    hash = cleanName.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const index = Math.abs(hash) % AVATAR_GRADIENTS.length;
+  return AVATAR_GRADIENTS[index];
+}
+
 function StarRating({ rating }: { rating: number }) {
   return (
     <div className="feedback-stars">
@@ -58,7 +80,7 @@ function MarqueeCard({ review }: { review: Review }) {
       <div className="feedback-author">
         <div
           className="feedback-avatar"
-          style={{ width: "30px", height: "30px", fontSize: "0.72rem" }}
+          style={{ width: "30px", height: "30px", fontSize: "0.72rem", background: getAvatarBackground(review.name) }}
         >
           {getInitials(review.name)}
         </div>
@@ -90,7 +112,7 @@ function FeedbackCard({ review }: { review: Review }) {
       <p className="feedback-text">{review.message}</p>
       <div className="feedback-divider" />
       <div className="feedback-author">
-        <div className="feedback-avatar">{getInitials(review.name)}</div>
+        <div className="feedback-avatar" style={{ background: getAvatarBackground(review.name) }}>{getInitials(review.name)}</div>
         <div className="feedback-author-info">
           <div className="feedback-author-name">{review.name}</div>
           <div className="feedback-author-role">{roleText}</div>
