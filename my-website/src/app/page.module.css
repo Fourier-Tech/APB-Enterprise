@@ -284,3 +284,113 @@
   }
 }
 
+/* ============================================================
+   LARGE VIEWPORTS (DESKTOP SCALING FOR LARGE & ULTRA-WIDE SCREENS)
+   ============================================================ */
+@media (min-width: 1400px) and (min-height: 820px) {
+  .hero .container {
+    max-width: 1320px !important; /* Scale up container on wide displays */
+  }
+
+  .hero-grid {
+    gap: 6.5rem;
+  }
+
+  .eyebrow-text {
+    font-size: 0.75rem !important;
+  }
+
+  .eyebrow-line {
+    width: 36px !important;
+  }
+
+  .hero h1 {
+    font-size: 4.2rem !important; /* Expand heading size */
+    max-width: 620px !important; /* Allow heading to stretch */
+  }
+
+  .hero-desc {
+    font-size: 1.12rem !important; /* Slightly larger description font */
+    max-width: 500px !important; /* Expand text block width */
+    margin-top: 1.5rem;
+  }
+
+  .hero-btns {
+    margin-top: 2.5rem;
+    gap: 1.5rem;
+  }
+
+  .hero-btns a,
+  .hero-btns button {
+    font-size: 0.96rem !important;
+    padding: 13px 26px !important;
+  }
+
+  .hero-stats {
+    margin-top: 3rem;
+    padding-top: 2.2rem;
+  }
+
+  .stat-num {
+    font-size: 2.4rem !important;
+  }
+
+  .stat-label {
+    font-size: 0.78rem !important;
+    margin-top: 6px;
+  }
+}
+
+@media (min-width: 1800px) and (min-height: 960px) {
+  .hero .container {
+    max-width: 1540px !important; /* Extra wide container on ultra-wide screens */
+  }
+
+  .hero-grid {
+    gap: 8rem;
+  }
+
+  .eyebrow-text {
+    font-size: 0.82rem !important;
+  }
+
+  .eyebrow-line {
+    width: 44px !important;
+  }
+
+  .hero h1 {
+    font-size: 4.8rem !important; /* Majestic heading font size */
+    max-width: 720px !important;
+  }
+
+  .hero-desc {
+    font-size: 1.25rem !important;
+    max-width: 580px !important;
+    margin-top: 1.75rem;
+  }
+
+  .hero-btns {
+    margin-top: 3rem;
+  }
+
+  .hero-btns a,
+  .hero-btns button {
+    font-size: 1.05rem !important;
+    padding: 15px 30px !important;
+  }
+
+  .hero-stats {
+    margin-top: 3.5rem;
+    padding-top: 2.5rem;
+  }
+
+  .stat-num {
+    font-size: 2.8rem !important;
+  }
+
+  .stat-label {
+    font-size: 0.85rem !important;
+    margin-top: 8px;
+  }
+}
+

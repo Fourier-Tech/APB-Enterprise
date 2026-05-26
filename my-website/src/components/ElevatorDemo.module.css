@@ -359,3 +359,18 @@
   justify-content: center;
   gap: 5px;
 }
+
+/* Large and ultra-wide screen scaling */
+@media (min-width: 1400px) and (min-height: 820px) {
+  .elevator-demo {
+    transform: scale(1.18);
+    transform-origin: center center;
+  }
+}
+
+@media (min-width: 1800px) and (min-height: 960px) {
+  .elevator-demo {
+    transform: scale(1.35);
+    transform-origin: center center;
+  }
+}

@@ -94,24 +94,38 @@ export default function Loader() {
     let resourceTimer: ReturnType<typeof setInterval> | null = null;
 
     function trackResourceProgress() {
-      if (typeof window === "undefined" || !window.performance) return;
+      try {
+        if (
+          typeof window === "undefined" ||
+          !window.performance ||
+          typeof window.performance.getEntriesByType !== "function"
+        )
+          return;
 
-      resourceTimer = setInterval(() => {
-        const entries = performance.getEntriesByType("resource");
-        const total = entries.length || 1;
-        const estimated = Math.min(5 + total * 3, 85);
-        if (estimated > progress) {
-          setProgress(estimated);
-          const carRatio = (progress - 5) / 80;
-          const carBottom = PAD_BOTTOM + TRAVEL * carRatio * 0.8;
-          safeCar.style.transition = "bottom 0.4s ease";
-          safeCar.style.bottom = carBottom + "px";
-        }
+        resourceTimer = setInterval(() => {
+          try {
+            const entries = performance.getEntriesByType("resource");
+            if (!entries) return;
+            const total = entries.length || 1;
+            const estimated = Math.min(5 + total * 3, 85);
+            if (estimated > progress) {
+              setProgress(estimated);
+              const carRatio = (progress - 5) / 80;
+              const carBottom = PAD_BOTTOM + TRAVEL * carRatio * 0.8;
+              safeCar.style.transition = "bottom 0.4s ease";
+              safeCar.style.bottom = carBottom + "px";
+            }
 
-        if (document.readyState === "complete") {
-          if (resourceTimer) clearInterval(resourceTimer);
-        }
-      }, 150);
+            if (document.readyState === "complete") {
+              if (resourceTimer) clearInterval(resourceTimer);
+            }
+          } catch (e) {
+            if (resourceTimer) clearInterval(resourceTimer);
+          }
+        }, 150);
+      } catch (e) {
+        // Fallback silently to prevent blocking loader transition
+      }
     }
 
     if (document.readyState === "loading") {
