@@ -1,0 +1,129 @@
+"use client";
+
+import { useState } from "react";
+import type { Product } from "@prisma/client";
+import Link from "next/link";
+import styles from "@/app/products/products.module.css";
+
+/* ── Icon map by category ── */
+const CATEGORY_ICONS: Record<string, string> = {
+  "geared controller": "fa-microchip",
+  "gearless controller": "fa-bolt",
+  "monarch integrated controller": "fa-network-wired",
+  "hydraulic controller": "fa-water",
+  "goods lift controller": "fa-box-open",
+};
+
+function getCategoryIcon(cat: string): string {
+  return CATEGORY_ICONS[cat.toLowerCase()] ?? "fa-cog";
+}
+
+function fmtCat(cat: string): string {
+  return cat
+    .split(" ")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+}
+
+interface Props {
+  products: Product[];
+}
+
+export default function ProductsCatalog({ products }: Props) {
+  const [activeCategory, setActiveCategory] = useState<string>("All");
+
+  const categories = [
+    "All",
+    ...Array.from(new Set(products.map((p) => p.category))).sort(),
+  ];
+
+  const filtered =
+    activeCategory === "All"
+      ? products
+      : products.filter((p) => p.category === activeCategory);
+
+  return (
+    <section className={styles["grid-section"]}>
+      <div className="container">
+        {/* Section heading */}
+        <div className={styles["grid-head"]} data-reveal>
+          <div>
+            <div className={styles["section-eyebrow"]}>Our products</div>
+            <h2 className={styles["section-title"]}>
+              Engineered for extreme reliability
+            </h2>
+          </div>
+        </div>
+
+        {/* Category tabs */}
+        <div className={styles["category-tabs"]}>
+          {categories.map((cat) => {
+            const count =
+              cat === "All"
+                ? products.length
+                : products.filter((p) => p.category === cat).length;
+            return (
+              <button
+                key={cat}
+                className={`${styles["cat-tab"]}${activeCategory === cat ? ` ${styles["active"]}` : ""}`}
+                onClick={() => setActiveCategory(cat)}
+              >
+                {cat === "All" ? "All" : fmtCat(cat)}
+                <span className={styles["cat-count"]}>{count}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Product grid */}
+        <div className={styles["products-grid"]}>
+          {filtered.map((product) => {
+            const icon = getCategoryIcon(product.category);
+            return (
+              <div className={styles["product-card"]} key={product.id}>
+                {/* Image / watermark */}
+                <div className={styles["product-img-wrap"]}>
+                  <span className={styles["product-badge"]}>APB Enterprise</span>
+                  {product.imageUrl ? (
+                    <img src={product.imageUrl} alt={product.name} />
+                  ) : (
+                    <div className={styles["product-watermark"]}>
+                      <i className={`fas ${icon}`} />
+                      <span className={styles["product-watermark-label"]}>
+                        {fmtCat(product.category)}
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Card body */}
+                <div className={styles["product-card-body"]}>
+                  {product.modelCode && (
+                    <div className={styles["model-code"]}>{product.modelCode}</div>
+                  )}
+                  <h3>{product.name}</h3>
+                  <p className={styles["product-desc"]}>
+                    {product.shortDesc.length > 110
+                      ? product.shortDesc.slice(0, 110).trim()
+                      : product.shortDesc}
+                    {product.shortDesc.length > 110 && (
+                      <span title={product.shortDesc} style={{ cursor: "help" }}>
+                        ...
+                      </span>
+                    )}
+                  </p>
+                  <Link
+                    href={`/products/${product.id}`}
+                    className={styles["product-link"]}
+                  >
+                    View Details <i className="fas fa-arrow-right fa-xs" />
+                  </Link>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}

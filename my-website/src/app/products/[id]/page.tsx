@@ -1,0 +1,135 @@
+import { Suspense } from "react";
+import Loader from "@/components/Loader";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import PageReadySignal from "@/components/PageReadySignal";
+import { prisma } from "@/lib/db";
+import styles from "../products.module.css";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import SpecTable from "../SpecTable";
+
+export const revalidate = 3600;
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const product = await prisma.product.findUnique({
+    where: { id: parseInt(id, 10) },
+  });
+  if (!product) return { title: "Product Not Found | APB Enterprise" };
+  return {
+    title: `${product.name} | APB Enterprise`,
+    description: product.shortDesc,
+  };
+}
+
+/* ── Icon map by category ── */
+const CATEGORY_ICONS: Record<string, string> = {
+  "geared controller": "fa-microchip",
+  "gearless controller": "fa-bolt",
+  "monarch integrated controller": "fa-network-wired",
+  "hydraulic controller": "fa-water",
+  "goods lift controller": "fa-box-open",
+};
+
+function getCategoryIcon(cat: string): string {
+  return CATEGORY_ICONS[cat.toLowerCase()] ?? "fa-cog";
+}
+
+export default async function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  
+  return (
+    <>
+      <Loader />
+      <Header />
+      <Suspense fallback={null}>
+        <AsyncProductDetail id={parseInt(id, 10)} />
+      </Suspense>
+    </>
+  );
+}
+
+async function AsyncProductDetail({ id }: { id: number }) {
+  const [product, contact] = await Promise.all([
+    prisma.product.findUnique({ where: { id } }),
+    prisma.contact.findFirst(),
+  ]);
+
+  if (!product) {
+    notFound();
+  }
+
+  const icon = getCategoryIcon(product.category);
+
+  // Build WhatsApp URL
+  const base = contact?.whatsappPrimary ?? "919999999999";
+  const number = base.replace(/\D/g, "");
+  const msg = `Hi APB Enterprise team, I am interested in your product "${product.name}" (Model: ${product.modelCode ?? "N/A"}). Could you please share the price and technical specifications?`;
+  const whatsappUrl = `https://wa.me/${number}?text=${encodeURIComponent(msg)}`;
+
+  return (
+    <>
+      <div className="page-shell">
+        <main style={{ paddingTop: "72px" }}>
+          <section className={styles["detail-section"]}>
+            <div className="container">
+              <Link href="/products" className={styles["back-btn"]}>
+                <i className="fas fa-arrow-left" />
+                Back to all products
+              </Link>
+
+              <div className={styles["detail-grid"]}>
+                {/* Visual panel */}
+                <div className={styles["detail-visual"]}>
+                  {product.imageUrl ? (
+                    <img src={product.imageUrl} alt={product.name} />
+                  ) : (
+                    <i className={`fas ${icon}`} />
+                  )}
+                </div>
+
+                {/* Info panel */}
+                <div>
+                  <div className={styles["detail-eyebrow"]}>
+                    <span className={styles["eyebrow-line"]} />
+                    <span className={styles["eyebrow-text"]}>Product detail</span>
+                  </div>
+
+                  <h1 className={styles["detail-name"]}>{product.name}</h1>
+
+                  {product.modelCode && (
+                    <span className={styles["detail-model"]}>
+                      {product.modelCode}
+                    </span>
+                  )}
+
+                  <div className={styles["detail-divider"]} />
+
+                  <p className={styles["detail-short-desc"]}>
+                    {product.shortDesc}
+                  </p>
+
+                  <SpecTable longDesc={product.longDesc} />
+
+                  <a
+                    href={whatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-primary"
+                  >
+                    <i className="fab fa-whatsapp" />
+                    Get a Quote for this Product
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+        </main>
+
+        <Footer contact={contact} />
+      </div>
+      <PageReadySignal />
+    </>
+  );
+}
