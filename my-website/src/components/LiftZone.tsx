@@ -652,7 +652,7 @@ export default function LiftZone({
                       <h3>{p.name}</h3>
                       <p title={p.shortDesc}>{p.shortDesc}</p>
                       <Link href="/products" className="product-link">
-                        Details <i className="fas fa-arrow-right fa-xs"></i>
+                        View Details <i className="fas fa-arrow-right fa-xs"></i>
                       </Link>
                     </div>
                   </div>

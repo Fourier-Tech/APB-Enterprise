@@ -84,7 +84,7 @@ async function AsyncPageContent() {
                       className={`${styles["stat-num"]} stat-num`}
                       data-count="8+"
                     >
-                      8+
+                      7+
                     </div>
                     <div className={styles["stat-label"]}>Years</div>
                   </div>
