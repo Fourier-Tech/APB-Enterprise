@@ -5,16 +5,27 @@ import styles from "./about.module.css";
 import ScrollReveal from "@/components/ScrollReveal";
 import PageReadySignal from "@/components/PageReadySignal";
 import Loader from "@/components/Loader";
+import { Suspense } from "react";
 
 export const revalidate = 0; // Dynamic Server Component to fetch the latest contacts
 
-export default async function AboutPage() {
-  const contact = await prisma.contact.findFirst();
-
+export default function AboutPage() {
   return (
     <>
       <Loader />
       <Header />
+      <Suspense fallback={null}>
+        <AsyncAboutContent />
+      </Suspense>
+    </>
+  );
+}
+
+async function AsyncAboutContent() {
+  const contact = await prisma.contact.findFirst();
+
+  return (
+    <>
       <ScrollReveal />
       <div className={styles["page-shell"]}>
         <main style={{ paddingTop: "72px" }}>
