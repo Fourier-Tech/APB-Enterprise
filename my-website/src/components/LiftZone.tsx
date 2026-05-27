@@ -679,7 +679,7 @@ export default function LiftZone({
                 <div className="reach-stats stagger">
                   {[
                     { num: "7+", label: "Countries" },
-                    { num: "200+", label: "Projects" },
+                    { num: "2200+", label: "Projects" },
                     { num: "15+", label: "Export years" },
                     { num: "3", label: "Continents" },
                   ].map((s) => (

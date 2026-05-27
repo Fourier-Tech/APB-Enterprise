@@ -165,10 +165,14 @@ async function AsyncAboutContent() {
                 {/* Card 1 — Managing Partner */}
                 <div className={styles["team-card"]}>
                   <div className={styles["team-avatar-wrap"]}>
-                    <div className={`${styles["team-avatar"]} ${styles["team-avatar-teal"]}`}>
+                    <div
+                      className={`${styles["team-avatar"]} ${styles["team-avatar-teal"]}`}
+                    >
                       <i className="fas fa-user-tie"></i>
                     </div>
-                    <div className={`${styles["team-avatar-ring"]} ${styles["team-avatar-ring-teal"]}`}></div>
+                    <div
+                      className={`${styles["team-avatar-ring"]} ${styles["team-avatar-ring-teal"]}`}
+                    ></div>
                   </div>
                   <h3 className={styles["team-name"]}>Arvind Bhai Patel</h3>
                   <div className={styles["team-role"]}>Managing Partner</div>
