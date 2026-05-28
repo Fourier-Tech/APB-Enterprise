@@ -15,7 +15,15 @@ if (typeof window === "undefined") {
   // We are on server side (Next.js Node environment)
   const connectionString = env.DATABASE_URL;
   const config = parse(connectionString);
-  const pool = new Pool(config as any);
+  
+  // Custom configurations optimized for Neon Postgres serverless cold starts
+  const pool = new Pool({
+    ...config,
+    connectionTimeoutMillis: 15000, // 15 seconds timeout to wait for suspended compute nodes
+    max: 10,                        // Maximum pool size
+    idleTimeoutMillis: 30000,       // Close idle connections after 30 seconds
+  } as any);
+  
   const adapter = new PrismaPg(pool);
 
   prismaInstance =

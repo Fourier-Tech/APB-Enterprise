@@ -150,7 +150,7 @@ async function AsyncContactContent() {
           </section>
         </main>
 
-        <Footer contact={contact} />
+        <Footer contact={contact} hideQuoteStrip={true} />
       </div>
       <PageReadySignal />
     </>

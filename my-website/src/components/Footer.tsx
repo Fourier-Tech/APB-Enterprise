@@ -19,26 +19,34 @@ interface ContactData {
   youtubeUrl: string | null;
 }
 
-export default function Footer({ contact }: { contact: ContactData | null }) {
+export default function Footer({
+  contact,
+  hideQuoteStrip = false,
+}: {
+  contact: ContactData | null;
+  hideQuoteStrip?: boolean;
+}) {
   return (
     <>
       {/* ── WHATSAPP QUOTE STRIP — shown on every page ── */}
-      <section className="quote-strip">
-        <div className="container">
-          <h3>Need a custom solution for your elevator project?</h3>
-          <p>
-            Expert consultation, volume pricing, and tailored product designs.
-          </p>
-          <a
-            href="/contact"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-gold-cta"
-          >
-            Contact Us
-          </a>
-        </div>
-      </section>
+      {!hideQuoteStrip && (
+        <section className="quote-strip">
+          <div className="container">
+            <h3>Need a custom solution for your elevator project?</h3>
+            <p>
+              Expert consultation, volume pricing, and tailored product designs.
+            </p>
+            <a
+              href="/contact"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-gold-cta"
+            >
+              Contact Us
+            </a>
+          </div>
+        </section>
+      )}
 
       {/* ── FOOTER ── */}
       <footer>

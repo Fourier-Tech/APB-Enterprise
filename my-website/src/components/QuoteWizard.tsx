@@ -101,14 +101,17 @@ Please review these parameters and share a customized quote with me.`;
   };
 
   return (
-    <div className={styles["quote-wizard-card"]}>
+    <div>
       <div className={styles["wizard-header"]}>
         <div className={styles["wizard-eyebrow"]}>
+          <span className={styles["eyebrow-line"]} />
           <span className={styles["wizard-eyebrow-text"]}>Interactive Spec Wizard</span>
         </div>
         <h2>Project Quote Engine</h2>
         <p>Configure details below to compile a custom spec-sheet. Submit to send instantly via WhatsApp.</p>
       </div>
+
+      <div className={styles["quote-wizard-card"]}>
 
       {/* Wizard toggle control segments */}
       <div className={styles["wizard-tabs"]}>
@@ -563,5 +566,6 @@ Please review these parameters and share a customized quote with me.`;
         </form>
       )}
     </div>
+  </div>
   );
 }

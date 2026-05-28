@@ -21,7 +21,7 @@
   z-index: 0;
 }
 
-.contact-section .container {
+.contact-section :global(.container) {
   position: relative;
   z-index: 1;
 }
@@ -418,8 +418,8 @@
   transition: color 0.25s ease; /* Smooth hover transition */
 }
 
-.hq-card:hover .hq-address {
-  color: var(--white); /* Turns address pure white when card is hovered */
+.hq-address:hover {
+  color: var(--white); /* Turns address pure white when address text itself is hovered */
 }
 
 .hq-address i {
@@ -479,7 +479,7 @@
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--teal);
+  color: var(--gold);
 }
 
 .wizard-header h2 {
@@ -542,6 +542,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.55rem; /* Spacious labels spacing */
+  min-width: 0; /* Prevents grid layout items from forcing card width */
 }
 
 .full-width {
@@ -583,6 +584,7 @@
   display: flex;
   align-items: center;
   width: 100%;
+  min-width: 0; /* Prevents wrapper stretching */
 }
 
 .input-icon-prefix {
@@ -604,6 +606,7 @@
   background: var(--white);
   outline: none;
   width: 100%;
+  min-width: 0; /* Prevents input element stretching */
   transition: all 0.2s ease;
 }
 
@@ -744,19 +747,64 @@
     grid-template-columns: 1fr;
     gap: 3.5rem;
   }
+
+  .contact-info-hub {
+    position: static; /* Disable sticky when stacked vertically on mobile/tablet */
+    align-self: stretch;
+  }
+}
+
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr; /* Stack inputs sooner to prevent horizontal squishing */
+    gap: 1.6rem;
+  }
+
+  .radio-capsule-group {
+    grid-template-columns: 1fr; /* Stack radio capsules sooner to prevent side-by-side horizontal overflow */
+  }
 }
 
 @media (max-width: 600px) {
   .quote-wizard-card {
-    padding: 2.2rem 1.6rem;
+    padding: 1.5rem 1rem; /* Reduced card padding on mobile so it stays neatly inside the screen */
   }
-  
-  .form-grid {
-    grid-template-columns: 1fr;
-    gap: 1.2rem;
+
+  .info-card,
+  .hq-card {
+    padding: 1.5rem 1.25rem; /* Reduced card padding on mobile for spaciousness */
   }
-  
-  .radio-capsule-group {
-    grid-template-columns: 1fr;
+
+  .wizard-header h2 {
+    font-size: 1.45rem;
+  }
+
+  .wizard-tabs {
+    gap: 6px;
+  }
+
+  .tab-btn {
+    font-size: 0.82rem;
+    padding: 10px 8px;
+  }
+}
+
+@media (max-width: 400px) {
+  .quote-wizard-card {
+    padding: 1.25rem 0.75rem; /* Maximize typing space on extremely narrow screens */
+  }
+
+  .info-card,
+  .hq-card {
+    padding: 1.25rem 1rem; /* Maximize space on extremely narrow mobile devices */
+  }
+
+  .wizard-tabs {
+    gap: 4px;
+  }
+
+  .tab-btn {
+    font-size: 0.76rem;
+    padding: 8px 4px;
   }
 }

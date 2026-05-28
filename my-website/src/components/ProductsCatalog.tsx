@@ -109,15 +109,8 @@ export default function ProductsCatalog({ products }: Props) {
                     <div className={styles["model-code"]}>{product.modelCode}</div>
                   )}
                   <h3>{product.name}</h3>
-                  <p className={styles["product-desc"]}>
-                    {shortDesc.length > 110
-                      ? shortDesc.slice(0, 110).trim()
-                      : shortDesc}
-                    {shortDesc.length > 110 && (
-                      <span title={shortDesc} style={{ cursor: "help" }}>
-                        ...
-                      </span>
-                    )}
+                  <p className={styles["product-desc"]} title={shortDesc}>
+                    {shortDesc}
                   </p>
                   <span className={styles["product-link"]}>
                     View Details <i className="fas fa-arrow-right fa-xs" />

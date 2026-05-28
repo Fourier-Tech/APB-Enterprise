@@ -160,7 +160,7 @@ async function AsyncPageContent() {
                 </div>
               </div>
               <Link href="/brochures" className="btn-outline-teal">
-                <i className="fas fa-download"></i> Download catalogue
+                <i className="fas fa-eye"></i> View catalogue
               </Link>
             </div>
           </section>
