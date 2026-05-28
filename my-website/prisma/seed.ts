@@ -150,24 +150,12 @@ async function main() {
     console.log(`✅ Seeded product: ${product.name} (${product.modelCode})`);
   }
 
-  // 4. Seed 3 dummy active brochures
+  // 4. Seed active brochures matching Neon production database
   const brochuresData = [
     {
-      title: "APB Enterprise - Full Product Catalogue 2026",
-      fileUrl: "https://res.cloudinary.com/demo/image/upload/v1610000000/apb_catalogue_2026.pdf",
+      title: "APB Enterprise - Catalogue 2026",
+      fileUrl: "https://odmxozftqwzjxtnpstsi.supabase.co/storage/v1/object/public/pdfs/apd_brochure.pdf",
       displayOrder: 1,
-      isActive: true,
-    },
-    {
-      title: "APB-101 Series Integrated Controller Specs Sheet",
-      fileUrl: "https://res.cloudinary.com/demo/image/upload/v1610000000/apb_101_specsheet.pdf",
-      displayOrder: 2,
-      isActive: true,
-    },
-    {
-      title: "Plugin Elevator Wire Harness Installation Manual",
-      fileUrl: "https://res.cloudinary.com/demo/image/upload/v1610000000/apb_harness_installation.pdf",
-      displayOrder: 3,
       isActive: true,
     },
   ];

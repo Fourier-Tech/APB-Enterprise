@@ -1,0 +1,780 @@
+/* ── DARK CINEMATIC HERO ── */
+.page-hero {
+  background: var(--near-black);
+  border-bottom: 3px solid var(--gold);
+  position: relative;
+  overflow: hidden;
+  padding: 4rem 0;
+}
+
+.page-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(212, 168, 0, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212, 168, 0, 0.06) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.page-hero::after {
+  content: "";
+  position: absolute;
+  top: -80px;
+  right: -80px;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(15, 105, 120, 0.2) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.page-hero-accent {
+  position: absolute;
+  bottom: -60px;
+  left: -60px;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212, 168, 0, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.page-hero-dots {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 80px;
+  height: 80px;
+  background-image: radial-gradient(circle, rgba(212, 168, 0, 0.3) 1px, transparent 1px);
+  background-size: 12px 12px;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.page-hero :global(.container) {
+  position: relative;
+  z-index: 2;
+}
+
+.page-hero-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 1rem;
+}
+
+.eyebrow-line {
+  width: 28px;
+  height: 2px;
+  background: var(--gold);
+  flex-shrink: 0;
+}
+
+.eyebrow-text {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.67rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.page-hero h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--white);
+  line-height: 1.1;
+}
+
+.page-hero h1 em {
+  font-style: normal;
+  color: var(--teal-light);
+}
+
+.page-hero p {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 0.75rem;
+  max-width: 500px;
+  line-height: 1.65;
+}
+
+/* ── BROCHURES GRID SECTION ── */
+.brochures-section {
+  padding: 5rem 0;
+  background: var(--off-white);
+  border-bottom: 1px solid var(--gray-light);
+}
+
+.section-label {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.67rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--teal);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 0.75rem;
+}
+
+.section-label::before {
+  content: "";
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--teal);
+}
+
+.section-title {
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--black);
+  margin-bottom: 3.5rem;
+}
+
+/* ── 3D BOOK CARDS GRID ── */
+.books-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 3rem;
+  perspective: 1800px;
+}
+
+.book-card {
+  cursor: pointer;
+  perspective: 1200px;
+  display: flex;
+  flex-direction: column;
+}
+
+.book-card:hover .book-cover {
+  transform: rotateY(-28deg);
+  box-shadow: 18px 18px 45px rgba(0, 0, 0, 0.22);
+}
+
+.book-cover {
+  position: relative;
+  width: 100%;
+  padding-top: 140%;
+  transform-origin: left center;
+  transform: rotateY(0deg);
+  transition: transform 0.55s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.55s ease;
+  border-radius: 2px 8px 8px 2px;
+  box-shadow: 6px 8px 24px rgba(0, 0, 0, 0.14);
+}
+
+.book-front {
+  position: absolute;
+  inset: 0;
+  border-radius: 2px 8px 8px 2px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 3D Spine Illusion */
+.book-spine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 14px;
+  border-radius: 2px 0 0 2px;
+  z-index: 2;
+}
+
+/* Book page edges stack */
+.book-pages {
+  position: absolute;
+  top: 3px;
+  right: -6px;
+  bottom: 3px;
+  width: 8px;
+  border-radius: 0 2px 2px 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    #f5f0e8 0px,
+    #f5f0e8 1px,
+    #e8e0d0 2px,
+    #e8e0d0 3px
+  );
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.15);
+  z-index: -1;
+}
+
+.book-cover-img {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1.25rem 1.25rem 1.75rem;
+}
+
+.book-tag {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 3px;
+  display: inline-block;
+  width: fit-content;
+  margin-bottom: 1rem;
+}
+
+.book-title {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.25;
+  flex: 1;
+}
+
+.book-subtitle {
+  font-size: 0.72rem;
+  opacity: 0.75;
+  line-height: 1.45;
+  margin-top: 0.6rem;
+  margin-bottom: 1.2rem;
+}
+
+.book-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.75rem;
+  border-top: 1px solid;
+}
+
+.book-meta-year {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  opacity: 0.7;
+}
+
+.book-icon {
+  font-size: 1.1rem;
+  opacity: 0.8;
+}
+
+.book-info {
+  margin-top: 1.25rem;
+}
+
+.book-info h3 {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+  color: var(--black);
+}
+
+.book-info p {
+  font-size: 0.8rem;
+  color: var(--gray-mid);
+}
+
+/* Theme 1 - Teal (Product Catalogue) */
+.book-1 .book-spine {
+  background: linear-gradient(180deg, #0a4d5a 0%, #0f6978 100%);
+}
+
+.book-1 .book-front {
+  background: linear-gradient(145deg, #0f6978 0%, #0a3d48 100%);
+}
+
+.book-1 .book-tag {
+  background: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.book-1 .book-title {
+  color: var(--white);
+}
+
+.book-1 .book-subtitle {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.book-1 .book-meta {
+  border-top-color: rgba(255, 255, 255, 0.15);
+  color: var(--white);
+}
+
+/* Theme 2 - Gold (Technical Specs Manual) */
+.book-2 .book-spine {
+  background: linear-gradient(180deg, #9a7a00 0%, #d4a800 100%);
+}
+
+.book-2 .book-front {
+  background: linear-gradient(145deg, #d4a800 0%, #9a7400 100%);
+}
+
+.book-2 .book-tag {
+  background: rgba(0, 0, 0, 0.12);
+  color: rgba(0, 0, 0, 0.78);
+}
+
+.book-2 .book-title {
+  color: #1a1200;
+}
+
+.book-2 .book-subtitle {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.book-2 .book-meta {
+  border-top-color: rgba(0, 0, 0, 0.15);
+  color: #1a1200;
+}
+
+/* Theme 3 - Dark (Company Profile) */
+.book-3 .book-spine {
+  background: linear-gradient(180deg, #0d0d0d 0%, #1c1c1c 100%);
+}
+
+.book-3 .book-front {
+  background: linear-gradient(145deg, #1c1c1c 0%, #111111 100%);
+}
+
+.book-3 .book-tag {
+  background: rgba(212, 168, 0, 0.2);
+  color: var(--gold);
+}
+
+.book-3 .book-title {
+  color: var(--white);
+}
+
+.book-3 .book-subtitle {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.book-3 .book-meta {
+  border-top-color: rgba(255, 255, 255, 0.1);
+  color: var(--white);
+}
+
+/* Theme 4 - Light Grey (Installation Guide) */
+.book-4 .book-spine {
+  background: linear-gradient(180deg, #cccccc 0%, #e8e8e8 100%);
+}
+
+.book-4 .book-front {
+  background: linear-gradient(145deg, #f0f4f5 0%, #dde8ea 100%);
+}
+
+.book-4 .book-tag {
+  background: var(--teal-bg);
+  color: var(--teal);
+}
+
+.book-4 .book-title {
+  color: var(--near-black);
+}
+
+.book-4 .book-subtitle {
+  color: var(--gray-dark);
+}
+
+.book-4 .book-meta {
+  border-top-color: var(--gray-light);
+  color: var(--black);
+}
+
+/* ── MODAL OVERLAY (PDF Viewer) ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  padding: 1rem;
+}
+
+.modal-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.flipbook-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 960px;
+  background: #1a1a1a;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6);
+  transform: scale(0.94) translateY(20px);
+  transition: transform 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.modal-overlay.open .flipbook-wrap {
+  transform: scale(1) translateY(0);
+}
+
+/* Modal Top bar */
+.flipbook-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 1.5rem;
+  background: #111111;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.flipbook-topbar-title {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.modal-download-btn {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: transparent;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.modal-download-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: var(--white);
+}
+
+.flipbook-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 1.1rem;
+  transition: color 0.15s, background-color 0.15s;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.flipbook-close:hover {
+  color: var(--white);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* PDF Stage row horizontal partition */
+.pdf-stage-row {
+  display: flex;
+  width: 100%;
+  height: 80vh;
+  overflow: hidden;
+  position: relative;
+  background: #0c0c0c;
+}
+
+/* ── PREMIUM LEFT SIDEBAR THUMBNAIL PANEL ── */
+.sidebar-pane {
+  width: 180px;
+  background: #111111;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem 0.75rem;
+  gap: 1.25rem;
+  transition: width 0.3s cubic-bezier(0.23, 1, 0.32, 1), padding 0.3s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.25s ease;
+  flex-shrink: 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+.sidebar-pane.closed {
+  width: 0;
+  padding: 1.25rem 0;
+  opacity: 0;
+  border-right-color: transparent;
+  pointer-events: none;
+}
+
+.thumb-wrapper {
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  padding: 6px;
+  transition: all 0.2s ease;
+  background: rgba(255, 255, 255, 0.01);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  user-select: none;
+}
+
+.thumb-wrapper:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.thumb-wrapper.active {
+  background: rgba(15, 105, 120, 0.15);
+  border-color: var(--teal-light);
+  box-shadow: 0 4px 18px rgba(15, 105, 120, 0.3);
+}
+
+.thumb-canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+  border-radius: 3px;
+  background: #ffffff;
+  transition: transform 0.25s ease;
+}
+
+.thumb-wrapper:hover .thumb-canvas {
+  transform: scale(1.03);
+}
+
+.thumb-label {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.45);
+  margin-top: 0.45rem;
+  transition: color 0.2s ease;
+}
+
+.thumb-wrapper.active .thumb-label {
+  color: var(--teal-light);
+}
+
+.pdf-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+/* ── PREMIUM PDF CUSTOM CANVAS RENDERING ── */
+.canvas-stage {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+  position: relative;
+  height: 100%;
+  background: #0c0c0c;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.canvas-stage.fit-mode {
+  overflow: hidden; /* completely prevent scrollbars in fit-to-screen */
+}
+
+.canvas-stage.custom-mode {
+  overflow: auto; /* allow panning scrollbars when custom zooming */
+  align-items: flex-start; /* top-align to read document easily */
+}
+
+.pdf-canvas {
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.55);
+  max-width: 100%;
+  height: auto !important;
+  display: block;
+  margin: 0 auto;
+  border-radius: 4px;
+  background: #ffffff;
+  transition: transform 0.2s cubic-bezier(0.1, 0.8, 0.25, 1), opacity 0.22s ease-in-out;
+  opacity: 1;
+}
+
+.pdf-canvas.rendering {
+  opacity: 0.7;
+}
+
+.pdf-controls {
+  position: absolute;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: rgba(15, 15, 15, 0.9);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 30px;
+  padding: 8px 22px;
+  z-index: 50;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  pointer-events: auto;
+}
+
+.pdf-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.82rem;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  transition: color 0.15s, background-color 0.15s, transform 0.1s;
+}
+
+.pdf-btn:hover:not(:disabled) {
+  color: var(--white);
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.05);
+}
+
+.pdf-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.pdf-btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+.pdf-page-indicator {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  min-width: 85px;
+  text-align: center;
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0 12px;
+  user-select: none;
+}
+
+.pdf-loading-spinner {
+  position: absolute;
+  inset: 0;
+  background: #0c0c0c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 40;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.spinner {
+  width: 44px;
+  height: 44px;
+  border: 3.5px solid rgba(255, 255, 255, 0.08);
+  border-top-color: var(--teal-light);
+  border-radius: 50%;
+  animation: spin 0.85s infinite linear;
+}
+
+.loading-text {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* ── RESPONSIVE MEDIA QUERIES ── */
+@media (max-width: 960px) {
+  .books-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+  
+  .pdf-stage-row {
+    height: 60vh;
+  }
+}
+
+@media (max-width: 580px) {
+  .books-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+  
+  .pdf-stage-row {
+    height: 50vh;
+  }
+  
+  .flipbook-topbar {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+  
+  .flipbook-topbar div {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .pdf-controls {
+    bottom: 15px;
+    padding: 6px 12px;
+    gap: 0.5rem;
+  }
+
+  .pdf-page-indicator {
+    min-width: 75px;
+    padding: 0 8px;
+    font-size: 0.7rem;
+  }
+
+  .pdf-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 0.75rem;
+  }
+  
+  .sidebar-pane {
+    display: none; /* auto hide sidebar thumbnails completely on narrow mobile screens */
+  }
+}
+
+

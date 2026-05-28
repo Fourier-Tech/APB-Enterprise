@@ -1,20 +1,78 @@
+import { Suspense } from "react";
+import Loader from "@/components/Loader";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ScrollReveal from "@/components/ScrollReveal";
+import PageReadySignal from "@/components/PageReadySignal";
+import BrochuresCatalog from "@/components/BrochuresCatalog";
+import { prisma } from "@/lib/db";
+import styles from "./brochures.module.css";
+
+export const revalidate = 3600; // Cache page for an hour
+
+export const metadata = {
+  title: "Brochures & Resources | APB Enterprise",
+  description:
+    "Download APB Enterprise's technical brochures, installation manuals, certificates, and corporate catalog profiles.",
+};
 
 export default function BrochuresPage() {
   return (
     <>
+      <Loader />
       <Header />
-      <main style={{ paddingTop: "120px", paddingBottom: "120px", minHeight: "60vh" }}>
-        <div className="container">
-          <div className="section-eyebrow">Brochures & Documents</div>
-          <h1 className="section-title">Technical Documentation</h1>
-          <p style={{ marginTop: "20px", color: "var(--gray-dark)" }}>
-            Coming soon. Technical specifications, manuals, catalogs, and certificates will be downloadable here.
-          </p>
-        </div>
-      </main>
-      <Footer contact={null} />
+      <Suspense fallback={null}>
+        <AsyncBrochuresContent />
+      </Suspense>
+    </>
+  );
+}
+
+async function AsyncBrochuresContent() {
+  const [dbBrochures, contact] = await Promise.all([
+    prisma.brochure.findMany({
+      where: { isActive: true },
+      orderBy: [{ displayOrder: "asc" }, { id: "asc" }],
+    }),
+    prisma.contact.findFirst(),
+  ]);
+
+  return (
+    <>
+      <ScrollReveal />
+      <div className="page-shell">
+        <main style={{ paddingTop: "72px" }}>
+          {/* ── DARK CINEMATIC HERO ── */}
+          <section className={styles["page-hero"]}>
+            <div className={styles["page-hero-accent"]} />
+            <div className={styles["page-hero-dots"]} />
+            <div className="container">
+              <div
+                className={`${styles["page-hero-eyebrow"]} reveal`}
+                data-reveal
+                data-delay="0"
+              >
+                <span className={styles["eyebrow-line"]} />
+                <span className={styles["eyebrow-text"]}>Resources & Guides</span>
+              </div>
+              <h1 data-reveal data-delay="100" className="reveal">
+                Technical <em>Brochures</em>
+                <br />& Catalogues.
+              </h1>
+              <p data-reveal data-delay="200" className="reveal">
+                Access step-by-step engineering diagrams, compliance standard documentation,
+                and extensive product specifications.
+              </p>
+            </div>
+          </section>
+
+          {/* ── INTERACTIVE 3D CATALOG GRID ── */}
+          <BrochuresCatalog dbBrochures={dbBrochures} contact={contact} />
+        </main>
+
+        <Footer contact={contact} />
+      </div>
+      <PageReadySignal />
     </>
   );
 }
