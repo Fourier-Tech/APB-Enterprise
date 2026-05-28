@@ -95,7 +95,7 @@ export default async function TermsPage() {
             </div>
           </section>
         </main>
-        <GlobalFooter />
+        <GlobalFooter hideQuoteStrip={true}/>
       </div>
       <PageReadySignal />
     </>
