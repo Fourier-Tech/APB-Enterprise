@@ -145,8 +145,8 @@ export default function FeedbackForm() {
         </div>
         <h1 className="feedback-title">Share Your Experience</h1>
         <p className="feedback-description">
-          At APB Enterprise, we pride ourselves on engineering elite-level elevator components. 
-          We invite our valued partners to share their verified review. Your insights help us 
+          At APB Enterprise, we pride ourselves on engineering elite-level elevator components.
+          We invite our valued partners to share their verified review. Your insights help us
           maintain world-class standards of reliability, performance, and craftsmanship.
         </p>
       </div>
