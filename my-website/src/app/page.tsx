@@ -27,11 +27,19 @@ export default function Home() {
 
 async function AsyncPageContent() {
   const contact = await prisma.contact.findFirst();
-  const featuredProducts = await prisma.product.findMany({
-    where: { isFeatured: true },
-    orderBy: [{ displayOrder: "asc" }, { createdAt: "desc" }],
-    take: 4,
-  });
+  const featuredProducts = (await prisma.product.findMany({
+    where: { isFeatured: true }
+  })).map(p => ({
+    ...p,
+    shortDesc: p.shortDesc ?? "",
+    longDesc: p.longDesc ?? "",
+    category: p.category ?? "",
+    imageUrl: p.imageUrl ?? "",
+    modelCode: p.modelCode ?? "",
+    isFeatured: p.isFeatured ?? false,
+    displayOrder: p.displayOrder ?? 0,
+    createdAt: p.createdAt ?? new Date(),
+  }));
   const featuredReviews = await prisma.review.findMany({
     where: { isFeatured: true },
     orderBy: { createdAt: "desc" },
