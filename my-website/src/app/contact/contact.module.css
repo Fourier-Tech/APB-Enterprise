@@ -1,0 +1,762 @@
+/* ══ CUSTOM PREMIUM CONTACT PAGE STYLES ══ */
+
+.contact-section {
+  padding: 5rem 0;
+  background: var(--white);
+  min-height: 100vh;
+  position: relative;
+  overflow: visible; /* Allows child sticky elements to stick on scroll */
+}
+
+/* Subtle architectural grid pattern overlay on white bg */
+.contact-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(15, 105, 120, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 105, 120, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.contact-section .container {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── DARK CINEMATIC HERO ── */
+.page-hero {
+  background: var(--near-black);
+  border-bottom: 3px solid var(--gold);
+  position: relative;
+  overflow: hidden;
+  padding: 4rem 0;
+}
+
+.page-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(212, 168, 0, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212, 168, 0, 0.06) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.page-hero::after {
+  content: "";
+  position: absolute;
+  top: -80px;
+  right: -80px;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(15, 105, 120, 0.2) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.page-hero-accent {
+  position: absolute;
+  bottom: -60px;
+  left: -60px;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212, 168, 0, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.page-hero-dots {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 80px;
+  height: 80px;
+  background-image: radial-gradient(circle, rgba(212, 168, 0, 0.3) 1px, transparent 1px);
+  background-size: 12px 12px;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.page-hero :global(.container) {
+  position: relative;
+  z-index: 2;
+}
+
+.page-hero-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 1rem;
+}
+
+.eyebrow-line {
+  width: 24px;
+  height: 2px;
+  background: var(--gold);
+}
+
+.eyebrow-text {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.67rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.page-hero h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--white);
+  line-height: 1.1;
+}
+
+.page-hero h1 em {
+  font-style: normal;
+  color: var(--teal-light);
+}
+
+.page-hero p {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 0.75rem;
+  max-width: 500px;
+  line-height: 1.65;
+}
+
+/* ── 2-COLUMN SPLIT GRID ── */
+.contact-split-grid {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 5rem;
+  align-items: start;
+  margin-top: 3.5rem;
+}
+
+/* ── LEFT COLUMN: DIRECT CONTACT DETAILS HUB ── */
+.contact-info-hub {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  position: sticky;
+  top: 100px; /* Floats comfortably beneath navbar header */
+  align-self: start; /* Prevents grid stretching so it can slide stuck */
+}
+
+/* Glassmorphic Contact Card container */
+.info-card {
+  background: var(--white);
+  border: 1px solid var(--gray-light);
+  border-radius: 12px;
+  padding: 2.2rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.015);
+}
+
+.info-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  background: var(--teal);
+  transition: width 0.3s ease;
+  z-index: 0;
+}
+
+.info-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--teal-light);
+  box-shadow: 0 12px 24px rgba(15, 105, 120, 0.08);
+}
+
+.info-card:hover::before {
+  width: 4px;
+}
+
+.info-card-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+}
+
+.info-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  background: var(--teal-bg);
+  border: 1.5px solid rgba(15, 105, 120, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.25s ease;
+}
+
+.info-card:hover .info-card-icon {
+  background: var(--teal);
+  border-color: var(--teal);
+}
+
+.info-card-icon i {
+  font-size: 1.15rem;
+  color: var(--teal);
+  transition: color 0.25s ease;
+}
+
+.info-card:hover .info-card-icon i {
+  color: var(--white);
+}
+
+.info-card-details {
+  flex: 1;
+}
+
+.info-card-details h3 {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--black);
+  margin-bottom: 0.4rem;
+}
+
+.info-card-value {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--black);
+  text-decoration: none;
+  display: inline-block;
+  transition: color 0.15s ease;
+}
+
+.info-card-value:hover {
+  color: var(--teal);
+}
+
+.info-card-note {
+  font-size: 0.8rem;
+  color: var(--gray-mid);
+  margin-top: 0.3rem;
+}
+
+/* Copy Action Button inside info cards */
+.copy-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--teal);
+  background: var(--teal-bg);
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-top: 0.6rem;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s ease;
+}
+
+.copy-badge:hover {
+  background: var(--teal);
+  color: var(--white);
+}
+
+/* Real-time Open status bar */
+.status-indicator-bar {
+  background: #f7fcfa;
+  border: 1.5px solid rgba(37, 211, 102, 0.15);
+  border-radius: 8px;
+  padding: 1.25rem 1.6rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.status-indicator-bar.offline {
+  background: #fffcf7;
+  border-color: rgba(212, 168, 0, 0.15);
+}
+
+.pulse-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #25D366;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.pulse-dot::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid #25D366;
+  animation: pulse 1.8s infinite ease-in-out;
+  opacity: 0;
+}
+
+.status-indicator-bar.offline .pulse-dot {
+  background: var(--gold);
+}
+
+.status-indicator-bar.offline .pulse-dot::after {
+  border-color: var(--gold);
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+.status-text-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.status-label {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #1ebe5c;
+}
+
+.status-indicator-bar.offline .status-label {
+  color: var(--gold);
+}
+
+.status-desc {
+  font-size: 0.85rem;
+  color: var(--gray-dark);
+  font-weight: 500;
+  margin-top: 1px;
+}
+
+/* Beautiful HQ address card - clickable link wrapper styling */
+.hq-card {
+  background: linear-gradient(135deg, #111e21 0%, #060b0c 100%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 2.2rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  display: block; /* Render as block-level anchor */
+  text-decoration: none; /* Strip link underlines */
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  cursor: pointer;
+}
+
+.hq-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--gold);
+  box-shadow: 0 12px 30px rgba(212, 168, 0, 0.12);
+}
+
+.hq-card::before {
+  content: "";
+  position: absolute;
+  top: -80px;
+  right: -80px;
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(15, 105, 120, 0.25) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.hq-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 1.25rem;
+  position: relative;
+  z-index: 1;
+}
+
+.hq-card-header i {
+  color: var(--gold);
+  font-size: 1.2rem;
+}
+
+.hq-card-header h3 {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--white);
+}
+
+.hq-address {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+  margin-bottom: 1.6rem;
+  position: relative;
+  z-index: 1;
+  transition: color 0.25s ease; /* Smooth hover transition */
+}
+
+.hq-card:hover .hq-address {
+  color: var(--white); /* Turns address pure white when card is hovered */
+}
+
+.hq-address i {
+  color: var(--gold);
+  margin-right: 8px;
+  font-size: 1rem;
+}
+
+.hq-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--gold);
+  text-decoration: none;
+  border: 1.5px solid var(--gold);
+  padding: 8px 18px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  position: relative;
+  z-index: 1;
+  background: transparent;
+}
+
+.hq-link-btn:hover {
+  background: var(--gold);
+  color: var(--black);
+}
+
+
+/* ── RIGHT COLUMN: PREMIUM DYNAMIC QUOTE WIZARD ── */
+.quote-wizard-card {
+  background: var(--white);
+  border: 1px solid var(--gray-light);
+  border-radius: 12px;
+  padding: 3rem 2.8rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.015);
+  position: relative;
+}
+
+.wizard-header {
+  margin-bottom: 2.2rem;
+}
+
+.wizard-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 0.6rem;
+}
+
+.wizard-eyebrow-text {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+
+.wizard-header h2 {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 1.7rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--black);
+  margin-bottom: 0.4rem;
+}
+
+.wizard-header p {
+  font-size: 0.92rem;
+  color: var(--gray-mid);
+  line-height: 1.5;
+}
+
+/* Premium tab toggle segment control styling */
+.wizard-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--gray-xlight);
+  border-radius: 8px;
+  padding: 5px;
+  margin-bottom: 2.4rem;
+  position: relative;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.tab-btn {
+  background: transparent;
+  border: none;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--gray-dark);
+  padding: 10px 14px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: center;
+  user-select: none;
+  z-index: 1;
+}
+
+.tab-btn.active {
+  background: var(--white);
+  color: var(--teal);
+  box-shadow: 0 3px 10px rgba(15, 105, 120, 0.08);
+}
+
+/* Spec Form Grid layouts */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.2rem 1.8rem; /* High-end spacious vertical and horizontal gaps */
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem; /* Spacious labels spacing */
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-group label {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--black);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.form-group label i {
+  color: var(--teal);
+  font-size: 0.85rem;
+  width: 14px;
+  flex-shrink: 0;
+}
+
+.form-group label .req {
+  color: var(--gold);
+  margin-left: 1px;
+}
+
+.form-group label .label-sub {
+  font-family: "Epilogue", sans-serif;
+  font-weight: 400;
+  font-size: 0.72rem;
+  color: var(--gray-mid);
+}
+
+/* Prefix inside inputs */
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.input-icon-prefix {
+  position: absolute;
+  left: 14px;
+  color: var(--gray-mid);
+  font-size: 0.9rem;
+  pointer-events: none;
+  transition: color 0.15s ease;
+}
+
+.form-input {
+  border: 1.5px solid var(--gray-light);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-family: "Epilogue", sans-serif;
+  font-size: 0.95rem;
+  color: var(--black);
+  background: var(--white);
+  outline: none;
+  width: 100%;
+  transition: all 0.2s ease;
+}
+
+.form-input-with-prefix {
+  padding-left: 36px;
+}
+
+.form-input:focus {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(15, 105, 120, 0.07);
+}
+
+.input-wrapper:focus-within .input-icon-prefix {
+  color: var(--teal);
+}
+
+/* Strictly mm suffix design */
+.input-mm-suffix {
+  position: absolute;
+  right: 14px;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--teal);
+  background: var(--teal-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+.form-input-with-suffix {
+  padding-right: 48px;
+}
+
+/* Custom modern radio capsule selection pills */
+.radio-capsule-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+}
+
+.radio-capsule {
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+  width: 100%;
+}
+
+.radio-capsule input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.radio-capsule-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border: 1.5px solid var(--gray-light);
+  border-radius: 6px;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--gray-dark);
+  background: var(--white);
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.radio-capsule input[type="radio"]:checked + .radio-capsule-box {
+  border-color: var(--teal);
+  background: var(--teal-bg);
+  color: var(--teal);
+}
+
+.radio-capsule:hover .radio-capsule-box {
+  border-color: var(--teal-light);
+}
+
+/* Submit Action panel */
+.submit-panel {
+  margin-top: 2.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.submit-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #25D366;
+  color: var(--white);
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 12px 28px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.2);
+}
+
+.submit-btn:hover {
+  background: #1ebe5c;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(37, 211, 102, 0.35);
+}
+
+.submit-btn i {
+  font-size: 1.1rem;
+}
+
+.privacy-notice {
+  font-size: 0.75rem;
+  color: var(--gray-mid);
+  line-height: 1.4;
+}
+
+.privacy-notice a {
+  color: var(--teal);
+  text-decoration: none;
+}
+
+.privacy-notice a:hover {
+  border-bottom: 1.2px solid var(--teal);
+}
+
+
+/* ── RESPONSIVE ADAPTATIONS ── */
+@media (max-width: 1024px) {
+  .contact-split-grid {
+    grid-template-columns: 1fr;
+    gap: 3.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .quote-wizard-card {
+    padding: 2.2rem 1.6rem;
+  }
+  
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+  
+  .radio-capsule-group {
+    grid-template-columns: 1fr;
+  }
+}

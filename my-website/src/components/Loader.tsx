@@ -69,7 +69,7 @@ export default function Loader() {
             (window as any).__loaderDone = true;
             document.dispatchEvent(new CustomEvent("loaderDone"));
           }, 400);
-        }, 350);
+        }, 950);
       }, 150);
     }
 
