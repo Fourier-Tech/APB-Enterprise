@@ -50,7 +50,7 @@ function getCategoryIcon(cat: string): string {
 
 export default async function ProductDetailPage({ params }: { params: Promise<{ code: string }> }) {
   const { code } = await params;
-  
+
   return (
     <>
       <Loader />
@@ -106,7 +106,6 @@ async function AsyncProductDetail({ code }: { code: string }) {
                 {/* Info panel */}
                 <div>
                   <div className={styles["detail-eyebrow"]}>
-                    <span className={styles["eyebrow-line"]} />
                     <span className={styles["eyebrow-text"]}>Product detail</span>
                   </div>
 

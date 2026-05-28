@@ -67,13 +67,6 @@
   margin-bottom: 1rem;
 }
 
-.eyebrow-line {
-  width: 28px;
-  height: 2px;
-  background: var(--gold);
-  flex-shrink: 0;
-}
-
 .eyebrow-text {
   font-family: "Space Grotesk", sans-serif;
   font-size: 0.67rem;

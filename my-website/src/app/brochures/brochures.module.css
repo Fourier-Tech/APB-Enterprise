@@ -117,19 +117,8 @@
   font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--teal);
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 0.75rem;
-}
-
-.section-label::before {
-  content: "";
-  display: block;
-  width: 20px;
-  height: 2px;
-  background: var(--teal);
+  color: var(--gold);
+  margin-bottom: 0.5rem;
 }
 
 .section-title {
