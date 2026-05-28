@@ -399,6 +399,9 @@
 }
 
 .back-btn {
+  position: sticky;
+  top: 72px; /* Sticks right below the main header (72px) */
+  z-index: 100;
   display: inline-flex;
   align-items: center;
   gap: 7px;
@@ -408,15 +411,17 @@
   font-weight: 600;
   text-decoration: none;
   border: none;
-  background: none;
-  cursor: pointer;
-  margin-bottom: 2.5rem;
-  padding: 0;
-  transition: gap 0.15s;
+  background: var(--white); /* Mask content scrolling behind */
+  width: 100%; /* Spans full container width */
+  padding: 1rem 0; /* Add top/bottom visual spacing */
+  margin-bottom: 2rem;
+  transition: gap 0.15s, color 0.15s;
+  border-bottom: 1.5px solid rgba(15, 105, 120, 0.06); /* Premium layout divider line */
 }
 
 .back-btn:hover {
   gap: 11px;
+  color: var(--gold);
 }
 
 .detail-grid {
@@ -428,7 +433,7 @@
 
 .detail-visual-sticky {
   position: sticky;
-  top: 90px; /* 72px header + 18px breathing room */
+  top: 146px; /* Positioned beautifully below the stuck back button (72px header + 58px back bar + 16px space) */
 }
 
 .detail-visual {
