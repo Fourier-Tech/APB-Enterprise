@@ -65,7 +65,7 @@ export default function BrochuresCatalog({ dbBrochures, contact }: Props) {
                 <div
                   key={b.id}
                   className={`${styles["book-card"]} ${themeClass}`}
-                  onClick={() => openBook(b.title, b.fileUrl)}
+                  onClick={() => openBook(b.title ?? "", b.fileUrl ?? "")}
                 >
                   <div className={styles["book-cover"]}>
                     <div className={styles["book-spine"]} />
@@ -73,7 +73,7 @@ export default function BrochuresCatalog({ dbBrochures, contact }: Props) {
                     <div className={styles["book-front"]}>
                       <div className={styles["book-cover-img"]}>
                         <span className={styles["book-tag"]}>Official</span>
-                        <div className={styles["book-title"]}>{b.title}</div>
+                        <div className={styles["book-title"]}>{b.title ?? ""}</div>
                         <div className={styles["book-subtitle"]}>
                           Official APB product catalogue, specifications, and full technical layout documentation.
                         </div>
@@ -85,7 +85,7 @@ export default function BrochuresCatalog({ dbBrochures, contact }: Props) {
                     </div>
                   </div>
                   <div className={styles["book-info"]}>
-                    <h3>{b.title}</h3>
+                    <h3>{b.title ?? ""}</h3>
                     <p>Dynamic Vector Preview</p>
                   </div>
                 </div>

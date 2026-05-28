@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Review message is required." }, { status: 400 });
     }
 
-    const rating = parseInt(ratingRaw, 10);
+    const rating = parseInt(ratingRaw ?? "0", 10);
     if (isNaN(rating) || rating < 1 || rating > 5) {
       return NextResponse.json({ error: "Rating must be a number between 1 and 5." }, { status: 400 });
     }

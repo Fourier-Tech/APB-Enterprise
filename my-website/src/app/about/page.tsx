@@ -22,7 +22,12 @@ export default function AboutPage() {
 }
 
 async function AsyncAboutContent() {
-  const contact = await prisma.contact.findFirst();
+  let contact = null;
+  try {
+    contact = await prisma.contact.findFirst();
+  } catch (error) {
+    console.error("Database query failed in AboutPage:", error);
+  }
 
   return (
     <>

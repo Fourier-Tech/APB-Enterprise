@@ -3,6 +3,8 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { Pool } from "pg";
 import { parse } from "pg-connection-string";
 
+import { env } from "./env";
+
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
@@ -11,8 +13,8 @@ let prismaInstance: PrismaClient;
 
 if (typeof window === "undefined") {
   // We are on server side (Next.js Node environment)
-  const connectionString = process.env.DATABASE_URL;
-  const config = parse(connectionString || "");
+  const connectionString = env.DATABASE_URL;
+  const config = parse(connectionString);
   const pool = new Pool(config as any);
   const adapter = new PrismaPg(pool);
 
@@ -20,10 +22,10 @@ if (typeof window === "undefined") {
     globalForPrisma.prisma ??
     new PrismaClient({
       adapter,
-      log: process.env.NODE_ENV === "development" ? ["error", "warn"] : ["error"],
+      log: env.NODE_ENV === "development" ? ["error", "warn"] : ["error"],
     });
 
-  if (process.env.NODE_ENV !== "production") {
+  if (env.NODE_ENV !== "production") {
     globalForPrisma.prisma = prismaInstance;
   }
 } else {

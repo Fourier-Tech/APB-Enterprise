@@ -12,15 +12,19 @@ import SpecTable from "../SpecTable";
 export const revalidate = 3600;
 
 async function findProductByCode(code: string) {
-  // Try modelCode first, fall back to numeric id
-  const byCode = await prisma.product.findFirst({
-    where: { modelCode: code },
-  });
-  if (byCode) return byCode;
+  try {
+    // Try modelCode first, fall back to numeric id
+    const byCode = await prisma.product.findFirst({
+      where: { modelCode: code },
+    });
+    if (byCode) return byCode;
 
-  const numId = parseInt(code, 10);
-  if (!isNaN(numId)) {
-    return prisma.product.findUnique({ where: { id: numId } });
+    const numId = parseInt(code, 10);
+    if (!isNaN(numId)) {
+      return await prisma.product.findUnique({ where: { id: numId } });
+    }
+  } catch (error) {
+    console.error("Database query failed in findProductByCode:", error);
   }
   return null;
 }
@@ -31,7 +35,7 @@ export async function generateMetadata({ params }: { params: Promise<{ code: str
   if (!product) return { title: "Product Not Found | APB Enterprise" };
   return {
     title: `${product.name} | APB Enterprise`,
-    description: product.shortDesc,
+    description: product.shortDesc ?? "",
   };
 }
 
@@ -63,19 +67,22 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 }
 
 async function AsyncProductDetail({ code }: { code: string }) {
-  const [product, contact] = await Promise.all([
-    findProductByCode(code),
-    prisma.contact.findFirst(),
-  ]);
+  const product = await findProductByCode(code);
+  let contact = null;
+  try {
+    contact = await prisma.contact.findFirst();
+  } catch (error) {
+    console.error("Database query failed for contact in AsyncProductDetail:", error);
+  }
 
   if (!product) {
     notFound();
   }
 
-  const icon = getCategoryIcon(product.category);
+  const icon = getCategoryIcon(product.category ?? "");
 
   // Build WhatsApp URL
-  const base = contact?.whatsappPrimary ?? "919999999999";
+  const base = contact?.whatsappPrimary ?? "";
   const number = base.replace(/\D/g, "");
   const msg = `Hi APB Enterprise team, I am interested in your product "${product.name}" (Model: ${product.modelCode ?? "N/A"}). Could you please share the price and technical specifications?`;
   const whatsappUrl = `https://wa.me/${number}?text=${encodeURIComponent(msg)}`;
@@ -120,10 +127,10 @@ async function AsyncProductDetail({ code }: { code: string }) {
                   <div className={styles["detail-divider"]} />
 
                   <p className={styles["detail-short-desc"]}>
-                    {product.shortDesc}
+                    {product.shortDesc ?? ""}
                   </p>
 
-                  <SpecTable longDesc={product.longDesc} />
+                  <SpecTable longDesc={product.longDesc ?? ""} />
 
                   <a
                     href={whatsappUrl}

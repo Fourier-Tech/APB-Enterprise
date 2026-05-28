@@ -29,13 +29,31 @@ export default function BrochuresPage() {
 }
 
 async function AsyncBrochuresContent() {
-  const [dbBrochures, contact] = await Promise.all([
-    prisma.brochure.findMany({
-      where: { isActive: true },
-      orderBy: [{ displayOrder: "asc" }, { id: "asc" }],
-    }),
-    prisma.contact.findFirst(),
-  ]);
+  let dbBrochures: any[] = [];
+  let contact = null;
+
+  try {
+    const [rawBrochures, rawContact] = await Promise.all([
+      prisma.brochure.findMany({
+        where: { isActive: true },
+        orderBy: [{ displayOrder: "asc" }, { id: "asc" }],
+      }),
+      prisma.contact.findFirst(),
+    ]);
+
+    dbBrochures = rawBrochures?.map(b => ({
+      ...b,
+      title: b.title ?? "",
+      fileUrl: b.fileUrl ?? "",
+      isActive: b.isActive ?? false,
+      displayOrder: b.displayOrder ?? 0,
+      createdAt: b.createdAt ?? new Date(),
+    })) ?? [];
+
+    contact = rawContact;
+  } catch (error) {
+    console.error("Database query failed in BrochuresPage:", error);
+  }
 
   return (
     <>
