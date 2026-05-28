@@ -93,7 +93,7 @@ async function AsyncPageContent() {
                 <p className={styles["hero-desc"]}>
                   We <b style={{ color: "rgb(255, 255, 255)" }}>APB Enterprise</b> are a leading Manufacturer and Trader of a
                   wide range of Elevator Control Panel,Auto Resque Devise, Full
-                  elevator harness , electric accessories,LOP-COP, etc.
+                  elevator harness , electric accessories, LOP-COP, etc.
                 </p>
 
                 <div className={styles["hero-btns"]}>
