@@ -635,8 +635,15 @@ export default function LiftZone({
                 className="products-grid stagger lz-products-grid"
                 data-count={featuredProducts.slice(0, 4).length}
               >
-                {featuredProducts.slice(0, 4).map((p) => (
-                  <div key={p.id} className="product-card">
+                {featuredProducts.slice(0, 4).map((p) => {
+                  const slug = p.modelCode ?? String(p.id);
+                  return (
+                  <Link
+                    key={p.id}
+                    href={`/products/${encodeURIComponent(slug)}`}
+                    className="product-card"
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
                     <div className="product-img-wrap lz-product-img-wrap">
                       <span className="product-watermark-badge">
                         APB Enterprise
@@ -651,12 +658,13 @@ export default function LiftZone({
                     <div className="product-card-body">
                       <h3>{p.name}</h3>
                       <p title={p.shortDesc}>{p.shortDesc}</p>
-                      <Link href="/products" className="product-link">
+                      <span className="product-link">
                         View Details <i className="fas fa-arrow-right fa-xs"></i>
-                      </Link>
+                      </span>
                     </div>
-                  </div>
-                ))}
+                  </Link>
+                  );
+                })}
               </div>
             </div>
 
