@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import Loader from "@/components/Loader";
 import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import GlobalFooter from "@/components/GlobalFooter";
 import ScrollReveal from "@/components/ScrollReveal";
 import PageReadySignal from "@/components/PageReadySignal";
 import { prisma } from "@/lib/db";
@@ -47,7 +47,13 @@ export default async function ContactPage() {
 }
 
 async function AsyncContactContent() {
-  const contact = await prisma.contact.findFirst();
+  let contact = null;
+  try {
+    contact = await prisma.contact.findFirst();
+  } catch (error) {
+    console.error("Database query failed in ContactPage:", error);
+  }
+
   const status = getOfficeStatus();
 
   // Establish fallback dynamic parameters
@@ -150,9 +156,10 @@ async function AsyncContactContent() {
           </section>
         </main>
 
-        <Footer contact={contact} hideQuoteStrip={true} />
+        <GlobalFooter hideQuoteStrip={true} />
       </div>
       <PageReadySignal />
     </>
   );
 }
+

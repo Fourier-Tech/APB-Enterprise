@@ -2,6 +2,13 @@ import Link from "next/link";
 import Image from "next/image";
 import QuoteButton from "@/components/QuoteButton";
 
+function fmtCat(cat: string): string {
+  return cat
+    .split(" ")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+}
+
 interface ContactData {
   address: string | null;
   addressUrl: string | null;
@@ -21,9 +28,11 @@ interface ContactData {
 
 export default function Footer({
   contact,
+  categories = [],
   hideQuoteStrip = false,
 }: {
   contact: ContactData | null;
+  categories?: string[];
   hideQuoteStrip?: boolean;
 }) {
   return (
@@ -127,20 +136,17 @@ export default function Footer({
             <div className="footer-col">
               <h4>Products</h4>
               <ul>
+                {categories.map((cat) => (
+                  <li key={cat}>
+                    <Link href={`/products?category=${encodeURIComponent(cat)}`}>
+                      {fmtCat(cat)}
+                    </Link>
+                  </li>
+                ))}
                 <li>
-                  <Link href="/products">Door Operators</Link>
-                </li>
-                <li>
-                  <Link href="/products">COP Panels</Link>
-                </li>
-                <li>
-                  <Link href="/products">Safety Gears</Link>
-                </li>
-                <li>
-                  <Link href="/products">Controllers</Link>
-                </li>
-                <li>
-                  <Link href="/products">View all</Link>
+                  <Link href="/products" style={{ color: "var(--teal)", fontWeight: 600 }}>
+                    View Full <i className="fas fa-arrow-right" style={{ fontSize: "0.75rem", marginLeft: "4px" }}></i>
+                  </Link>
                 </li>
               </ul>
             </div>

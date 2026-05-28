@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import Loader from "@/components/Loader";
-import Footer from "@/components/Footer";
+import GlobalFooter from "@/components/GlobalFooter";
 import ElevatorDemo from "@/components/ElevatorDemo";
 import LiftZone from "@/components/LiftZone";
 import HeroClient from "@/components/HeroClient";
@@ -26,12 +26,12 @@ export default function Home() {
 }
 
 async function AsyncPageContent() {
-  let contact = null;
+  
   let featuredProducts: any[] = [];
   let featuredReviews: any[] = [];
 
   try {
-    contact = await prisma.contact.findFirst();
+    
     featuredProducts = (await prisma.product.findMany({
       where: { isFeatured: true }
     }))?.map(p => ({
@@ -166,7 +166,7 @@ async function AsyncPageContent() {
           </section>
         </main>
 
-        <Footer contact={contact} />
+        <GlobalFooter />
       </div>
 
       {/* Client-side: hero→liftzone snap + scroll-reveal + counters */}
@@ -177,3 +177,4 @@ async function AsyncPageContent() {
     </>
   );
 }
+

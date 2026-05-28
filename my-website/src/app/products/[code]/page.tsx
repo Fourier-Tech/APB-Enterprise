@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import Loader from "@/components/Loader";
 import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import GlobalFooter from "@/components/GlobalFooter";
 import PageReadySignal from "@/components/PageReadySignal";
 import { prisma } from "@/lib/db";
 import styles from "../products.module.css";
@@ -147,7 +147,7 @@ async function AsyncProductDetail({ code }: { code: string }) {
           </section>
         </main>
 
-        <Footer contact={contact} />
+        <GlobalFooter />
       </div>
       <PageReadySignal />
     </>

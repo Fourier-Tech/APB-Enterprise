@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import GlobalFooter from "@/components/GlobalFooter";
 import { prisma } from "@/lib/db";
 import PageReadySignal from "@/components/PageReadySignal";
 import Loader from "@/components/Loader";
@@ -94,9 +94,10 @@ export default async function PrivacyPolicyPage() {
             </div>
           </section>
         </main>
-        <Footer contact={contact} hideQuoteStrip={true} />
+        <GlobalFooter hideQuoteStrip={true} />
       </div>
       <PageReadySignal />
     </>
   );
 }
+

@@ -6,10 +6,9 @@ import styles from "@/app/brochures/brochures.module.css";
 
 interface Props {
   dbBrochures: Brochure[];
-  contact: Contact | null;
 }
 
-export default function BrochuresCatalog({ dbBrochures, contact }: Props) {
+export default function BrochuresCatalog({ dbBrochures }: Props) {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
   const [pdfUrl, setPdfUrl] = useState("");
@@ -49,7 +48,10 @@ export default function BrochuresCatalog({ dbBrochures, contact }: Props) {
     <>
       <section className={styles["brochures-section"]}>
         <div className="container">
-          <div className={styles["section-label"]} data-reveal>Our Publications</div>
+          <div className={styles["section-label"]} data-reveal>
+            <span className={styles["eyebrow-line"]} />
+            Our Publications
+          </div>
           <h2 className={styles["section-title"]} data-reveal data-delay="100">
             Browse & Live Preview
           </h2>

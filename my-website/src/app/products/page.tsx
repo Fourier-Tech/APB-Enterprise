@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import Loader from "@/components/Loader";
 import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import GlobalFooter from "@/components/GlobalFooter";
 import ScrollReveal from "@/components/ScrollReveal";
 import PageReadySignal from "@/components/PageReadySignal";
 import ProductsCatalog from "@/components/ProductsCatalog";
@@ -30,14 +30,14 @@ export default function ProductsPage() {
 
 async function AsyncProductsContent() {
   let products: any[] = [];
-  let contact = null;
+  
 
   try {
-    const [rawProducts, rawContact] = await Promise.all([
+    const [rawProducts] = await Promise.all([
       prisma.product.findMany({
         orderBy: [{ displayOrder: "asc" }, { createdAt: "asc" }],
       }),
-      prisma.contact.findFirst(),
+      
     ]);
     
     products = rawProducts?.map(p => ({
@@ -52,7 +52,7 @@ async function AsyncProductsContent() {
       createdAt: p.createdAt ?? new Date(),
     })) ?? [];
     
-    contact = rawContact;
+    
   } catch (error) {
     console.error("Database query failed in ProductsPage:", error);
   }
@@ -92,9 +92,10 @@ async function AsyncProductsContent() {
 
         </main>
 
-        <Footer contact={contact} />
+        <GlobalFooter />
       </div>
       <PageReadySignal />
     </>
   );
 }
+

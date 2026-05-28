@@ -1,5 +1,5 @@
 import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import GlobalFooter from "@/components/GlobalFooter";
 import { prisma } from "@/lib/db";
 import styles from "./about.module.css";
 import ScrollReveal from "@/components/ScrollReveal";
@@ -22,9 +22,9 @@ export default function AboutPage() {
 }
 
 async function AsyncAboutContent() {
-  let contact = null;
+  
   try {
-    contact = await prisma.contact.findFirst();
+    
   } catch (error) {
     console.error("Database query failed in AboutPage:", error);
   }
@@ -231,9 +231,10 @@ async function AsyncAboutContent() {
             </div>
           </section>
         </main>
-        <Footer contact={contact} />
+        <GlobalFooter />
       </div>
       <PageReadySignal />
     </>
   );
 }
+

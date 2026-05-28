@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
 import type { Product } from "@prisma/client";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import styles from "@/app/products/products.module.css";
 
 /* ── Icon map by category ── */
@@ -29,8 +30,20 @@ interface Props {
   products: Product[];
 }
 
-export default function ProductsCatalog({ products }: Props) {
-  const [activeCategory, setActiveCategory] = useState<string>("All");
+function ProductsCatalogInner({ products }: Props) {
+  const searchParams = useSearchParams();
+  const categoryQuery = searchParams.get("category");
+  const [activeCategory, setActiveCategory] = useState<string>(categoryQuery || "All");
+
+  useEffect(() => {
+    if (categoryQuery) {
+      setActiveCategory(categoryQuery);
+      // Smoothly scroll to the catalog section when navigating via footer link
+      setTimeout(() => {
+        document.getElementById("catalog-tabs")?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    }
+  }, [categoryQuery]);
 
   const categories = [
     "All",
@@ -43,7 +56,7 @@ export default function ProductsCatalog({ products }: Props) {
       : products.filter((p) => p.category === activeCategory);
 
   return (
-    <section className={styles["grid-section"]}>
+    <section className={styles["grid-section"]} id="catalog-tabs">
       <div className="container">
         {/* Section heading */}
         <div className={styles["grid-head"]} data-reveal>
@@ -122,5 +135,13 @@ export default function ProductsCatalog({ products }: Props) {
         </div>
       </div>
     </section>
+  );
+}
+
+export default function ProductsCatalog({ products }: Props) {
+  return (
+    <Suspense fallback={<div style={{ minHeight: '600px' }} />}>
+      <ProductsCatalogInner products={products} />
+    </Suspense>
   );
 }

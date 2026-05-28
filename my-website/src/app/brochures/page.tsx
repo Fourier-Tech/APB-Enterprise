@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import Loader from "@/components/Loader";
 import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import GlobalFooter from "@/components/GlobalFooter";
 import ScrollReveal from "@/components/ScrollReveal";
 import PageReadySignal from "@/components/PageReadySignal";
 import BrochuresCatalog from "@/components/BrochuresCatalog";
@@ -30,15 +30,15 @@ export default function BrochuresPage() {
 
 async function AsyncBrochuresContent() {
   let dbBrochures: any[] = [];
-  let contact = null;
+  
 
   try {
-    const [rawBrochures, rawContact] = await Promise.all([
+    const [rawBrochures] = await Promise.all([
       prisma.brochure.findMany({
         where: { isActive: true },
         orderBy: [{ displayOrder: "asc" }, { id: "asc" }],
       }),
-      prisma.contact.findFirst(),
+      
     ]);
 
     dbBrochures = rawBrochures?.map(b => ({
@@ -50,7 +50,7 @@ async function AsyncBrochuresContent() {
       createdAt: b.createdAt ?? new Date(),
     })) ?? [];
 
-    contact = rawContact;
+    
   } catch (error) {
     console.error("Database query failed in BrochuresPage:", error);
   }
@@ -85,12 +85,13 @@ async function AsyncBrochuresContent() {
           </section>
 
           {/* ── INTERACTIVE 3D CATALOG GRID ── */}
-          <BrochuresCatalog dbBrochures={dbBrochures} contact={contact} />
+          <BrochuresCatalog dbBrochures={dbBrochures} />
         </main>
 
-        <Footer contact={contact} />
+        <GlobalFooter />
       </div>
       <PageReadySignal />
     </>
   );
 }
+
