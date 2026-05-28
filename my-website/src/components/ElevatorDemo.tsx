@@ -1,298 +1,197 @@
 "use client";
 
-import { useEffect } from "react";
-import styles from "./ElevatorDemo.module.css";
+import { useEffect, useRef, useState } from "react";
+
+const FLOORS = [
+  { id: 3, label: "3", name: "Floor 3", sub: "Executive Offices" },
+  { id: 2, label: "2", name: "Floor 2", sub: "Corporate Offices" },
+  { id: 1, label: "1", name: "Floor 1", sub: "Commercial" },
+  { id: 0, label: "G", name: "Ground", sub: "Lobby · Reception" },
+];
+
+const FH = 96,
+  CAR_H = 84,
+  DOOR_MS = 620,
+  DWELL = 1800,
+  TPF = 1050;
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export default function ElevatorDemo() {
-  useEffect(() => {
-    const FLOORS = [
-      { id: 3, label: "3", name: "Floor 3 ", sub: "Offices" },
-      { id: 2, label: "2", name: "Floor 2", sub: "Offices" },
-      { id: 1, label: "1", name: "Floor 1", sub: "Commercial" },
-      { id: 0, label: "G", name: "Ground", sub: "Lobby / Reception" },
-    ];
-    const FLOOR_HEIGHT = 82;
+  const [carTop, setCarTop] = useState<number | null>(null);
+  const [animating, setAnimating] = useState(false);
+  const [animSteps, setAnimSteps] = useState(1);
+  const [doorsOpen, setDoorsOpen] = useState(false);
+  const [openAtFloor, setOpenAtFloor] = useState<number | null>(null);
+  const [direction, setDirection] = useState<string | null>(null);
+  const [status, setStatus] = useState("ready");
+  const [displayFloor, setDisplayFloor] = useState(0);
+  const [litCop, setLitCop] = useState<number[]>([]);
+  const [litCall, setLitCall] = useState<number[]>([]);
+  const [copArrow, setCopArrow] = useState<string | null>(null);
+  const [chime, setChime] = useState(false);
 
-    let currentFloor = 0;
-    let busy = false;
-    const queue: number[] = [];
+  const busyRef = useRef(false);
+  const currentFloorRef = useRef(0);
+  // pendingRef holds ALL requested floors not yet visited
+  const pendingRef = useRef<number[]>([]);
+  // travelDir: current sweep direction; null = idle
+  const travelDirRef = useRef<"up" | "down" | null>(null);
+  const openAtFloorRef = useRef<number | null>(null);
+  const doorsOpenRef = useRef(false);
 
-    const shaft = document.getElementById("shaft");
-    const statusDot = document.getElementById("statusDot");
-    const statusText = document.getElementById("statusText");
-    const statusFloor = document.getElementById("statusFloor");
-    const copDisplay = document.getElementById("copDisplay");
-    const copBtnsEl = document.getElementById("copBtns");
+  const floorTopPx = (id: number) =>
+    (FLOORS.length - 1 - id) * FH + (FH - CAR_H) / 2;
 
-    if (
-      !shaft ||
-      !statusDot ||
-      !statusText ||
-      !statusFloor ||
-      !copDisplay ||
-      !copBtnsEl
-    )
-      return;
+  const triggerChime = () => {
+    setChime(true);
+    setTimeout(() => setChime(false), 550);
+  };
 
-    // Clear any existing children (React strict mode double-invoke guard)
-    shaft.innerHTML = "";
-    copBtnsEl.innerHTML = "";
-
-    // ── Build floor rows ──
-    FLOORS.forEach((f) => {
-      const row = document.createElement("div");
-      row.className = "floor-row";
-      row.id = "floor-row-" + f.id;
-      row.innerHTML = `
-        <div class="floor-label" id="floor-label-${f.id}">${f.label}</div>
-        <div class="floor-lobby">
-          <div style="display:flex;align-items:center;overflow:hidden;flex-shrink:0;">
-            <div class="floor-door-left"  id="lobby-dl-${f.id}"></div>
-            <div class="floor-door-gap"></div>
-            <div class="floor-door-right" id="lobby-dr-${f.id}"></div>
-          </div>
-          <div class="floor-info">
-            <div class="floor-name">${f.name}</div>
-            <div class="floor-sub">${f.sub}</div>
-          </div>
-          <button class="floor-call-btn" id="call-btn-${f.id}" title="Call elevator to ${f.name}">
-            <i class="fas fa-arrow-up"></i>
-          </button>
-        </div>
-      `;
-      shaft.appendChild(row);
+  const openDoors = (floorId: number) =>
+    new Promise<void>((res) => {
+      openAtFloorRef.current = floorId;
+      doorsOpenRef.current = true;
+      setDoorsOpen(true);
+      setOpenAtFloor(floorId);
+      triggerChime();
+      setTimeout(res, DOOR_MS);
     });
 
-    // ── Car overlay ──
-    const carTrack = document.createElement("div");
-    carTrack.className = "car-track";
-    carTrack.innerHTML = `
-      <div class="elevator-car" id="elevatorCar">
-        <div class="car-top-bar"></div>
-        <div class="car-doors">
-          <div class="car-door-left"  id="carDoorL"></div>
-          <div class="car-door-right" id="carDoorR"></div>
-        </div>
-        <div class="car-inner"><span class="car-label">APB</span></div>
-      </div>
-    `;
-    shaft.appendChild(carTrack);
-
-    const elevatorCar = document.getElementById("elevatorCar")!;
-    const carDoorL = document.getElementById("carDoorL")!;
-    const carDoorR = document.getElementById("carDoorR")!;
-
-    // ── Touch + click helper (no double-fire) ──
-    function addTapHandler(el: HTMLElement, handler: () => void) {
-      let touched = false;
-      el.addEventListener(
-        "touchstart",
-        (e) => {
-          touched = true;
-          e.preventDefault();
-          handler();
-        },
-        { passive: false },
-      );
-      el.addEventListener("click", () => {
-        if (touched) {
-          touched = false;
-          return;
-        }
-        handler();
-      });
-    }
-
-    // ── Build COP buttons ──
-    FLOORS.forEach((f) => {
-      const btn = document.createElement("button");
-      btn.id = "cop-btn-" + f.id;
-      btn.textContent = f.label;
-      btn.title = "Go to " + f.name;
-      btn.style.cssText = `
-        width:26px; height:26px;
-        border-radius:4px; border:none;
-        cursor:pointer;
-        font-family:'Space Grotesk',sans-serif;
-        font-size:0.6rem; font-weight:700;
-        color:rgba(255,255,255,0.55);
-        background:rgba(255,255,255,0.1);
-        transition:background 0.2s, color 0.2s, box-shadow 0.2s;
-        display:flex; align-items:center; justify-content:center;
-        -webkit-tap-highlight-color:transparent;
-      `;
-      btn.onmouseenter = () => {
-        if (!btn.classList.contains("lit"))
-          btn.style.background = "rgba(255,255,255,0.18)";
-      };
-      btn.onmouseleave = () => {
-        if (!btn.classList.contains("lit"))
-          btn.style.background = "rgba(255,255,255,0.1)";
-      };
-      addTapHandler(btn, () => requestFloor(f.id));
-      copBtnsEl.appendChild(btn);
+  const closeDoors = () =>
+    new Promise<void>((res) => {
+      doorsOpenRef.current = false;
+      setDoorsOpen(false);
+      setOpenAtFloor(null);
+      openAtFloorRef.current = null;
+      setTimeout(res, DOOR_MS);
     });
 
-    // ── Call button listeners ──
-    FLOORS.forEach((f) => {
-      const btn = document.getElementById("call-btn-" + f.id);
-      if (btn) addTapHandler(btn as HTMLElement, () => requestFloor(f.id));
-    });
+  /**
+   * SCAN algorithm (like a real lift):
+   * - While traveling UP  → serve the nearest floor ABOVE current first.
+   *   When no more floors above, reverse and serve floors below.
+   * - While traveling DOWN → serve the nearest floor BELOW current first.
+   *   When no more floors below, reverse and serve floors above.
+   * - If idle, pick direction toward the nearest pending floor.
+   */
+  function pickNext(cur: number, dir: "up" | "down" | null): number | null {
+    const pending = pendingRef.current;
+    if (pending.length === 0) return null;
 
-    // ── Helpers ──
-    function floorTop(floorId: number) {
-      const visualIdx = FLOORS.length - 1 - floorId;
-      return visualIdx * FLOOR_HEIGHT + (FLOOR_HEIGHT - 76) / 2;
+    if (dir === "up") {
+      const above = pending.filter((f) => f > cur).sort((a, b) => a - b);
+      if (above.length > 0) return above[0];
+      // nothing above – reverse
+      const below = pending.filter((f) => f < cur).sort((a, b) => b - a);
+      return below[0] ?? null;
     }
 
-    function setCarPosition(floorId: number, animate: boolean) {
-      elevatorCar.style.transition = animate
-        ? "top 0.9s cubic-bezier(0.4,0,0.2,1)"
-        : "none";
-      elevatorCar.style.top = floorTop(floorId) + "px";
+    if (dir === "down") {
+      const below = pending.filter((f) => f < cur).sort((a, b) => b - a);
+      if (below.length > 0) return below[0];
+      // nothing below – reverse
+      const above = pending.filter((f) => f > cur).sort((a, b) => a - b);
+      return above[0] ?? null;
     }
 
-    function setStatus(text: string, moving: boolean) {
-      statusText!.textContent = text;
-      statusDot!.className = "status-dot" + (moving ? "" : " idle");
-    }
+    // Idle: go to nearest
+    return pending.reduce((best, f) =>
+      Math.abs(f - cur) < Math.abs(best - cur) ? f : best,
+    );
+  }
 
-    function updateFloorLabels(active: number) {
-      FLOORS.forEach((f) => {
-        const el = document.getElementById("floor-label-" + f.id);
-        if (el)
-          el.className =
-            "floor-label" + (f.id === active ? " active-floor" : "");
-      });
-      const activeFloor = FLOORS.find((f) => f.id === active);
-      copDisplay!.textContent = activeFloor?.label || "";
-      statusFloor!.textContent = activeFloor?.label || "";
-    }
+  async function runElevator() {
+    if (busyRef.current) return;
+    busyRef.current = true;
 
-    function setCallBtn(floorId: number, lit: boolean) {
-      const btn = document.getElementById("call-btn-" + floorId);
-      if (btn) btn.className = "floor-call-btn" + (lit ? " called" : "");
-    }
+    while (pendingRef.current.length > 0) {
+      const cur = currentFloorRef.current;
+      const next = pickNext(cur, travelDirRef.current);
+      if (next === null) break;
 
-    function setCopBtn(floorId: number, lit: boolean) {
-      const btn = document.getElementById(
-        "cop-btn-" + floorId,
-      ) as HTMLButtonElement | null;
-      if (!btn) return;
-      if (lit) {
-        btn.classList.add("lit");
-        btn.style.background = "var(--gold)";
-        btn.style.color = "var(--near-black)";
-        btn.style.boxShadow = "0 0 8px rgba(212,168,0,0.5)";
-      } else {
-        btn.classList.remove("lit");
-        btn.style.background = "rgba(255,255,255,0.1)";
-        btn.style.color = "rgba(255,255,255,0.55)";
-        btn.style.boxShadow = "none";
-      }
-    }
+      // Remove this floor from pending
+      pendingRef.current = pendingRef.current.filter((f) => f !== next);
+      setLitCop((q) => q.filter((x) => x !== next));
+      setLitCall((q) => q.filter((x) => x !== next));
 
-    let doorsOpenAtFloor: number | null = null;
-
-    function openDoors(floorId: number) {
-      return new Promise<void>((res) => {
-        doorsOpenAtFloor = floorId;
-        carDoorL.classList.add("open");
-        carDoorR.classList.add("open");
-        const dl = document.getElementById("lobby-dl-" + floorId);
-        const dr = document.getElementById("lobby-dr-" + floorId);
-        if (dl) dl.classList.add("open");
-        if (dr) dr.classList.add("open");
-        setTimeout(res, 550);
-      });
-    }
-
-    function closeDoors() {
-      return new Promise<void>((res) => {
-        carDoorL.classList.remove("open");
-        carDoorR.classList.remove("open");
-        if (doorsOpenAtFloor !== null) {
-          const dl = document.getElementById("lobby-dl-" + doorsOpenAtFloor);
-          const dr = document.getElementById("lobby-dr-" + doorsOpenAtFloor);
-          if (dl) dl.classList.remove("open");
-          if (dr) dr.classList.remove("open");
-          doorsOpenAtFloor = null;
-        }
-        setTimeout(res, 550);
-      });
-    }
-
-    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-
-    async function processQueue() {
-      if (busy || queue.length === 0) return;
-      busy = true;
-      const next = queue.shift()!;
-
-      setCallBtn(next, false);
-      setCopBtn(next, false);
-
-      if (next === currentFloor) {
-        setStatus("doors opening", true);
-        await openDoors(currentFloor);
-        setStatus("boarding...", false);
-        await sleep(1800);
-        setStatus("doors closing", true);
+      if (next === cur) {
+        // Already here – just open
+        setStatus("doors opening");
+        await openDoors(cur);
+        setStatus("boarding");
+        await sleep(DWELL);
+        setStatus("doors closing");
         await closeDoors();
       } else {
-        if (doorsOpenAtFloor !== null) {
-          setStatus("doors closing", true);
+        if (doorsOpenRef.current) {
+          setStatus("doors closing");
           await closeDoors();
-          await sleep(150);
+          await sleep(180);
         }
 
-        const dir = next > currentFloor ? "going up" : "going down";
-        setStatus(dir, true);
-        setCarPosition(next, true);
+        const dir: "up" | "down" = next > cur ? "up" : "down";
+        travelDirRef.current = dir;
+        setDirection(dir);
+        setCopArrow(dir);
+        setStatus(dir === "up" ? "going up ↑" : "going down ↓");
 
-        const steps = Math.abs(next - currentFloor);
-        const stepTime = 900 / steps;
+        const steps = Math.abs(next - cur);
+        setAnimSteps(steps);
+        setAnimating(true);
+        setCarTop(floorTopPx(next));
+
         for (let i = 1; i <= steps; i++) {
-          await sleep(stepTime);
-          const mid = currentFloor + (next > currentFloor ? i : -i);
-          updateFloorLabels(mid);
+          await sleep(TPF);
+          const mid = cur + (dir === "up" ? i : -i);
+          setDisplayFloor(mid);
         }
 
-        currentFloor = next;
-        await sleep(100);
-        setStatus("arrived — doors opening", true);
-        await openDoors(currentFloor);
-        setStatus("boarding...", false);
-        await sleep(1800);
-        setStatus("doors closing", true);
+        currentFloorRef.current = next;
+        setAnimating(false);
+        await sleep(130);
+        setDirection(null);
+        setCopArrow(null);
+        setStatus("arrived · doors opening");
+        await openDoors(next);
+        setStatus("boarding");
+        await sleep(DWELL);
+        setStatus("doors closing");
         await closeDoors();
       }
 
-      updateFloorLabels(currentFloor);
-      setStatus("ready", false);
-      busy = false;
-      if (queue.length > 0) processQueue();
+      setDisplayFloor(currentFloorRef.current);
+      setCarTop(floorTopPx(currentFloorRef.current));
     }
 
-    function requestFloor(floorId: number) {
-      if (!queue.includes(floorId) && floorId !== currentFloor) {
-        queue.push(floorId);
-        setCallBtn(floorId, true);
-        setCopBtn(floorId, true);
-      }
-      processQueue();
+    // All done
+    travelDirRef.current = null;
+    setDirection(null);
+    setCopArrow(null);
+    setStatus("ready");
+    busyRef.current = false;
+  }
+
+  function requestFloor(floorId: number) {
+    // Ignore if already pending or currently at that floor
+    if (
+      pendingRef.current.includes(floorId) ||
+      floorId === currentFloorRef.current
+    ) {
+      return;
     }
+    pendingRef.current = [...pendingRef.current, floorId];
+    setLitCop((q) => [...q, floorId]);
+    setLitCall((q) => [...q, floorId]);
+    runElevator();
+  }
 
-    // ── Init ──
-    setCarPosition(currentFloor, false);
-    updateFloorLabels(currentFloor);
-    setStatus("ready", false);
-
-    // Auto demo
-    const t1 = setTimeout(() => requestFloor(2), 2000);
-    const t2 = setTimeout(() => requestFloor(3), 5000);
-    const t3 = setTimeout(() => requestFloor(0), 9000);
-
+  useEffect(() => {
+    setCarTop(floorTopPx(0));
+    setDisplayFloor(0);
+    // Auto demo sequence
+    const t1 = setTimeout(() => requestFloor(2), 1800);
+    const t2 = setTimeout(() => requestFloor(3), 3000);
+    const t3 = setTimeout(() => requestFloor(0), 4500);
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
@@ -300,136 +199,548 @@ export default function ElevatorDemo() {
     };
   }, []);
 
-  return (
-    <div className={styles["elevator-demo"]}>
-      <div style={{ display: "flex", gap: 0, alignItems: "flex-start" }}>
-        {/* Shaft + status bar */}
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div className="shaft-wrap" id="shaft"></div>
-          <div className="shaft-status">
-            <div className="status-dot idle" id="statusDot"></div>
-            <span className="status-text" id="statusText">
-              ready
-            </span>
-            <span className="status-floor" id="statusFloor">
-              G
-            </span>
-          </div>
-        </div>
+  const displayLabel = FLOORS.find((f) => f.id === displayFloor)?.label || "G";
+  const isIdle = status === "ready";
 
-        {/* COP Panel */}
-        <div style={{ flexShrink: 0, marginLeft: "12px", marginTop: 0 }}>
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        padding: "16px",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          gap: 14,
+          alignItems: "flex-start",
+          width: "100%",
+          maxWidth: 400,
+        }}
+      >
+        {/* ── Shaft ── */}
+        <div style={{ flex: 1, minWidth: 0 }}>
           <div
             style={{
-              background: "var(--near-black)",
-              borderRadius: "6px",
-              padding: "12px 9px 10px",
+              position: "relative",
+              height: FLOORS.length * FH,
+              background: "#ffffff",
+              border: "1.5px solid #d0d5dd",
+              borderRadius: "6px 6px 0 0",
+              overflow: "hidden",
+            }}
+          >
+            {FLOORS.map((f, i) => {
+              const isActive = displayFloor === f.id;
+              const isOpen = openAtFloor === f.id;
+              return (
+                <div
+                  key={f.id}
+                  style={{
+                    position: "absolute",
+                    top: i * FH,
+                    left: 0,
+                    right: 0,
+                    height: FH,
+                    display: "flex",
+                    alignItems: "stretch",
+                    borderBottom:
+                      i < FLOORS.length - 1 ? "1px solid #e4e7ec" : "none",
+                    zIndex: 2,
+                  }}
+                >
+                  {/* Floor label */}
+                  <div
+                    style={{
+                      width: 38,
+                      flexShrink: 0,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontFamily: "'Space Grotesk',sans-serif",
+                      fontSize: 12,
+                      fontWeight: 700,
+                      color: isActive ? "#0f6978" : "#667085",
+                      background: isActive ? "#e6f4f6" : "#f9fafb",
+                      borderRight: "1px solid #e4e7ec",
+                      transition: "color 0.3s, background 0.3s",
+                      letterSpacing: "0.04em",
+                      zIndex: 2,
+                    }}
+                  >
+                    {f.label}
+                  </div>
+
+                  <div
+                    style={{
+                      flex: 1,
+                      display: "flex",
+                      alignItems: "center",
+                      padding: "0 10px",
+                      gap: 10,
+                      background: "#ffffff",
+                    }}
+                  >
+                    {/* Door frame */}
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        flexShrink: 0,
+                        height: 68,
+                        overflow: "hidden",
+                        borderRadius: 3,
+                        border: "1px solid #d0d5dd",
+                        background: "#c8cdd4",
+                        position: "relative",
+                      }}
+                    >
+                      {(["left", "right"] as const).map((side) => (
+                        <div
+                          key={side}
+                          style={{
+                            width: 28,
+                            height: "100%",
+                            flexShrink: 0,
+                            background:
+                              "linear-gradient(155deg,#e8ecf0 0%,#c8cdd4 55%,#adb3bc 100%)",
+                            borderRight:
+                              side === "left" ? "1px solid #b0b7c0" : "none",
+                            borderLeft:
+                              side === "right" ? "1px solid #b0b7c0" : "none",
+                            transform: isOpen
+                              ? `translateX(${side === "left" ? "-100%" : "100%"})`
+                              : "translateX(0)",
+                            transition: `transform ${DOOR_MS}ms cubic-bezier(0.4,0,0.2,1)`,
+                            position: "relative",
+                            zIndex: 1,
+                          }}
+                        >
+                          <div
+                            style={{
+                              position: "absolute",
+                              top: "12%",
+                              bottom: "12%",
+                              [side === "left" ? "right" : "left"]: 5,
+                              width: 1,
+                              background: "#ffffff60",
+                            }}
+                          />
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Floor info */}
+                    <div
+                      style={{
+                        flex: 1,
+                        minWidth: 0,
+                        opacity: isOpen ? 0 : 1,
+                        transition: "opacity 0.3s",
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontFamily: "'Space Grotesk',sans-serif",
+                          fontSize: 12,
+                          fontWeight: 600,
+                          color: "#101828",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                      >
+                        {f.name}
+                      </div>
+                      <div
+                        style={{
+                          fontFamily: "'Space Grotesk',sans-serif",
+                          fontSize: 10,
+                          color: "#667085",
+                          marginTop: 2,
+                        }}
+                      >
+                        {f.sub}
+                      </div>
+                    </div>
+
+                    {/* Call button */}
+                    <button
+                      onClick={() => requestFloor(f.id)}
+                      title={`Call to ${f.name}`}
+                      style={{
+                        width: 26,
+                        height: 26,
+                        borderRadius: "50%",
+                        border: litCall.includes(f.id)
+                          ? "1.5px solid #d4a800"
+                          : "1.5px solid #d0d5dd",
+                        background: litCall.includes(f.id)
+                          ? "#d4a800"
+                          : "#ffffff",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        cursor: "pointer",
+                        flexShrink: 0,
+                        transition: "all 0.18s",
+                        boxShadow: litCall.includes(f.id)
+                          ? "0 0 7px #d4a80066"
+                          : "none",
+                        opacity: isOpen ? 0 : 1,
+                        pointerEvents: isOpen ? "none" : "auto",
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontSize: 11,
+                          color: litCall.includes(f.id) ? "#1c1c1c" : "#667085",
+                          lineHeight: 1,
+                        }}
+                      >
+                        ▲
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+
+            {/* Elevator car */}
+            {carTop !== null && (
+              <div
+                style={{
+                  position: "absolute",
+                  left: 38,
+                  right: 8,
+                  height: CAR_H,
+                  top: carTop,
+                  transition: animating
+                    ? `top ${animSteps * TPF}ms cubic-bezier(0.45,0,0.12,1)`
+                    : "none",
+                  zIndex: 6,
+                  borderRadius: 4,
+                  overflow: "hidden",
+                  border: "2px solid #0f6978",
+                  boxShadow: "0 4px 18px #0f697833",
+                  background: "#ffffff",
+                }}
+              >
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: 4,
+                    background: "#0f6978",
+                  }}
+                />
+
+                {/* Car door panels */}
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 4,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    display: "flex",
+                    overflow: "hidden",
+                  }}
+                >
+                  {(["left", "right"] as const).map((side) => (
+                    <div
+                      key={side}
+                      style={{
+                        width: "50%",
+                        height: "100%",
+                        flexShrink: 0,
+                        background:
+                          "linear-gradient(150deg,#e6f4f6 0%,#cceaee 100%)",
+                        borderRight:
+                          side === "left" ? "1px solid #b2dce4" : "none",
+                        transform: doorsOpen
+                          ? `translateX(${side === "left" ? "-100%" : "100%"})`
+                          : "translateX(0)",
+                        transition: `transform ${DOOR_MS}ms cubic-bezier(0.4,0,0.2,1)`,
+                        position: "relative",
+                      }}
+                    >
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: "18%",
+                          bottom: "18%",
+                          [side === "left" ? "right" : "left"]: 7,
+                          width: 1.5,
+                          background: "#0f697826",
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                {/* Interior */}
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 4,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: 4,
+                    pointerEvents: "none",
+                    zIndex: 7,
+                  }}
+                >
+                  {direction && (
+                    <div
+                      style={{
+                        fontSize: 15,
+                        color: "#0f6978",
+                        lineHeight: 1,
+                        animation:
+                          "arrowBounce 0.6s ease-in-out infinite alternate",
+                      }}
+                    >
+                      {direction === "up" ? "▲" : "▼"}
+                    </div>
+                  )}
+                  {doorsOpen && (
+                    <div
+                      style={{
+                        fontFamily: "'Space Grotesk',sans-serif",
+                        fontSize: 9,
+                        fontWeight: 700,
+                        letterSpacing: "0.16em",
+                        color: "#0f6978",
+                        textTransform: "uppercase",
+                        background: "#e6f4f6",
+                        padding: "3px 8px",
+                        borderRadius: 3,
+                        border: "1px solid #b2dce4",
+                        animation: "fadeInAPB 0.3s ease",
+                      }}
+                    >
+                      APB
+                    </div>
+                  )}
+                </div>
+
+                {chime && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      background: "#0f697826",
+                      animation: "chimeFade 0.5s ease-out forwards",
+                      pointerEvents: "none",
+                      zIndex: 10,
+                    }}
+                  />
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Status bar */}
+          <div
+            style={{
               display: "flex",
-              flexDirection: "column",
-              gap: "6px",
               alignItems: "center",
-              minWidth: "42px",
-              boxShadow: "0 4px 14px rgba(0,0,0,0.25)",
+              gap: 8,
+              padding: "8px 14px",
+              background: "#1c2434",
+              borderRadius: "0 0 6px 6px",
             }}
           >
             <div
               style={{
+                width: 6,
+                height: 6,
+                borderRadius: "50%",
+                background: isIdle ? "#4b5565" : "#d4a800",
+                animation: isIdle ? "none" : "pulse 1.4s infinite",
+                flexShrink: 0,
+              }}
+            />
+            <span
+              style={{
                 fontFamily: "'Space Grotesk',sans-serif",
-                fontSize: "0.5rem",
-                color: "rgba(255,255,255,0.35)",
+                fontSize: 9,
+                color: "#8a94a6",
                 letterSpacing: "0.12em",
                 textTransform: "uppercase",
               }}
             >
-              COP
-            </div>
+              {status}
+            </span>
+          </div>
+        </div>
 
+        {/* ── COP Panel ── */}
+        <div
+          style={{
+            flexShrink: 0,
+            background: "#1c2434",
+            borderRadius: 6,
+            padding: "14px 10px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 7,
+            minWidth: 48,
+            boxShadow: "0 4px 18px #00000033",
+            border: "1px solid #2e3849",
+          }}
+        >
+          <div
+            style={{
+              fontFamily: "'Space Grotesk',sans-serif",
+              fontSize: 7,
+              color: "#8a94a6",
+              letterSpacing: "0.2em",
+              textTransform: "uppercase",
+            }}
+          >
+            COP
+          </div>
+
+          <div
+            style={{
+              fontFamily: "'Space Grotesk',sans-serif",
+              fontSize: 19,
+              fontWeight: 700,
+              color: "#d4a800",
+              background: "#111827",
+              padding: "5px 9px",
+              borderRadius: 3,
+              minWidth: 32,
+              textAlign: "center",
+              letterSpacing: "0.04em",
+              border: "1px solid #2e3849",
+            }}
+          >
+            {displayLabel}
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+              alignItems: "center",
+            }}
+          >
             <div
-              id="copDisplay"
               style={{
-                fontFamily: "'Space Grotesk',sans-serif",
-                fontSize: "1rem",
-                fontWeight: 700,
-                color: "var(--gold)",
-                background: "rgba(0,0,0,0.55)",
-                padding: "4px 8px",
-                borderRadius: "3px",
-                minWidth: "28px",
-                textAlign: "center",
-                letterSpacing: "0.05em",
-                border: "1px solid rgba(212,168,0,0.2)",
+                fontSize: 10,
+                color: copArrow === "up" ? "#d4a800" : "#3d4a5c",
+                transition: "color 0.2s",
               }}
             >
-              G
+              ▲
             </div>
-
-            <div
-              id="copBtns"
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "5px",
-                alignItems: "center",
-              }}
-            ></div>
-
             <div
               style={{
-                width: "80%",
-                height: "1px",
-                background: "rgba(255,255,255,0.08)",
-                margin: "1px 0",
+                fontSize: 10,
+                color: copArrow === "down" ? "#d4a800" : "#3d4a5c",
+                transition: "color 0.2s",
               }}
-            ></div>
+            >
+              ▼
+            </div>
+          </div>
 
-            <div style={{ display: "flex", gap: "5px" }}>
-              <div
+          <div style={{ width: "78%", height: 1, background: "#2e3849" }} />
+
+          {FLOORS.map((f) => {
+            const lit = litCop.includes(f.id);
+            return (
+              <button
+                key={f.id}
+                onClick={() => requestFloor(f.id)}
                 style={{
-                  width: "16px",
-                  height: "16px",
-                  borderRadius: "50%",
-                  background: "rgba(255,255,255,0.08)",
+                  width: 28,
+                  height: 28,
+                  borderRadius: 4,
+                  border: lit ? "1.5px solid #d4a800" : "1.5px solid #2e3849",
+                  cursor: "pointer",
+                  fontFamily: "'Space Grotesk',sans-serif",
+                  fontSize: 10,
+                  fontWeight: 700,
+                  color: lit ? "#1c1c1c" : "#8a94a6",
+                  background: lit ? "#d4a800" : "#253044",
+                  transition: "all 0.18s",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
+                  boxShadow: lit ? "0 0 9px #d4a80070" : "none",
                 }}
               >
-                <i
-                  className="fas fa-bell"
-                  style={{
-                    fontSize: "0.42rem",
-                    color: "rgba(255,255,255,0.28)",
-                  }}
-                ></i>
-              </div>
+                {f.label}
+              </button>
+            );
+          })}
+
+          <div style={{ width: "78%", height: 1, background: "#2e3849" }} />
+
+          <div style={{ display: "flex", gap: 5 }}>
+            {["🔔", "↔"].map((ic) => (
               <div
+                key={ic}
                 style={{
-                  width: "16px",
-                  height: "16px",
+                  width: 17,
+                  height: 17,
                   borderRadius: "50%",
-                  background: "rgba(255,255,255,0.08)",
+                  background: "#253044",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
+                  fontSize: 8,
+                  color: "#4b5565",
                 }}
               >
-                <i
-                  className="fas fa-arrows-left-right"
-                  style={{
-                    fontSize: "0.42rem",
-                    color: "rgba(255,255,255,0.28)",
-                  }}
-                ></i>
+                {ic}
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
 
-      <div className="demo-hint">
-        <i className="fas fa-hand-pointer" style={{ color: "var(--gold)" }}></i>
+      {/* ── Hint line (centered under the whole widget) ── */}
+      <div
+        style={{
+          marginTop: 12,
+          width: "100%",
+          maxWidth: 400,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 6,
+          fontFamily: "'Space Grotesk',sans-serif",
+          fontSize: 10,
+          color: "#8a94a6",
+          letterSpacing: "0.06em",
+        }}
+      >
+        <span style={{ color: "#d4a800", fontSize: 13 }}>⬆</span>
         Click a floor button or COP panel to call the lift
       </div>
+
+      <style>{`
+        @keyframes pulse        { 0%,100%{opacity:1} 50%{opacity:0.3} }
+        @keyframes arrowBounce  { 0%{transform:translateY(0)} 100%{transform:translateY(-4px)} }
+        @keyframes fadeInAPB    { from{opacity:0;transform:scale(0.75)} to{opacity:1;transform:scale(1)} }
+        @keyframes chimeFade    { 0%{opacity:1} 100%{opacity:0} }
+      `}</style>
     </div>
   );
 }
