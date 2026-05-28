@@ -92,13 +92,15 @@ async function AsyncProductDetail({ code }: { code: string }) {
               </Link>
 
               <div className={styles["detail-grid"]}>
-                {/* Visual panel */}
-                <div className={styles["detail-visual"]}>
-                  {product.imageUrl ? (
-                    <img src={product.imageUrl} alt={product.name} />
-                  ) : (
-                    <i className={`fas ${icon}`} />
-                  )}
+                {/* Visual panel — sticky so it stays visible alongside the long spec table */}
+                <div className={styles["detail-visual-sticky"]}>
+                  <div className={styles["detail-visual"]}>
+                    {product.imageUrl ? (
+                      <img src={product.imageUrl} alt={product.name} />
+                    ) : (
+                      <i className={`fas ${icon}`} />
+                    )}
+                  </div>
                 </div>
 
                 {/* Info panel */}
