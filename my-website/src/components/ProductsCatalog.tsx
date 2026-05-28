@@ -79,8 +79,14 @@ export default function ProductsCatalog({ products }: Props) {
         <div className={styles["products-grid"]}>
           {filtered.map((product) => {
             const icon = getCategoryIcon(product.category);
+            const slug = product.modelCode ?? String(product.id);
             return (
-              <div className={styles["product-card"]} key={product.id}>
+              <Link
+                href={`/products/${encodeURIComponent(slug)}`}
+                className={styles["product-card"]}
+                key={product.id}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
                 {/* Image / watermark */}
                 <div className={styles["product-img-wrap"]}>
                   <span className={styles["product-badge"]}>APB Enterprise</span>
@@ -112,14 +118,11 @@ export default function ProductsCatalog({ products }: Props) {
                       </span>
                     )}
                   </p>
-                  <Link
-                    href={`/products/${product.id}`}
-                    className={styles["product-link"]}
-                  >
+                  <span className={styles["product-link"]}>
                     View Details <i className="fas fa-arrow-right fa-xs" />
-                  </Link>
+                  </span>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>

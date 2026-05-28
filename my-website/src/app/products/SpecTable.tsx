@@ -25,6 +25,8 @@ export default function SpecTable({ longDesc }: { longDesc: string | null }) {
   const [needsCollapse, setNeedsCollapse] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
 
+  const containerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (contentRef.current) {
       // If the content is taller than the max collapsed height (e.g., 180px), it needs collapse
@@ -36,9 +38,21 @@ export default function SpecTable({ longDesc }: { longDesc: string | null }) {
 
   if (specs.length === 0) return null;
 
+  const handleToggle = () => {
+    if (expanded) {
+      // Collapsing — scroll the spec container into view so user doesn't land at footer
+      setExpanded(false);
+      requestAnimationFrame(() => {
+        containerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    } else {
+      setExpanded(true);
+    }
+  };
+
   return (
-    <div className={styles["spec-container"]}>
-      <div 
+    <div className={styles["spec-container"]} ref={containerRef}>
+      <div
         className={`${styles["spec-table-wrap"]} ${needsCollapse && !expanded ? styles["collapsed"] : ""}`}
         ref={contentRef}
       >
@@ -51,11 +65,11 @@ export default function SpecTable({ longDesc }: { longDesc: string | null }) {
           ))}
         </div>
       </div>
-      
+
       {needsCollapse && (
-        <button 
-          className={styles["spec-toggle-btn"]} 
-          onClick={() => setExpanded(!expanded)}
+        <button
+          className={styles["spec-toggle-btn"]}
+          onClick={handleToggle}
         >
           {expanded ? (
             <>Show Less <i className="fas fa-chevron-up" /></>

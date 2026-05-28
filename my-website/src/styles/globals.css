@@ -625,6 +625,7 @@ footer {
     box-shadow 0.2s,
     transform 0.2s;
   position: relative;
+  cursor: pointer;
 }
 
 .product-card:hover {

@@ -11,11 +11,23 @@ import SpecTable from "../SpecTable";
 
 export const revalidate = 3600;
 
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const product = await prisma.product.findUnique({
-    where: { id: parseInt(id, 10) },
+async function findProductByCode(code: string) {
+  // Try modelCode first, fall back to numeric id
+  const byCode = await prisma.product.findFirst({
+    where: { modelCode: code },
   });
+  if (byCode) return byCode;
+
+  const numId = parseInt(code, 10);
+  if (!isNaN(numId)) {
+    return prisma.product.findUnique({ where: { id: numId } });
+  }
+  return null;
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ code: string }> }) {
+  const { code } = await params;
+  const product = await findProductByCode(decodeURIComponent(code));
   if (!product) return { title: "Product Not Found | APB Enterprise" };
   return {
     title: `${product.name} | APB Enterprise`,
@@ -36,23 +48,23 @@ function getCategoryIcon(cat: string): string {
   return CATEGORY_ICONS[cat.toLowerCase()] ?? "fa-cog";
 }
 
-export default async function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+export default async function ProductDetailPage({ params }: { params: Promise<{ code: string }> }) {
+  const { code } = await params;
   
   return (
     <>
       <Loader />
       <Header />
       <Suspense fallback={null}>
-        <AsyncProductDetail id={parseInt(id, 10)} />
+        <AsyncProductDetail code={decodeURIComponent(code)} />
       </Suspense>
     </>
   );
 }
 
-async function AsyncProductDetail({ id }: { id: number }) {
+async function AsyncProductDetail({ code }: { code: string }) {
   const [product, contact] = await Promise.all([
-    prisma.product.findUnique({ where: { id } }),
+    findProductByCode(code),
     prisma.contact.findFirst(),
   ]);
 
