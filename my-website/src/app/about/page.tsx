@@ -71,42 +71,21 @@ async function AsyncAboutContent() {
                 </div>
                 <div className={`${styles["who-body"]} stagger`} data-reveal>
                   <p>
-                    We feel extremely glad to introduce our company in the world
-                    of ELEVATORS. We have been manufacturing high-tech,
-                    cost-effective yet robust micro-controller based control
-                    systems since 2018.
+                    We are proud to introduce our company as a trusted leader in the elevator manufacturing industry. Since 2018, we have been designing and manufacturing high-tech, cost-effective, and robust microcontroller-based elevator control systems.
                   </p>
                   <p>
-                    Our highly skilled team is capable of achieving almost all
-                    the tasks that so far have come across by putting their
-                    constant efforts with innovative ideas involving latest
-                    technologies and a strong approach towards quality. We
-                    always give quality services to our customers because we
-                    believe that <strong>OUR CUSTOMER is OUR GOD</strong>.
+                    Our highly skilled engineering team leverages innovative ideas and the latest technologies to deliver uncompromising quality. We are dedicated to providing exceptional service because we believe that our clients' success is the foundation of our own.
                   </p>
                   <p>
-                    We have an expertise in the field of elevators and we
-                    develop our systems according to the requirement of the
-                    industry. We do have clients in INDIA as well as abroad. Our
-                    quality service includes manufacturing all types of elevator
-                    control systems, associated cards, and all types of relevant
-                    accessories.
+                    With deep expertise in vertical transportation, we develop tailored systems that meet the rigorous demands of the modern industry. Today, our products power elevators for clients across India and internationally, encompassing comprehensive control panels, associated circuit cards, and premium accessories.
                   </p>
                   <p>
-                    In addition to product quality, APB also places a strong
-                    emphasis on customer service. We strive to provide excellent
-                    customer support and build long-lasting relationships with
-                    our clients. By listening to feedback and addressing any
-                    concerns promptly, we aim to exceed customer expectations
-                    and build a loyal customer base.
+                    Beyond product quality, APB places a strong emphasis on customer support. We strive to build long-lasting partnerships by listening to feedback, addressing technical requirements promptly, and consistently exceeding expectations.
                   </p>
                   <p
                     style={{ fontWeight: 600, borderLeftColor: "var(--teal)" }}
                   >
-                    So the bottom line is that if you really want to end up your
-                    search in the field of ELEVATORS, then we are your{" "}
-                    <strong>ONE-STOP DESTINATION</strong> for all vertical
-                    transport needs.
+                    If you are looking for a reliable partner in the elevator industry, we are your <strong>one-stop destination</strong> for all vertical transport components.
                   </p>
                 </div>
               </div>

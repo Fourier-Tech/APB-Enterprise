@@ -214,8 +214,22 @@ export default function Footer({
           </div>
 
           {/* Footer Bottom */}
-          <div className="footer-bottom" style={{ justifyContent: "center" }}>
-            <p style={{ textAlign: "center" }}>
+          <div className="footer-bottom" style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: "1rem" }}>
+            <style>{`
+              .footer-legal-link {
+                color: var(--gray-mid);
+                text-decoration: none;
+                transition: color 0.2s ease;
+              }
+              .footer-legal-link:hover {
+                color: var(--teal);
+              }
+            `}</style>
+            <div style={{ display: "flex", gap: "1.5rem", fontSize: "0.75rem" }}>
+              <Link href="/privacy-policy" className="footer-legal-link">Privacy Policy</Link>
+              <Link href="/terms" className="footer-legal-link">Terms & Conditions</Link>
+            </div>
+            <p>
               © {new Date().getFullYear()} APB ENTERPRISE. All rights
               reserved.
             </p>

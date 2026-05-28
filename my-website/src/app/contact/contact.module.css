@@ -13,7 +13,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background-image: 
+  background-image:
     linear-gradient(rgba(15, 105, 120, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(15, 105, 120, 0.03) 1px, transparent 1px);
   background-size: 40px 40px;
@@ -55,7 +55,11 @@
   width: 400px;
   height: 400px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(15, 105, 120, 0.2) 0%, transparent 65%);
+  background: radial-gradient(
+    circle,
+    rgba(15, 105, 120, 0.2) 0%,
+    transparent 65%
+  );
   pointer-events: none;
   z-index: 0;
 }
@@ -67,7 +71,11 @@
   width: 300px;
   height: 300px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(212, 168, 0, 0.08) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(212, 168, 0, 0.08) 0%,
+    transparent 70%
+  );
   pointer-events: none;
 }
 
@@ -77,7 +85,11 @@
   right: 20px;
   width: 80px;
   height: 80px;
-  background-image: radial-gradient(circle, rgba(212, 168, 0, 0.3) 1px, transparent 1px);
+  background-image: radial-gradient(
+    circle,
+    rgba(212, 168, 0, 0.3) 1px,
+    transparent 1px
+  );
   background-size: 12px 12px;
   pointer-events: none;
   opacity: 0.6;
@@ -295,7 +307,7 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: #25D366;
+  background: #25d366;
   position: relative;
   flex-shrink: 0;
 }
@@ -305,7 +317,7 @@
   position: absolute;
   inset: -4px;
   border-radius: 50%;
-  border: 2px solid #25D366;
+  border: 2px solid #25d366;
   animation: pulse 1.8s infinite ease-in-out;
   opacity: 0;
 }
@@ -383,7 +395,11 @@
   width: 240px;
   height: 240px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(15, 105, 120, 0.25) 0%, transparent 65%);
+  background: radial-gradient(
+    circle,
+    rgba(15, 105, 120, 0.25) 0%,
+    transparent 65%
+  );
   pointer-events: none;
 }
 
@@ -419,7 +435,9 @@
 }
 
 .hq-address:hover {
-  color: var(--white); /* Turns address pure white when address text itself is hovered */
+  color: var(
+    --white
+  ); /* Turns address pure white when address text itself is hovered */
 }
 
 .hq-address i {
@@ -450,7 +468,6 @@
   background: var(--gold);
   color: var(--black);
 }
-
 
 /* ── RIGHT COLUMN: PREMIUM DYNAMIC QUOTE WIZARD ── */
 .quote-wizard-card {
@@ -702,7 +719,7 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: #25D366;
+  background: #25d366;
   color: var(--white);
   font-family: "Space Grotesk", sans-serif;
   font-size: 0.95rem;
@@ -739,7 +756,6 @@
 .privacy-notice a:hover {
   border-bottom: 1.2px solid var(--teal);
 }
-
 
 /* ── RESPONSIVE ADAPTATIONS ── */
 @media (max-width: 1024px) {

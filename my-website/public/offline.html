@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline | APB Enterprise</title>
+    <style>
+        :root {
+            --teal: #0f6978;
+            --gray-mid: #888888;
+            --white: #ffffff;
+            --black: #111111;
+        }
+        body {
+            font-family: 'Epilogue', sans-serif, system-ui;
+            background: var(--white);
+            color: var(--black);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 400px;
+        }
+        h1 {
+            font-family: 'Space Grotesk', sans-serif, system-ui;
+            color: var(--teal);
+            margin-bottom: 10px;
+        }
+        p {
+            color: var(--gray-mid);
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--teal);
+            color: var(--white);
+            font-family: 'Space Grotesk', sans-serif, system-ui;
+            font-weight: 600;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>You are offline</h1>
+        <p>It looks like you've lost your internet connection. Please check your network settings and try again.</p>
+        <button class="btn" onclick="window.location.reload()">Try Again</button>
+    </div>
+</body>
+</html>
