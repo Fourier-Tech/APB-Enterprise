@@ -86,7 +86,7 @@ export default function BrochuresCatalog({ dbBrochures, contact }: Props) {
                   </div>
                   <div className={styles["book-info"]}>
                     <h3>{b.title}</h3>
-                    <p>Dynamic Vector Preview · Download PDF</p>
+                    <p>Dynamic Vector Preview</p>
                   </div>
                 </div>
               );
@@ -107,16 +107,6 @@ export default function BrochuresCatalog({ dbBrochures, contact }: Props) {
           <div className={styles["flipbook-topbar"]}>
             <span className={styles["flipbook-topbar-title"]}>{modalTitle}</span>
             <div style={{ display: "flex", alignItems: "center", gap: "0.8rem" }}>
-              {pdfUrl && (
-                <a
-                  href={pdfUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles["modal-download-btn"]}
-                >
-                  <i className="fas fa-download" /> Download PDF
-                </a>
-              )}
               <button className={styles["flipbook-close"]} onClick={closeBook}>
                 <i className="fas fa-times" />
               </button>
