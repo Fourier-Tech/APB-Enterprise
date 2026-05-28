@@ -78,8 +78,9 @@ export default function ProductsCatalog({ products }: Props) {
         {/* Product grid */}
         <div className={styles["products-grid"]}>
           {filtered.map((product) => {
-            const icon = getCategoryIcon(product.category);
+            const icon = getCategoryIcon(product.category ?? "");
             const slug = product.modelCode ?? String(product.id);
+            const shortDesc = product.shortDesc ?? "";
             return (
               <Link
                 href={`/products/${encodeURIComponent(slug)}`}
@@ -96,7 +97,7 @@ export default function ProductsCatalog({ products }: Props) {
                     <div className={styles["product-watermark"]}>
                       <i className={`fas ${icon}`} />
                       <span className={styles["product-watermark-label"]}>
-                        {fmtCat(product.category)}
+                        {fmtCat(product.category ?? "")}
                       </span>
                     </div>
                   )}
@@ -109,11 +110,11 @@ export default function ProductsCatalog({ products }: Props) {
                   )}
                   <h3>{product.name}</h3>
                   <p className={styles["product-desc"]}>
-                    {product.shortDesc.length > 110
-                      ? product.shortDesc.slice(0, 110).trim()
-                      : product.shortDesc}
-                    {product.shortDesc.length > 110 && (
-                      <span title={product.shortDesc} style={{ cursor: "help" }}>
+                    {shortDesc.length > 110
+                      ? shortDesc.slice(0, 110).trim()
+                      : shortDesc}
+                    {shortDesc.length > 110 && (
+                      <span title={shortDesc} style={{ cursor: "help" }}>
                         ...
                       </span>
                     )}

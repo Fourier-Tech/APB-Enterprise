@@ -26,24 +26,42 @@ export default function Home() {
 }
 
 async function AsyncPageContent() {
-  const contact = await prisma.contact.findFirst();
-  const featuredProducts = (await prisma.product.findMany({
-    where: { isFeatured: true }
-  })).map(p => ({
-    ...p,
-    shortDesc: p.shortDesc ?? "",
-    longDesc: p.longDesc ?? "",
-    category: p.category ?? "",
-    imageUrl: p.imageUrl ?? "",
-    modelCode: p.modelCode ?? "",
-    isFeatured: p.isFeatured ?? false,
-    displayOrder: p.displayOrder ?? 0,
-    createdAt: p.createdAt ?? new Date(),
-  }));
-  const featuredReviews = await prisma.review.findMany({
-    where: { isFeatured: true },
-    orderBy: { createdAt: "desc" },
-  });
+  let contact = null;
+  let featuredProducts: any[] = [];
+  let featuredReviews: any[] = [];
+
+  try {
+    contact = await prisma.contact.findFirst();
+    featuredProducts = (await prisma.product.findMany({
+      where: { isFeatured: true }
+    }))?.map(p => ({
+      ...p,
+      shortDesc: p.shortDesc ?? "",
+      longDesc: p.longDesc ?? "",
+      category: p.category ?? "",
+      imageUrl: p.imageUrl ?? "",
+      modelCode: p.modelCode ?? "",
+      isFeatured: p.isFeatured ?? false,
+      displayOrder: p.displayOrder ?? 0,
+      createdAt: p.createdAt ?? new Date(),
+    })) ?? [];
+    
+    featuredReviews = (await prisma.review.findMany({
+      where: { isFeatured: true },
+      orderBy: { createdAt: "desc" },
+    }))?.map(r => ({
+      ...r,
+      name: r.name ?? "",
+      companyName: r.companyName ?? "",
+      message: r.message ?? "",
+      position: r.position ?? "",
+      location: r.location ?? "",
+      rating: r.rating ?? 5,
+      createdAt: r.createdAt ?? new Date()
+    })) ?? [];
+  } catch (error) {
+    console.error("Database query failed in Home:", error);
+  }
 
   return (
     <>

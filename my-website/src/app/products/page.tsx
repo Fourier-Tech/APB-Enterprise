@@ -29,12 +29,33 @@ export default function ProductsPage() {
 }
 
 async function AsyncProductsContent() {
-  const [products, contact] = await Promise.all([
-    prisma.product.findMany({
-      orderBy: [{ displayOrder: "asc" }, { createdAt: "asc" }],
-    }),
-    prisma.contact.findFirst(),
-  ]);
+  let products: any[] = [];
+  let contact = null;
+
+  try {
+    const [rawProducts, rawContact] = await Promise.all([
+      prisma.product.findMany({
+        orderBy: [{ displayOrder: "asc" }, { createdAt: "asc" }],
+      }),
+      prisma.contact.findFirst(),
+    ]);
+    
+    products = rawProducts?.map(p => ({
+      ...p,
+      shortDesc: p.shortDesc ?? "",
+      longDesc: p.longDesc ?? "",
+      category: p.category ?? "",
+      imageUrl: p.imageUrl ?? "",
+      modelCode: p.modelCode ?? "",
+      isFeatured: p.isFeatured ?? false,
+      displayOrder: p.displayOrder ?? 0,
+      createdAt: p.createdAt ?? new Date(),
+    })) ?? [];
+    
+    contact = rawContact;
+  } catch (error) {
+    console.error("Database query failed in ProductsPage:", error);
+  }
 
   return (
     <>
