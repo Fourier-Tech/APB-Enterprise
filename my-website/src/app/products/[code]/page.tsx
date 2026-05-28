@@ -127,10 +127,10 @@ async function AsyncProductDetail({ code }: { code: string }) {
                   <div className={styles["detail-divider"]} />
 
                   <p className={styles["detail-short-desc"]}>
-                    {product.shortDesc}
+                    {product.shortDesc ?? ""}
                   </p>
 
-                  <SpecTable longDesc={product.longDesc} />
+                  <SpecTable longDesc={product.longDesc ?? ""} />
 
                   <a
                     href={whatsappUrl}

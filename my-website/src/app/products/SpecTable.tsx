@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import styles from "./products.module.css";
 
 /* ── Parse longDesc pipe-separated spec lines ── */
-function parseSpecs(longDesc: string | null): { key: string; val: string }[] {
+function parseSpecs(longDesc: string): { key: string; val: string }[] {
   if (!longDesc) return [];
   return longDesc
     .split("|")
@@ -19,7 +19,7 @@ function parseSpecs(longDesc: string | null): { key: string; val: string }[] {
     .filter(Boolean) as { key: string; val: string }[];
 }
 
-export default function SpecTable({ longDesc }: { longDesc: string | null }) {
+export default function SpecTable({ longDesc }: { longDesc: string }) {
   const specs = parseSpecs(longDesc);
   const [expanded, setExpanded] = useState(false);
   const [needsCollapse, setNeedsCollapse] = useState(false);

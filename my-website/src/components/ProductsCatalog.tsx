@@ -64,11 +64,11 @@ export default function ProductsCatalog({ products }: Props) {
                 : products.filter((p) => p.category === cat).length;
             return (
               <button
-                key={cat}
+                key={cat ?? ""}
                 className={`${styles["cat-tab"]}${activeCategory === cat ? ` ${styles["active"]}` : ""}`}
-                onClick={() => setActiveCategory(cat)}
+                onClick={() => setActiveCategory(cat ?? "")}
               >
-                {cat === "All" ? "All" : fmtCat(cat)}
+                {cat === "All" ? "All" : fmtCat(cat ?? "")}
                 <span className={styles["cat-count"]}>{count}</span>
               </button>
             );
