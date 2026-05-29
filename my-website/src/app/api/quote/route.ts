@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { Logger } from "@/lib/logger";
 
 // Force Node.js runtime — required because @/lib/db uses the pg Pool
 // which relies on Node.js net/tls APIs unavailable in the Edge runtime.
@@ -8,8 +9,9 @@ export const runtime = "nodejs";
 export async function POST(req: NextRequest) {
   const startTime = performance.now();
   const requestId = Math.random().toString(36).substring(2, 10).toUpperCase();
+  const context = `api/quote:REQ-${requestId}`;
 
-  console.log(`[INFO] [REQ-${requestId}] Incoming Quote Request started.`);
+  Logger.info(context, "Incoming Quote Request started.");
 
   try {
     const body = await req.json();
@@ -18,7 +20,7 @@ export async function POST(req: NextRequest) {
     const message: string = body.message ?? "";
 
     if (!name.trim() || !mobileNumber.trim()) {
-      console.warn(`[WARN] [REQ-${requestId}] Validation failed: Missing required fields (name/mobileNumber).`);
+      Logger.warn(context, "Validation failed: Missing required fields (name/mobileNumber).");
       return NextResponse.json(
         { error: "Name and mobile number are required." },
         { status: 400 }
@@ -35,14 +37,14 @@ export async function POST(req: NextRequest) {
         msg: message.trim() || null,
       },
     });
-    console.log(`[PERF] [REQ-${requestId}] QuoteRequest saved to Neon DB in ${(performance.now() - dbStart).toFixed(1)}ms`);
+    Logger.perf(context, "QuoteRequest saved to Neon DB", performance.now() - dbStart);
 
     // Read WhatsApp number dynamically from contacts table
     const contactStart = performance.now();
     const contact = await prisma.contact.findFirst({
       select: { whatsappPrimary: true },
     });
-    console.log(`[PERF] [REQ-${requestId}] Fetch contact configuration completed in ${(performance.now() - contactStart).toFixed(1)}ms`);
+    Logger.perf(context, "Fetch contact configuration completed", performance.now() - contactStart);
 
     let whatsappUrl: string | null = null;
     if (contact?.whatsappPrimary) {
@@ -52,16 +54,14 @@ export async function POST(req: NextRequest) {
       );
       whatsappUrl = `https://wa.me/${number}?text=${text}`;
     } else {
-      console.warn(`[WARN] [REQ-${requestId}] whatsappPrimary contact number was empty in the database. Using fallback.`);
+      Logger.warn(context, "whatsappPrimary contact number was empty in the database. Using fallback.");
     }
 
-    const duration = performance.now() - startTime;
-    console.log(`[SUCCESS] [REQ-${requestId}] Quote Request processed successfully in ${duration.toFixed(1)}ms`);
+    Logger.success(context, `Quote Request processed successfully in ${(performance.now() - startTime).toFixed(1)}ms`);
 
     return NextResponse.json({ success: true, whatsappUrl });
   } catch (err) {
-    const duration = performance.now() - startTime;
-    console.error(`[ERROR] [REQ-${requestId}] Internal Server Error after ${duration.toFixed(1)}ms:`, err);
+    Logger.error(context, "Internal Server Error during quote processing", err);
     return NextResponse.json({ error: "Internal server error." }, { status: 500 });
   }
 }

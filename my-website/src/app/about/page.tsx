@@ -6,6 +6,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 import PageReadySignal from "@/components/PageReadySignal";
 import Loader from "@/components/Loader";
 import { Suspense } from "react";
+import { Logger } from "@/lib/logger";
 
 export const revalidate = 0; // Dynamic Server Component to fetch the latest contacts
 
@@ -26,7 +27,7 @@ async function AsyncAboutContent() {
   try {
     
   } catch (error) {
-    console.error("Database query failed in AboutPage:", error);
+    Logger.error("AboutPage", "Database query failed", error);
   }
 
   return (

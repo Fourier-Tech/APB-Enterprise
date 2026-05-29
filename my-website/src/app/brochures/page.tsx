@@ -6,6 +6,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 import PageReadySignal from "@/components/PageReadySignal";
 import BrochuresCatalog from "@/components/BrochuresCatalog";
 import { prisma } from "@/lib/db";
+import { Logger } from "@/lib/logger";
 import styles from "./brochures.module.css";
 
 export const revalidate = 3600; // Cache page for an hour
@@ -52,7 +53,7 @@ async function AsyncBrochuresContent() {
 
     
   } catch (error) {
-    console.error("Database query failed in BrochuresPage:", error);
+    Logger.error("BrochuresPage", "Database query failed", error);
   }
 
   return (

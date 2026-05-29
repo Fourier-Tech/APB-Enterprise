@@ -9,11 +9,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import SpecTable from "../SpecTable";
 
+import { Logger } from "@/lib/logger";
+
 export const revalidate = 3600;
 
 async function findProductByCode(code: string) {
   const queryStart = performance.now();
-  console.log(`[INFO] Querying product for code: "${code}"`);
+  const context = "products/[code]";
+  Logger.info(context, `Querying product for code: "${code}"`);
 
   try {
     // Try modelCode first, fall back to numeric id
@@ -21,7 +24,7 @@ async function findProductByCode(code: string) {
       where: { modelCode: code },
     });
     if (byCode) {
-      console.log(`[SUCCESS] Product found by modelCode: "${code}" in ${(performance.now() - queryStart).toFixed(1)}ms`);
+      Logger.perf(context, `Product found by modelCode: "${code}"`, performance.now() - queryStart);
       return byCode;
     }
 
@@ -29,16 +32,14 @@ async function findProductByCode(code: string) {
     if (!isNaN(numId)) {
       const byId = await prisma.product.findUnique({ where: { id: numId } });
       if (byId) {
-        console.log(`[SUCCESS] Product found by ID fallback: ${numId} in ${(performance.now() - queryStart).toFixed(1)}ms`);
+        Logger.perf(context, `Product found by ID fallback: ${numId}`, performance.now() - queryStart);
         return byId;
       }
     }
 
-    const duration = performance.now() - queryStart;
-    console.warn(`[WARN] Product NOT found for code/ID: "${code}" (duration: ${duration.toFixed(1)}ms). Returning null.`);
+    Logger.warn(context, `Product NOT found for code/ID: "${code}" (duration: ${(performance.now() - queryStart).toFixed(1)}ms). Returning null.`);
   } catch (error) {
-    const duration = performance.now() - queryStart;
-    console.error(`[ERROR] Database query failed in findProductByCode for "${code}" after ${duration.toFixed(1)}ms:`, error);
+    Logger.error(context, `Database query failed in findProductByCode for "${code}" after ${(performance.now() - queryStart).toFixed(1)}ms`, error);
   }
   return null;
 }

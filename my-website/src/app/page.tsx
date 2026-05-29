@@ -10,7 +10,7 @@ import FeedbackCarousel from "@/components/FeedbackCarousel";
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import styles from "./page.module.css";
-
+import { Logger } from "@/lib/logger";
 import { Suspense } from "react";
 
 export default function Home() {
@@ -60,7 +60,7 @@ async function AsyncPageContent() {
       createdAt: r.createdAt ?? new Date()
     })) ?? [];
   } catch (error) {
-    console.error("Database query failed in Home:", error);
+    Logger.error("Home", "Database query failed", error);
   }
 
   return (

@@ -6,6 +6,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 import PageReadySignal from "@/components/PageReadySignal";
 import ProductsCatalog from "@/components/ProductsCatalog";
 import { prisma } from "@/lib/db";
+import { Logger } from "@/lib/logger";
 import styles from "./products.module.css";
 
 export const revalidate = 3600; // Revalidate every hour
@@ -54,7 +55,7 @@ async function AsyncProductsContent() {
     
     
   } catch (error) {
-    console.error("Database query failed in ProductsPage:", error);
+    Logger.error("ProductsPage", "Database query failed", error);
   }
 
   return (

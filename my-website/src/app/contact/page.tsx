@@ -6,6 +6,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 import PageReadySignal from "@/components/PageReadySignal";
 import { prisma } from "@/lib/db";
 import QuoteWizard from "@/components/QuoteWizard";
+import { Logger } from "@/lib/logger";
 import styles from "./contact.module.css";
 
 export const metadata = {
@@ -31,7 +32,7 @@ async function AsyncContactContent() {
   try {
     contact = await prisma.contact.findFirst();
   } catch (error) {
-    console.error("Database query failed in ContactPage:", error);
+    Logger.error("ContactPage", "Database query failed", error);
   }
 
   // Establish fallback dynamic parameters
