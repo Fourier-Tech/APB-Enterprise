@@ -25,7 +25,7 @@ export default function QuoteWizard({ whatsappNumber }: QuoteWizardProps) {
   const [harnessLopCopPurchase, setHarnessLopCopPurchase] = useState("");
   const [harnessExtraNote, setHarnessExtraNote] = useState("");
 
-  /* ── CONTROL PANEL FORM STATES (DUMMY DETAILS) ── */
+  /* ── CONTROL PANEL FORM STATES ── */
   const [cpClientName, setCpClientName] = useState("");
   const [cpModel, setCpModel] = useState("");
   const [cpControlType, setCpControlType] = useState("Standard");
@@ -428,7 +428,7 @@ Please review these parameters and share a customized quote with me.`;
           </form>
         )}
 
-        {/* Tab 2: Control Panel Form (Dummy details) */}
+        {/* Tab 2: Control Panel Form */}
         {activeTab === "control" && (
           <form onSubmit={handleControlPanelSubmit} role="tabpanel" id="panel-control" aria-labelledby="tab-control">
             <div className={styles["form-grid"]}>
@@ -488,7 +488,7 @@ Please review these parameters and share a customized quote with me.`;
                 </select>
               </div>
 
-              {/* HP Rating (Dummy) */}
+              {/* HP Rating */}
               <div className={`${styles["form-group"]} ${styles["full-width"]}`}>
                 <label htmlFor="cpHpRating">
                   <i className="fas fa-bolt" /> HP / Amp Rating <span className={styles["req"]}>*</span>
@@ -507,7 +507,7 @@ Please review these parameters and share a customized quote with me.`;
                 </select>
               </div>
 
-              {/* Power Phase Type (Dummy) */}
+              {/* Power Phase Type */}
               <div className={`${styles["form-group"]} ${styles["full-width"]}`}>
                 <label htmlFor="cpPhaseType">
                   <i className="fas fa-plug" /> Power System Phase <span className={styles["req"]}>*</span>

@@ -6,6 +6,15 @@ import { Logger } from "@/lib/logger";
 // which relies on Node.js net/tls APIs unavailable in the Edge runtime.
 export const runtime = "nodejs";
 
+/**
+ * POST endpoint to process and record B2B Quote Requests.
+ * Generates a unique request trace ID, validates inputs, persists the lead inside
+ * the PostgreSQL database, and compiles a formatted WhatsApp redirection URL using
+ * dynamically queried business contact details.
+ * 
+ * @param {NextRequest} req - The incoming HTTP request containing client parameters.
+ * @returns {Promise<NextResponse>} JSON response containing success state and redirect URL.
+ */
 export async function POST(req: NextRequest) {
   const startTime = performance.now();
   const requestId = Math.random().toString(36).substring(2, 10).toUpperCase();

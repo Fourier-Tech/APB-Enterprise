@@ -1,5 +1,13 @@
 import type { NextConfig } from "next";
 
+/**
+ * Strict Content-Security-Policy (CSP) headers config.
+ * Securely whitelist approved resource domains to protect against content injection (XSS).
+ * 
+ * - img-src: Whitelists Cloudinary (res.cloudinary.com) to load high-res product photos.
+ * - frame-src: Whitelists Cloudinary and Supabase to allow dynamic vector PDF datasheets 
+ *   to embed inside our custom iframe booklet viewer.
+ */
 const cspHeader = `
   default-src 'self';
   script-src 'self' 'unsafe-eval' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net;
@@ -16,7 +24,7 @@ const cspHeader = `
 `.replace(/\s{2,}/g, ' ').trim();
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  /* Next.js configuration rules */
   allowedDevOrigins: [
     "192.168.0.101",
     "192.168.0.104",

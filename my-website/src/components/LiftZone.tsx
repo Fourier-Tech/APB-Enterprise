@@ -35,6 +35,17 @@ function getProductIcon(category: string) {
 
 const scriptLoadingPromises: { [src: string]: Promise<void> | undefined } = {};
 
+/**
+ * Dynamically loads external CDN scripts synchronously and asynchronously.
+ * Incorporates standard promise caching to prevent multiple parallel fetches.
+ * 
+ * NOTE: Implements a 50ms polling checking cycle for window globals alongside
+ * normal onload events. This completely avoids silent promise hangs when scripts
+ * are already appended to the document body but unmount states/re-renders override onload.
+ * 
+ * @param {string} src - The absolute CDN script source URL.
+ * @returns {Promise<void>} Resolves when the script has completed loading and is globally ready.
+ */
 const loadScript = (src: string): Promise<void> => {
   if (typeof window === "undefined") return Promise.resolve();
 

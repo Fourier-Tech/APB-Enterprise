@@ -5,6 +5,15 @@ import { Logger } from "@/lib/logger";
 // Force Node.js runtime because @/lib/db uses pg Pool (native sockets/tls)
 export const runtime = "nodejs";
 
+/**
+ * POST endpoint to receive and record verified client reviews.
+ * Validates the reviewer's metadata, company details, rating scale, and message.
+ * Persists the validated entry into PostgreSQL defaulted to `isFeatured: false` 
+ * to ensure that all reviews undergo manual administrative curation before homepage displays.
+ * 
+ * @param {NextRequest} req - The incoming HTTP request with reviewer parameters.
+ * @returns {Promise<NextResponse>} JSON response containing success state and review ID.
+ */
 export async function POST(req: NextRequest) {
   const startTime = performance.now();
   const requestId = Math.random().toString(36).substring(2, 10).toUpperCase();
