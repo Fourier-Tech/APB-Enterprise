@@ -154,7 +154,7 @@ async function main() {
   const brochuresData = [
     {
       title: "APB Enterprise - Catalogue 2026",
-      fileUrl: "https://odmxozftqwzjxtnpstsi.supabase.co/storage/v1/object/public/pdfs/apd_brochure.pdf",
+      fileUrl: "https://odmxozftqwzjxtnpstsi.supabase.co/storage/v1/object/public/pdfs/apb_brochure.pdf",
       displayOrder: 1,
       isActive: true,
     },

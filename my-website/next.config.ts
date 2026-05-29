@@ -7,7 +7,7 @@ const cspHeader = `
   font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
   img-src 'self' blob: data:;
   connect-src * ws: wss: data:;
-  frame-src 'self';
+  frame-src 'self' https://odmxozftqwzjxtnpstsi.supabase.co;
   object-src 'none';
   base-uri 'self';
   form-action 'self';
