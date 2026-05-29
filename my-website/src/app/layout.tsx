@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "../styles/globals.css";
 
 export const metadata: Metadata = {
-  title: "APB Enterprise | Elevator Components",
+  title: "APB Enterprise | Lift Control Panel & Harness Manufacturer",
   description:
-    "APB Enterprise manufactures elevator controllers, door operators, safety gears, and COP panels.",
+    "APB Enterprise is a leading manufacturer of elevator controllers and elevator harnesses. Trusted by clients across India, UAE, Nepal, Nigeria, Brazil & more. ISO-certified quality, built to international standards.",
   icons: {
     icon: "/logo.jpg",
   },

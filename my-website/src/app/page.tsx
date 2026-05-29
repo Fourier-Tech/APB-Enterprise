@@ -13,6 +13,8 @@ import styles from "./page.module.css";
 import { Logger } from "@/lib/logger";
 import { Suspense } from "react";
 
+export const revalidate = 3600; // Revalidate every hour
+
 export default function Home() {
   return (
     <>
@@ -26,12 +28,12 @@ export default function Home() {
 }
 
 async function AsyncPageContent() {
-  
+
   let featuredProducts: any[] = [];
   let featuredReviews: any[] = [];
 
   try {
-    
+
     featuredProducts = (await prisma.product.findMany({
       where: { isFeatured: true }
     }))?.map(p => ({
@@ -45,7 +47,7 @@ async function AsyncPageContent() {
       displayOrder: p.displayOrder ?? 0,
       createdAt: p.createdAt ?? new Date(),
     })) ?? [];
-    
+
     featuredReviews = (await prisma.review.findMany({
       where: { isFeatured: true },
       orderBy: { createdAt: "desc" },

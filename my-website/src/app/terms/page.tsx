@@ -63,7 +63,7 @@ export default async function TermsPage() {
                 4. Professional Products and Specifications
               </h2>
               <p style={{ marginBottom: "1.5rem" }}>
-                APB Enterprise manufactures professional-grade elevator control panels, auto rescue devices (ARD), harnesses, and safety gears. All product information, technical data, and specifications provided on this website are intended exclusively for certified engineers, licensed elevator technicians, and professional procurement officers. 
+                APB Enterprise manufactures professional-grade elevator control panels, auto rescue devices (ARD), harnesses, and safety gears. All product information, technical data, and specifications provided on this website are intended exclusively for certified engineers, licensed elevator technicians, and professional procurement officers.
                 <br /><br />
                 We reserve the right to modify or discontinue any product specification without notice to improve engineering reliability or function. While we strive for accuracy, we do not guarantee that the product details on the Site are entirely error-free or current at all times.
               </p>
@@ -95,7 +95,7 @@ export default async function TermsPage() {
             </div>
           </section>
         </main>
-        <GlobalFooter hideQuoteStrip={true}/>
+        <GlobalFooter hideQuoteStrip={true} />
       </div>
       <PageReadySignal />
     </>

@@ -23,9 +23,9 @@ export default function AboutPage() {
 }
 
 async function AsyncAboutContent() {
-  
+
   try {
-    
+
   } catch (error) {
     Logger.error("AboutPage", "Database query failed", error);
   }

@@ -31,7 +31,7 @@ export default function BrochuresPage() {
 
 async function AsyncBrochuresContent() {
   let dbBrochures: any[] = [];
-  
+
 
   try {
     const [rawBrochures] = await Promise.all([
@@ -39,7 +39,7 @@ async function AsyncBrochuresContent() {
         where: { isActive: true },
         orderBy: [{ displayOrder: "asc" }, { id: "asc" }],
       }),
-      
+
     ]);
 
     dbBrochures = rawBrochures?.map(b => ({
@@ -51,7 +51,7 @@ async function AsyncBrochuresContent() {
       createdAt: b.createdAt ?? new Date(),
     })) ?? [];
 
-    
+
   } catch (error) {
     Logger.error("BrochuresPage", "Database query failed", error);
   }

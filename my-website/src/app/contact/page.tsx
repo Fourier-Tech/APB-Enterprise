@@ -9,6 +9,8 @@ import QuoteWizard from "@/components/QuoteWizard";
 import { Logger } from "@/lib/logger";
 import styles from "./contact.module.css";
 
+export const revalidate = 0; // Dynamic server component to load latest contact credentials
+
 export const metadata = {
   title: "Contact & Quote Engine | APB Enterprise",
   description:

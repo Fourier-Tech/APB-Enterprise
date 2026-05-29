@@ -31,16 +31,16 @@ export default function ProductsPage() {
 
 async function AsyncProductsContent() {
   let products: any[] = [];
-  
+
 
   try {
     const [rawProducts] = await Promise.all([
       prisma.product.findMany({
         orderBy: [{ displayOrder: "asc" }, { createdAt: "asc" }],
       }),
-      
+
     ]);
-    
+
     products = rawProducts?.map(p => ({
       ...p,
       shortDesc: p.shortDesc ?? "",
@@ -52,8 +52,8 @@ async function AsyncProductsContent() {
       displayOrder: p.displayOrder ?? 0,
       createdAt: p.createdAt ?? new Date(),
     })) ?? [];
-    
-    
+
+
   } catch (error) {
     Logger.error("ProductsPage", "Database query failed", error);
   }
