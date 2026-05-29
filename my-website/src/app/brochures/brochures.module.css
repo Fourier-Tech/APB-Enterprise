@@ -740,14 +740,14 @@
   }
 
   .flipbook-topbar {
-    flex-direction: column;
-    gap: 0.75rem;
-    align-items: flex-start;
+    padding: 0.8rem 1rem;
   }
 
-  .flipbook-topbar div {
-    width: 100%;
-    justify-content: space-between;
+  .flipbook-topbar-title {
+    max-width: 75%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .pdf-controls {
