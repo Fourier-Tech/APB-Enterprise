@@ -14,26 +14,6 @@ export const metadata = {
     "Get in touch with APB Enterprise. Speak with our vertical transportation engineers, request specialized elevator wiring harness quote parameters, or customize control panel layouts.",
 };
 
-// Real-time IST Status Calculation (India Standard Time: UTC + 5:30)
-function getOfficeStatus() {
-  const date = new Date();
-  const utcTime = date.getTime() + date.getTimezoneOffset() * 60000;
-  const istDate = new Date(utcTime + 3600000 * 5.5);
-
-  const currentHour = istDate.getHours();
-  const currentDay = istDate.getDay(); // 0: Sunday, 1: Monday, ..., 6: Saturday
-
-  // Monday to Saturday, 9:00 AM (9) to 7:00 PM (19)
-  const isOpen = currentDay >= 1 && currentDay <= 6 && currentHour >= 9 && currentHour < 19;
-
-  return {
-    isOpen,
-    desc: isOpen
-      ? "Our sales and engineering desk is active. Average response time: 2 hours."
-      : "We are currently closed. Submit your spec sheet and we'll reply first thing in the morning.",
-  };
-}
-
 export default async function ContactPage() {
   return (
     <>
@@ -53,8 +33,6 @@ async function AsyncContactContent() {
   } catch (error) {
     console.error("Database query failed in ContactPage:", error);
   }
-
-  const status = getOfficeStatus();
 
   // Establish fallback dynamic parameters
   const phone = contact?.phonePrimary ?? "+91 22 4098 1234";
@@ -104,6 +82,7 @@ async function AsyncContactContent() {
 
                 {/* RIGHT SIDE: DIRECT CONTACT DETAILS HUB */}
                 <div className={styles["contact-info-hub"]}>
+
                   {/* Speak to Sales card */}
                   <div className={styles["info-card"]}>
                     <div className={styles["info-card-content"]}>

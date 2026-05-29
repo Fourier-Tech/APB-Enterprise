@@ -42,36 +42,66 @@ const loadScript = (src: string): Promise<void> => {
     return scriptLoadingPromises[src];
   }
 
-  const promise = new Promise<void>((resolve, reject) => {
-    // If the library/map is already defined globally, resolve immediately
+  const checkGlobal = () => {
     if (src.includes("gsap") && (window as any).gsap) {
-      resolve();
-      return;
+      return true;
     }
     if (src.includes("jsvectormap.min.js") && (window as any).jsVectorMap) {
-      resolve();
-      return;
+      return true;
     }
     if (src.includes("world.js") && (window as any).jsVectorMap?.maps?.world) {
+      return true;
+    }
+    return false;
+  };
+
+  const promise = new Promise<void>((resolve, reject) => {
+    // If already defined globally, resolve immediately
+    if (checkGlobal()) {
       resolve();
       return;
     }
 
     const existing = document.querySelector(`script[src="${src}"]`) as HTMLScriptElement;
     if (existing) {
+      const interval = setInterval(() => {
+        if (checkGlobal()) {
+          clearInterval(interval);
+          resolve();
+        }
+      }, 50);
+
       const oldOnload = existing.onload;
       existing.onload = (e) => {
+        clearInterval(interval);
         if (oldOnload) (oldOnload as any).call(existing, e);
         resolve();
       };
-      existing.onerror = (e) => reject(e);
+      existing.onerror = (e) => {
+        clearInterval(interval);
+        reject(e);
+      };
       return;
     }
 
     const s = document.createElement("script");
     s.src = src;
-    s.onload = () => resolve();
-    s.onerror = (e) => reject(e);
+
+    const interval = setInterval(() => {
+      if (checkGlobal()) {
+        clearInterval(interval);
+        resolve();
+      }
+    }, 50);
+
+    s.onload = () => {
+      clearInterval(interval);
+      resolve();
+    };
+    s.onerror = (e) => {
+      clearInterval(interval);
+      reject(e);
+    };
     document.body.appendChild(s);
   });
 
