@@ -235,9 +235,16 @@ export default function Footer({
               <Link href="/privacy-policy" className="footer-legal-link">Privacy Policy</Link>
               <Link href="/terms" className="footer-legal-link">Terms & Conditions</Link>
             </div>
-            <p>
-              © {new Date().getFullYear()} APB ENTERPRISE. All rights
-              reserved.
+            <p style={{ fontSize: "0.75rem", color: "var(--gray-mid)" }}>
+              © {new Date().getFullYear()} APB ENTERPRISE. All rights reserved. |{" "}
+              <a
+                href="https://bizcard-production-a814.up.railway.app/BizCard/fouriertech"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="footer-legal-link"
+              >
+                Built by FourierTech
+              </a>
             </p>
           </div>
         </div>
