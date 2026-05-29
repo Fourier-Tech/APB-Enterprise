@@ -12,19 +12,33 @@ import SpecTable from "../SpecTable";
 export const revalidate = 3600;
 
 async function findProductByCode(code: string) {
+  const queryStart = performance.now();
+  console.log(`[INFO] Querying product for code: "${code}"`);
+
   try {
     // Try modelCode first, fall back to numeric id
     const byCode = await prisma.product.findFirst({
       where: { modelCode: code },
     });
-    if (byCode) return byCode;
+    if (byCode) {
+      console.log(`[SUCCESS] Product found by modelCode: "${code}" in ${(performance.now() - queryStart).toFixed(1)}ms`);
+      return byCode;
+    }
 
     const numId = parseInt(code, 10);
     if (!isNaN(numId)) {
-      return await prisma.product.findUnique({ where: { id: numId } });
+      const byId = await prisma.product.findUnique({ where: { id: numId } });
+      if (byId) {
+        console.log(`[SUCCESS] Product found by ID fallback: ${numId} in ${(performance.now() - queryStart).toFixed(1)}ms`);
+        return byId;
+      }
     }
+
+    const duration = performance.now() - queryStart;
+    console.warn(`[WARN] Product NOT found for code/ID: "${code}" (duration: ${duration.toFixed(1)}ms). Returning null.`);
   } catch (error) {
-    console.error("Database query failed in findProductByCode:", error);
+    const duration = performance.now() - queryStart;
+    console.error(`[ERROR] Database query failed in findProductByCode for "${code}" after ${duration.toFixed(1)}ms:`, error);
   }
   return null;
 }
