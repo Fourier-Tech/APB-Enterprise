@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { Suspense } from "react";
 import Loader from "@/components/Loader";
 import Header from "@/components/Header";
@@ -11,10 +12,15 @@ import styles from "./brochures.module.css";
 
 export const revalidate = 3600; // Cache page for an hour
 
-export const metadata = {
-  title: "Brochures & Resources | APB Enterprise",
+export const metadata: Metadata = {
+  title: "Download Brochures & Technical Resources",
   description:
-    "Download APB Enterprise's technical brochures, installation manuals, certificates, and corporate catalog profiles.",
+    "Download technical brochures, wiring diagrams, installation manuals, and catalog sheets for APB Enterprise elevator control systems.",
+  openGraph: {
+    title: "Technical Brochures & Resource Catalog | APB Enterprise",
+    description:
+      "Download technical brochures, wiring diagrams, installation manuals, and catalog sheets for APB Enterprise elevator control systems.",
+  },
 };
 
 export default function BrochuresPage() {

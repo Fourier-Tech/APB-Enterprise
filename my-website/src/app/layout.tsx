@@ -1,12 +1,55 @@
 import type { Metadata } from "next";
 import "../styles/globals.css";
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://apbenterprise.com";
+
 export const metadata: Metadata = {
-  title: "APB Enterprise | Lift Control Panel & Harness Manufacturer",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "APB Enterprise | Lift Control Panel & Harness Manufacturer",
+    template: "%s | APB Enterprise",
+  },
   description:
-    "APB Enterprise is a leading manufacturer of elevator controllers and elevator harnesses. Trusted by clients across India, UAE, Nepal, Nigeria, Brazil & more. ISO-certified quality, built to international standards.",
+    "APB Enterprise is an ISO-certified manufacturer of elevator controllers and harnesses. Trusted across India, UAE, Nigeria, Brazil, and globally.",
+  keywords: [
+    "elevator controller",
+    "elevator harness",
+    "lift control panel manufacturer",
+    "elevator wiring harness",
+    "elevator control panel",
+    "APB Enterprise",
+    "APB"
+  ],
   icons: {
     icon: "/logo.jpg",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: SITE_URL,
+    siteName: "APB Enterprise",
+    title: "APB Enterprise | Lift Control Panel & Harness Manufacturer",
+    description:
+      "Leading manufacturer of ISO-certified elevator controllers and harnesses, serving India, UAE, Nigeria, and globally.",
+    images: [
+      {
+        url: "/logo.jpg",
+        width: 400,
+        height: 400,
+        alt: "APB Enterprise Logo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary",
+    title: "APB Enterprise | Lift Control Panel & Harness Manufacturer",
+    description:
+      "Leading manufacturer of ISO-certified elevator controllers and harnesses, serving India, UAE, Nigeria, and globally.",
+    images: ["/logo.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 

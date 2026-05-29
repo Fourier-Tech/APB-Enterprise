@@ -8,8 +8,14 @@ import Loader from "@/components/Loader";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | APB Enterprise",
-  description: "Learn how APB Enterprise handles, protects, and respects your privacy and personal data.",
+  title: "Privacy Policy - Data Protection Commitment",
+  description:
+    "Read APB Enterprise's privacy policy to understand how we protect, secure, and handle your business contact details and reviews.",
+  openGraph: {
+    title: "Privacy Policy | APB Enterprise",
+    description:
+      "Read APB Enterprise's privacy policy to understand how we protect, secure, and handle your business contact details and reviews.",
+  },
 };
 
 export default async function PrivacyPolicyPage() {

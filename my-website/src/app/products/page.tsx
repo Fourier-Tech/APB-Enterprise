@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { Suspense } from "react";
 import Loader from "@/components/Loader";
 import Header from "@/components/Header";
@@ -11,10 +12,15 @@ import styles from "./products.module.css";
 
 export const revalidate = 3600; // Revalidate every hour
 
-export const metadata = {
-  title: "Products | APB Enterprise",
+export const metadata: Metadata = {
+  title: "Elevator Controllers & Wiring Harnesses",
   description:
-    "Browse APB Enterprise's full range of elevator controllers, door operators, safety gears, and integrated systems — engineered for extreme reliability.",
+    "Explore APB Enterprise's premium range of ISO-certified elevator controllers, lift control panels, and custom wiring harnesses.",
+  openGraph: {
+    title: "Elevator Controllers & Wiring Harnesses Catalog | APB Enterprise",
+    description:
+      "Explore APB Enterprise's premium range of ISO-certified elevator controllers, lift control panels, and custom wiring harnesses.",
+  },
 };
 
 export default function ProductsPage() {

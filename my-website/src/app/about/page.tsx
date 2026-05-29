@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import Header from "@/components/Header";
 import GlobalFooter from "@/components/GlobalFooter";
 import { prisma } from "@/lib/db";
@@ -7,6 +8,17 @@ import PageReadySignal from "@/components/PageReadySignal";
 import Loader from "@/components/Loader";
 import { Suspense } from "react";
 import { Logger } from "@/lib/logger";
+
+export const metadata: Metadata = {
+  title: "About Us - Elevator Component Manufacturer",
+  description:
+    "Discover APB Enterprise since 2018. Learn about our vision, mission, and team delivering ISO 9001:2015 certified elevator controllers & harnesses.",
+  openGraph: {
+    title: "About APB Enterprise | Lift Control Panel Manufacturer",
+    description:
+      "Discover APB Enterprise since 2018. Learn about our vision, mission, and team delivering ISO 9001:2015 certified elevator controllers & harnesses.",
+  },
+};
 
 export const revalidate = 0; // Dynamic Server Component to fetch the latest contacts
 

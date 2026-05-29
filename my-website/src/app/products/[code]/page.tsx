@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { Suspense } from "react";
 import Loader from "@/components/Loader";
 import Header from "@/components/Header";
@@ -44,13 +45,22 @@ async function findProductByCode(code: string) {
   return null;
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ code: string }> }) {
+export async function generateMetadata({ params }: { params: Promise<{ code: string }> }): Promise<Metadata> {
   const { code } = await params;
   const product = await findProductByCode(decodeURIComponent(code));
-  if (!product) return { title: "Product Not Found | APB Enterprise" };
+  if (!product) return { title: "Product Not Found" };
+  
+  const title = `${product.name} (${product.modelCode || ""})`;
+  const description = product.shortDesc || `Technical specifications, diagrams, and features for APB Enterprise ${product.name}.`;
+  
   return {
-    title: `${product.name} | APB Enterprise`,
-    description: product.shortDesc ?? "",
+    title,
+    description,
+    openGraph: {
+      title: `${title} | APB Enterprise`,
+      description,
+      images: product.imageUrl ? [{ url: product.imageUrl }] : [],
+    },
   };
 }
 

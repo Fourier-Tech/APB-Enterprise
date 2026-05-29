@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { Suspense } from "react";
 import Loader from "@/components/Loader";
 import Header from "@/components/Header";
@@ -11,10 +12,15 @@ import styles from "./contact.module.css";
 
 export const revalidate = 0; // Dynamic server component to load latest contact credentials
 
-export const metadata = {
-  title: "Contact & Quote Engine | APB Enterprise",
+export const metadata: Metadata = {
+  title: "Contact Us & Get a Custom Elevator Quote",
   description:
-    "Get in touch with APB Enterprise. Speak with our vertical transportation engineers, request specialized elevator wiring harness quote parameters, or customize control panel layouts.",
+    "Contact APB Enterprise. Use our interactive Quote Engine to configure elevator control panels, harnesses, and request custom specifications.",
+  openGraph: {
+    title: "Contact APB Enterprise | Interactive Quote Engine",
+    description:
+      "Contact APB Enterprise. Use our interactive Quote Engine to configure elevator control panels, harnesses, and request custom specifications.",
+  },
 };
 
 export default async function ContactPage() {

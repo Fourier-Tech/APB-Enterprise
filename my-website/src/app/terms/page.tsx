@@ -8,8 +8,14 @@ import Loader from "@/components/Loader";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Terms & Conditions | APB Enterprise",
-  description: "Read the Terms & Conditions for using APB Enterprise products and services.",
+  title: "Terms of Service - User & Product Agreement",
+  description:
+    "Review the Terms and Conditions of APB Enterprise for using our website, requesting product quotes, and acquiring elevator controllers & harnesses.",
+  openGraph: {
+    title: "Terms & Conditions | APB Enterprise",
+    description:
+      "Review the Terms and Conditions of APB Enterprise for using our website, requesting product quotes, and acquiring elevator controllers & harnesses.",
+  },
 };
 
 export default async function TermsPage() {
