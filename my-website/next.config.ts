@@ -5,9 +5,9 @@ const cspHeader = `
   script-src 'self' 'unsafe-eval' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net;
   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net;
   font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
-  img-src 'self' blob: data:;
+  img-src 'self' blob: data: https://res.cloudinary.com https://*.cloudinary.com;
   connect-src * ws: wss: data:;
-  frame-src 'self' https://odmxozftqwzjxtnpstsi.supabase.co;
+  frame-src 'self' https://odmxozftqwzjxtnpstsi.supabase.co https://res.cloudinary.com https://*.cloudinary.com;
   object-src 'none';
   base-uri 'self';
   form-action 'self';
