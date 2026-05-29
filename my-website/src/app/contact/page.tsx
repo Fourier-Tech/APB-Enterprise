@@ -82,7 +82,6 @@ async function AsyncContactContent() {
 
                 {/* RIGHT SIDE: DIRECT CONTACT DETAILS HUB */}
                 <div className={styles["contact-info-hub"]}>
-
                   {/* Speak to Sales card */}
                   <div className={styles["info-card"]}>
                     <div className={styles["info-card-content"]}>
