@@ -123,17 +123,6 @@ export default function BrochuresCatalog({ dbBrochures }: Props) {
           <div className={styles["flipbook-topbar"]}>
             <span className={styles["flipbook-topbar-title"]}>{modalTitle}</span>
             <div style={{ display: "flex", alignItems: "center", gap: "0.8rem" }}>
-              {pdfUrl && !isMobile && (
-                <a
-                  href={pdfUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles["flipbook-action-btn"]}
-                  title="Open full PDF in a new tab"
-                >
-                  <i className="fas fa-external-link-alt" /> Open PDF
-                </a>
-              )}
               <button className={styles["flipbook-close"]} onClick={closeBook}>
                 <i className="fas fa-times" />
               </button>
