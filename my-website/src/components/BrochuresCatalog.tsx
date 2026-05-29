@@ -12,6 +12,7 @@ export default function BrochuresCatalog({ dbBrochures }: Props) {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
   const [pdfUrl, setPdfUrl] = useState("");
+  const [isMobile, setIsMobile] = useState(false);
 
   // Handle modal toggling & scroll locking
   function openBook(title: string, fileUrl: string) {
@@ -28,6 +29,19 @@ export default function BrochuresCatalog({ dbBrochures }: Props) {
       setPdfUrl("");
     }, 350);
   }
+
+  // Detect mobile device viewport or user agent
+  useEffect(() => {
+    function checkDevice() {
+      setIsMobile(
+        window.innerWidth <= 768 ||
+        /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
+      );
+    }
+    checkDevice();
+    window.addEventListener("resize", checkDevice);
+    return () => window.removeEventListener("resize", checkDevice);
+  }, []);
 
   // Listen for Escape key to close modal
   useEffect(() => {
@@ -109,6 +123,17 @@ export default function BrochuresCatalog({ dbBrochures }: Props) {
           <div className={styles["flipbook-topbar"]}>
             <span className={styles["flipbook-topbar-title"]}>{modalTitle}</span>
             <div style={{ display: "flex", alignItems: "center", gap: "0.8rem" }}>
+              {pdfUrl && !isMobile && (
+                <a
+                  href={pdfUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles["flipbook-action-btn"]}
+                  title="Open full PDF in a new tab"
+                >
+                  <i className="fas fa-external-link-alt" /> Open PDF
+                </a>
+              )}
               <button className={styles["flipbook-close"]} onClick={closeBook}>
                 <i className="fas fa-times" />
               </button>
@@ -118,11 +143,35 @@ export default function BrochuresCatalog({ dbBrochures }: Props) {
           {/* Premium Native Vector PDF Viewer inside custom modal wrapper */}
           <div className={styles["pdf-stage-row"]}>
             {pdfUrl && (
-              <iframe
-                title={modalTitle}
-                src={`${pdfUrl}#toolbar=1&navpanes=0`}
-                className={styles["pdf-iframe"]}
-              />
+              <>
+                {isMobile ? (
+                  <div className={styles["mobile-fallback-container"]}>
+                    <div className={styles["mobile-fallback-card"]}>
+                      <div className={styles["mobile-pdf-icon-wrap"]}>
+                        <i className="far fa-file-pdf" />
+                      </div>
+                      <h3>{modalTitle}</h3>
+                      <p>
+                        For the best viewing experience, open this technical brochure directly in your device's native PDF reader.
+                      </p>
+                      <a
+                        href={pdfUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles["mobile-open-btn"]}
+                      >
+                        <i className="fas fa-external-link-alt" /> Open Document
+                      </a>
+                    </div>
+                  </div>
+                ) : (
+                  <iframe
+                    title={modalTitle}
+                    src={`${pdfUrl}#toolbar=1&navpanes=0`}
+                    className={styles["pdf-iframe"]}
+                  />
+                )}
+              </>
             )}
           </div>
         </div>
