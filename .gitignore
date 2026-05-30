@@ -1,5 +1,6 @@
 # ARIA Developer Memory
 .aria/
+ARIA-Template/
 
 # Environment Variables
 .env
