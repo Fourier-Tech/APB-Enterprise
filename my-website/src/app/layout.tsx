@@ -78,6 +78,20 @@ export default function RootLayout({
         />
       </head>
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "APB Enterprise",
+              "url": SITE_URL,
+              "logo": `${SITE_URL}/logo.jpg`,
+              "description": "APB Enterprise is an ISO-certified manufacturer of elevator controllers and harnesses. Trusted across India, UAE, Nigeria, Brazil, and globally.",
+              "sameAs": []
+            })
+          }}
+        />
         <div id="page-wrapper">{children}</div>
       </body>
     </html>

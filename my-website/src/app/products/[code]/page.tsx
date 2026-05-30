@@ -114,6 +114,23 @@ async function AsyncProductDetail({ code }: { code: string }) {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": product.name,
+            "image": product.imageUrl || undefined,
+            "description": product.shortDesc || undefined,
+            "model": product.modelCode || undefined,
+            "brand": {
+              "@type": "Brand",
+              "name": "APB Enterprise"
+            }
+          })
+        }}
+      />
       <div className="page-shell">
         <main style={{ paddingTop: "72px" }}>
           <section className={styles["detail-section"]}>
