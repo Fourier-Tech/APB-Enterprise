@@ -47,7 +47,6 @@ export default function Footer({
             </p>
             <a
               href="/contact"
-              target="_blank"
               rel="noopener noreferrer"
               className="btn-gold-cta"
             >
