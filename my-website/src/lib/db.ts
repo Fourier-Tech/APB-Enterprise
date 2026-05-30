@@ -16,11 +16,14 @@ if (typeof window === "undefined") {
   const connectionString = env.DATABASE_URL;
   const config = parse(connectionString);
   
+  // Detect if we are in the Next.js static site generation build phase
+  const isBuildPhase = process.env.NEXT_PHASE === "phase-production-build";
+  
   // Custom configurations optimized for Neon Postgres serverless cold starts
   const pool = new Pool({
     ...config,
     connectionTimeoutMillis: 15000, // 15 seconds timeout to wait for suspended compute nodes
-    max: 10,                        // Maximum pool size
+    max: isBuildPhase ? 2 : 10,     // Restrict to 2 connections per build worker to prevent Neon limits exhaustion
     idleTimeoutMillis: 30000,       // Close idle connections after 30 seconds
   } as any);
   
