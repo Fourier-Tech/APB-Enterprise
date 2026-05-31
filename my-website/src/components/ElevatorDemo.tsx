@@ -259,7 +259,7 @@ export default function ElevatorDemo() {
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      fontFamily: "'Space Grotesk',sans-serif",
+                      fontFamily: "var(--font-space-grotesk), sans-serif",
                       fontSize: 12,
                       fontWeight: 700,
                       color: isActive ? "#0f6978" : "#667085",
@@ -343,7 +343,7 @@ export default function ElevatorDemo() {
                     >
                       <div
                         style={{
-                          fontFamily: "'Space Grotesk',sans-serif",
+                          fontFamily: "var(--font-space-grotesk), sans-serif",
                           fontSize: 12,
                           fontWeight: 600,
                           color: "#101828",
@@ -356,7 +356,7 @@ export default function ElevatorDemo() {
                       </div>
                       <div
                         style={{
-                          fontFamily: "'Space Grotesk',sans-serif",
+                          fontFamily: "var(--font-space-grotesk), sans-serif",
                           fontSize: 10,
                           color: "#667085",
                           marginTop: 2,
@@ -516,7 +516,7 @@ export default function ElevatorDemo() {
                   {doorsOpen && (
                     <div
                       style={{
-                        fontFamily: "'Space Grotesk',sans-serif",
+                        fontFamily: "var(--font-space-grotesk), sans-serif",
                         fontSize: 9,
                         fontWeight: 700,
                         letterSpacing: "0.16em",
@@ -573,7 +573,7 @@ export default function ElevatorDemo() {
             />
             <span
               style={{
-                fontFamily: "'Space Grotesk',sans-serif",
+                fontFamily: "var(--font-space-grotesk), sans-serif",
                 fontSize: 9,
                 color: "#8a94a6",
                 letterSpacing: "0.12em",
@@ -603,7 +603,7 @@ export default function ElevatorDemo() {
         >
           <div
             style={{
-              fontFamily: "'Space Grotesk',sans-serif",
+              fontFamily: "var(--font-space-grotesk), sans-serif",
               fontSize: 7,
               color: "#8a94a6",
               letterSpacing: "0.2em",
@@ -615,7 +615,7 @@ export default function ElevatorDemo() {
 
           <div
             style={{
-              fontFamily: "'Space Grotesk',sans-serif",
+              fontFamily: "var(--font-space-grotesk), sans-serif",
               fontSize: 19,
               fontWeight: 700,
               color: "#d4a800",
@@ -673,7 +673,7 @@ export default function ElevatorDemo() {
                   borderRadius: 4,
                   border: lit ? "1.5px solid #d4a800" : "1.5px solid #2e3849",
                   cursor: "pointer",
-                  fontFamily: "'Space Grotesk',sans-serif",
+                  fontFamily: "var(--font-space-grotesk), sans-serif",
                   fontSize: 10,
                   fontWeight: 700,
                   color: lit ? "#1c1c1c" : "#8a94a6",
@@ -725,7 +725,7 @@ export default function ElevatorDemo() {
           alignItems: "center",
           justifyContent: "center",
           gap: 6,
-          fontFamily: "'Space Grotesk',sans-serif",
+          fontFamily: "var(--font-space-grotesk), sans-serif",
           fontSize: 10,
           color: "#8a94a6",
           letterSpacing: "0.06em",

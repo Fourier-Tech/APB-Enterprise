@@ -42,7 +42,7 @@ html {
 body {
   background: var(--white);
   color: var(--black);
-  font-family: "Epilogue", sans-serif;
+  font-family: var(--font-epilogue), sans-serif;
   line-height: 1.55;
   overflow-x: hidden;
 }
@@ -78,7 +78,7 @@ h4,
 .logo-name,
 .stat-num,
 nav a {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
 }
 
 /* ============================================================
@@ -142,7 +142,7 @@ header {
 }
 
 .logo-sub {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
   font-size: 0.63rem;
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -217,7 +217,7 @@ nav a.active::after {
   gap: 8px;
   background: var(--teal);
   color: var(--white);
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
   font-size: 0.88rem;
   font-weight: 600;
   padding: 11px 22px;
@@ -239,7 +239,7 @@ nav a.active::after {
   align-items: center;
   gap: 6px;
   color: var(--black);
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
   font-size: 0.88rem;
   font-weight: 500;
   text-decoration: none;
@@ -263,7 +263,7 @@ nav a.active::after {
   gap: 8px;
   background: var(--gold);
   color: var(--black);
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
   font-size: 0.88rem;
   font-weight: 700;
   padding: 12px 28px;
@@ -283,7 +283,7 @@ nav a.active::after {
   gap: 8px;
   border: 1.5px solid var(--teal);
   color: var(--teal);
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
   font-size: 0.82rem;
   font-weight: 600;
   padding: 10px 22px;
@@ -304,7 +304,7 @@ nav a.active::after {
    7. SECTION SHARED STYLES
    ============================================================ */
 .section-eyebrow {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
   font-size: 0.67rem;
   font-weight: 600;
   letter-spacing: 0.16em;
@@ -388,7 +388,7 @@ footer {
 }
 
 .footer-col h4 {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
   font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.13em;
@@ -579,7 +579,7 @@ footer {
 }
 
 .about-label {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
   font-size: 0.67rem;
   font-weight: 600;
   letter-spacing: 0.16em;
@@ -603,7 +603,7 @@ footer {
   margin-top: 1.25rem;
   margin-left: 1.5rem;
   color: var(--teal);
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
   font-size: 0.82rem;
   font-weight: 600;
   text-decoration: none;
@@ -711,7 +711,7 @@ footer {
 }
 
 .product-watermark-label {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
   font-size: 0.55rem;
   font-weight: 600;
   letter-spacing: 0.18em;
@@ -728,7 +728,7 @@ footer {
   border: 1px solid rgba(15, 105, 120, 0.15);
   border-radius: 3px;
   padding: 3px 8px;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
   font-size: 0.55rem;
   font-weight: 600;
   letter-spacing: 0.1em;
@@ -747,7 +747,7 @@ footer {
 }
 
 .product-card h3 {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
   font-size: 0.92rem;
   font-weight: 700;
   letter-spacing: -0.01em;
@@ -771,7 +771,7 @@ footer {
 }
 
 .product-link {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
   font-size: 0.68rem;
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -822,7 +822,7 @@ footer {
 }
 
 .reach-stat-num {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
   font-size: 2rem;
   font-weight: 700;
   letter-spacing: -0.04em;
@@ -864,7 +864,7 @@ footer {
 }
 
 .region-pill {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
   font-size: 0.62rem;
   font-weight: 500;
   letter-spacing: 0.08em;
@@ -892,7 +892,7 @@ footer {
 }
 
 .brochure-label {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
   font-size: 0.65rem;
   font-weight: 600;
   letter-spacing: 0.15em;
@@ -902,7 +902,7 @@ footer {
 }
 
 .brochure-title {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
   font-size: 1.2rem;
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -996,7 +996,7 @@ footer {
 
   /* Mobile links */
   .mobile-nav a {
-    font-family: "Space Grotesk", sans-serif;
+    font-family: var(--font-space-grotesk), sans-serif;
     font-size: 1.35rem;
     font-weight: 700;
     color: var(--gray-dark);
@@ -1444,7 +1444,7 @@ body.modal-open header {
   position: absolute;
   top: 1.2rem;
   right: 1.8rem;
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
   font-size: 3.5rem;
   line-height: 1;
   color: rgba(15, 105, 120, 0.05);
@@ -1491,7 +1491,7 @@ body.modal-open header {
   border-radius: 50%;
   background: linear-gradient(135deg, var(--teal) 0%, var(--near-black) 100%);
   color: var(--white);
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
   font-weight: 700;
   font-size: 0.9rem;
   display: flex;
@@ -1511,7 +1511,7 @@ body.modal-open header {
 }
 
 .feedback-author-name {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
   font-weight: 700;
   font-size: 0.95rem;
   color: var(--black);
@@ -1595,7 +1595,7 @@ body.modal-open header {
 }
 
 .feedback-eyebrow-text {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -1704,7 +1704,7 @@ body.modal-open header {
 }
 
 .feedback-field-label {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
   font-weight: 700;
   font-size: 0.78rem;
   text-transform: uppercase;
@@ -1716,7 +1716,7 @@ body.modal-open header {
 
 .feedback-input,
 .feedback-textarea {
-  font-family: "Epilogue", sans-serif;
+  font-family: var(--font-epilogue), sans-serif;
   border: 1px solid var(--gray-light);
   border-radius: 8px;
   padding: 0.85rem 1rem;
@@ -1783,7 +1783,7 @@ body.modal-open header {
 }
 
 .feedback-rating-label {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
   font-size: 0.88rem;
   font-weight: 700;
   color: var(--teal);
@@ -2160,7 +2160,7 @@ body.modal-open header {
 }
 
 .fc-marquee-text {
-  font-family: "Epilogue", sans-serif;
+  font-family: var(--font-epilogue), sans-serif;
   font-size: 0.83rem;
   color: var(--gray-dark);
   line-height: 1.45;
@@ -2212,7 +2212,7 @@ body.modal-open header {
 }
 
 .fc-avg-eyebrow {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -2228,7 +2228,7 @@ body.modal-open header {
 }
 
 .fc-avg-big-num {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
   font-size: 3.2rem; /* Compact visual display size */
   font-weight: 800;
   color: var(--black);
@@ -2236,7 +2236,7 @@ body.modal-open header {
 }
 
 .fc-avg-max-val {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
   font-size: 1.2rem;
   font-weight: 600;
   color: var(--gray-mid);
@@ -2278,7 +2278,7 @@ body.modal-open header {
 }
 
 .fc-bar-label-new {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
   font-size: 0.8rem;
   font-weight: 600;
   color: var(--black);
@@ -2306,7 +2306,7 @@ body.modal-open header {
 }
 
 .fc-bar-count-new {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--font-space-grotesk), sans-serif;
   font-size: 0.78rem;
   color: var(--gray-dark);
   width: 65px;
