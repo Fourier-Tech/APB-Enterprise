@@ -529,48 +529,6 @@
   font-style: italic;
 }
 
-/* ── CTA BANNER ── */
-.cta-strip {
-  background: var(--near-black);
-  padding: 4rem 0;
-  text-align: center;
-}
-
-.cta-strip h3 {
-  font-size: clamp(1.4rem, 3vw, 2rem);
-  font-weight: 700;
-  letter-spacing: -0.025em;
-  color: var(--white) !important;
-  max-width: 500px;
-  margin: 0 auto;
-}
-
-.cta-strip p {
-  color: var(--gray-mid) !important;
-  font-size: 0.9rem;
-  margin: 1rem auto 2rem;
-  max-width: 400px;
-}
-
-.cta-strip :global(.btn-gold-cta) {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--gold);
-  color: var(--black) !important;
-  font-family: "Space Grotesk", sans-serif;
-  font-size: 0.88rem;
-  font-weight: 700;
-  padding: 12px 28px;
-  text-decoration: none;
-  border-radius: 3px;
-  transition: background 0.15s;
-}
-
-.cta-strip :global(.btn-gold-cta:hover) {
-  background: var(--gold-light);
-}
-
 /* ── RESPONSIVE VIEWPORTS ── */
 @media (max-width: 960px) {
   .who-grid {

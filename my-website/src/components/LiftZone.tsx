@@ -13,25 +13,7 @@ interface ProductData {
   imageUrl: string | null;
 }
 
-function getProductIcon(category: string) {
-  switch (category) {
-    case "integrated":
-      return "fa-microchip";
-    case "nice_series":
-      return "fa-th-large";
-    case "geared":
-    case "gearless":
-      return "fa-cogs";
-    case "hydraulic":
-      return "fa-water";
-    case "goods":
-      return "fa-truck-loading";
-    case "harness":
-      return "fa-project-diagram";
-    default:
-      return "fa-cube";
-  }
-}
+
 
 const scriptLoadingPromises: { [src: string]: Promise<void> | undefined } = {};
 
@@ -686,13 +668,10 @@ export default function LiftZone({
                     style={{ textDecoration: "none", color: "inherit" }}
                   >
                     <div className="product-img-wrap lz-product-img-wrap">
-                      <span className="product-watermark-badge">
-                        APB Enterprise
-                      </span>
                       <div className="product-watermark">
-                        <i className={`fas ${getProductIcon(p.category)}`}></i>
+                        <i className="fas fa-image"></i>
                         <span className="product-watermark-label">
-                          {p.modelCode || "Product Image"}
+                          {p.name || "Product Image"}
                         </span>
                       </div>
                     </div>

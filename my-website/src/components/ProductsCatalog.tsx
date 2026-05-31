@@ -6,18 +6,6 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import styles from "@/app/products/products.module.css";
 
-/* ── Icon map by category ── */
-const CATEGORY_ICONS: Record<string, string> = {
-  "geared controller": "fa-microchip",
-  "gearless controller": "fa-bolt",
-  "monarch integrated controller": "fa-network-wired",
-  "hydraulic controller": "fa-water",
-  "goods lift controller": "fa-box-open",
-};
-
-function getCategoryIcon(cat: string): string {
-  return CATEGORY_ICONS[cat.toLowerCase()] ?? "fa-cog";
-}
 
 function fmtCat(cat: string): string {
   return cat
@@ -91,7 +79,6 @@ function ProductsCatalogInner({ products }: Props) {
         {/* Product grid */}
         <div className={styles["products-grid"]}>
           {filtered.map((product) => {
-            const icon = getCategoryIcon(product.category ?? "");
             const slug = product.modelCode ?? String(product.id);
             const shortDesc = product.shortDesc ?? "";
             return (
@@ -103,14 +90,13 @@ function ProductsCatalogInner({ products }: Props) {
               >
                 {/* Image / watermark */}
                 <div className={styles["product-img-wrap"]}>
-                  <span className={styles["product-badge"]}>APB Enterprise</span>
                   {product.imageUrl ? (
                     <img src={product.imageUrl} alt={product.name} />
                   ) : (
                     <div className={styles["product-watermark"]}>
-                      <i className={`fas ${icon}`} />
+                      <i className="fas fa-image" />
                       <span className={styles["product-watermark-label"]}>
-                        {fmtCat(product.category ?? "")}
+                        {fmtCat(product.name ?? "")}
                       </span>
                     </div>
                   )}
