@@ -18,6 +18,9 @@ export const metadata: Metadata = {
     description:
       "Discover APB Enterprise since 2018. Learn about our vision, mission, and team delivering ISO 9001:2015 certified elevator controllers & harnesses.",
   },
+  alternates: {
+    canonical: "/about",
+  },
 };
 
 export const revalidate = 0; // Dynamic Server Component to fetch the latest contacts

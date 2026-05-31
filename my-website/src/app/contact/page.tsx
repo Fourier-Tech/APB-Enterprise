@@ -21,6 +21,9 @@ export const metadata: Metadata = {
     description:
       "Contact APB Enterprise. Use our interactive Quote Engine to configure elevator control panels, harnesses, and request custom specifications.",
   },
+  alternates: {
+    canonical: "/contact",
+  },
 };
 
 export default async function ContactPage() {

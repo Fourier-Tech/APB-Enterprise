@@ -61,6 +61,9 @@ export async function generateMetadata({ params }: { params: Promise<{ code: str
       description,
       images: product.imageUrl ? [{ url: product.imageUrl }] : [],
     },
+    alternates: {
+      canonical: `/products/${encodeURIComponent(decodeURIComponent(code))}`,
+    },
   };
 }
 

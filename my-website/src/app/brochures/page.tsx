@@ -21,6 +21,9 @@ export const metadata: Metadata = {
     description:
       "Download technical brochures, wiring diagrams, installation manuals, and catalog sheets for APB Enterprise elevator control systems.",
   },
+  alternates: {
+    canonical: "/brochures",
+  },
 };
 
 export default function BrochuresPage() {

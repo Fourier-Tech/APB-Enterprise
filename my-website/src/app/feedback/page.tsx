@@ -13,6 +13,9 @@ export const metadata: Metadata = {
     description:
       "Submit reviews and ratings for APB Enterprise to help us continuously improve our elevator controllers and wiring harnesses.",
   },
+  alternates: {
+    canonical: "/feedback",
+  },
 };
 
 export const revalidate = 0; // Dynamic server component to load latest contact credentials

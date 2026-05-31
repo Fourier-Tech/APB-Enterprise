@@ -160,7 +160,7 @@ export default function Loader() {
           <div id="ldrContent" className={styles["ldr-car-content"]}>
             <img
               src="/logo.jpg"
-              alt="APB"
+              alt="APB Enterprise Logo"
               style={{
                 width: "30px",
                 height: "30px",

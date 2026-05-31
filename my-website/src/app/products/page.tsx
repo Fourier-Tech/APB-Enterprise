@@ -21,6 +21,9 @@ export const metadata: Metadata = {
     description:
       "Explore APB Enterprise's premium range of ISO-certified elevator controllers, lift control panels, and custom wiring harnesses.",
   },
+  alternates: {
+    canonical: "/products",
+  },
 };
 
 export default function ProductsPage() {

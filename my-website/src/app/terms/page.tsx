@@ -16,6 +16,9 @@ export const metadata: Metadata = {
     description:
       "Review the Terms and Conditions of APB Enterprise for using our website, requesting product quotes, and acquiring elevator controllers & harnesses.",
   },
+  alternates: {
+    canonical: "/terms",
+  },
 };
 
 export default async function TermsPage() {

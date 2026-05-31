@@ -16,6 +16,9 @@ export const metadata: Metadata = {
     description:
       "Read APB Enterprise's privacy policy to understand how we protect, secure, and handle your business contact details and reviews.",
   },
+  alternates: {
+    canonical: "/privacy-policy",
+  },
 };
 
 export default async function PrivacyPolicyPage() {
